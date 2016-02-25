@@ -83,7 +83,7 @@
                                     <div style="clear:both;">
                                         <div class="forum_state" title="0" idvalue="{f_ForumId}">正常</div>
                                         <div class="forum_state" title="1" idvalue="{f_ForumId}">禁止访问</div>
-                                        <div class="forum_state" title="2" idvalue="{f_ForumId}">暂时关闭</div>
+                                        <div class="forum_state" title="100" idvalue="{f_ForumId}">关闭</div>
                                         <div class="forum_state" style="display:none;" title="3" idvalue="{f_ForumId}">按用户加密</div>
                                         <div class="forum_state" style="display:none;" title="4" idvalue="{f_ForumId}">按身份加密</div>
                                         <div class="forum_state" style="display:none;" title="5" idvalue="{f_ForumId}">

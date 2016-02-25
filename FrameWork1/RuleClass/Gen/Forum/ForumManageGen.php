@@ -373,6 +373,9 @@ class ForumManageGen extends BaseManageGen implements IBaseManageGen
         if ($forumId > 0 && $state >= 0) {
             $forumManageData = new ForumManageData();
             $result = $forumManageData->ModifyState($forumId, $state);
+
+            //删除缓冲
+            parent::DelAllCache();
         }
         return $result;
     }

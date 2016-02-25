@@ -73,6 +73,17 @@
         <td class="spe_line" width="20%" height="30" align="right"><label for="f_ForumName">版块名称：</label></td>
         <td class="spe_line"><input name="f_ForumName" id="f_ForumName" value="{ForumName}" type="text" class="input_box" style="width:300px;"/></td>
     </tr>
+    <tr>
+        <td class="spe_line" width="20%" height="30" align="right"><label for="f_State">状态：</label></td>
+        <td class="spe_line">
+            <select id="f_State" name="f_State">
+                <option value="0">正常</option>
+                <option value="100">关闭</option>
+            </select>
+            {s_State}
+
+        </td>
+    </tr>
 
     <tr class="rank_1">
         <td class="spe_line" height="30" align="right"><label for="f_ForumType">版块类型：</label></td>

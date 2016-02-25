@@ -42,7 +42,7 @@ $(function() {
 
     //格式化站点状态
     $(".span_state").each(function(){
-        $(this).text(FormatForumState($(this).text()));
+        $(this).html(FormatForumState($(this).text()));
     });
     //改变状态按钮事件捕获
     $(".img_modify_state").click(function(event) {
@@ -61,7 +61,7 @@ $(function() {
             //操作完成后触发的命令
             var resultInt = parseInt(result);
             if (resultInt > 0) {
-                $("#span_state_" + forumId).text(FormatForumState(parseInt(state)));
+                $("#span_state_" + forumId).html(FormatForumState(parseInt(state)));
             }
         });
     });
@@ -143,7 +143,7 @@ function FormatForumState(state) {
             return "禁止发帖";
             break;
         case 100:
-            return "已删除";
+            return "<span style='color:red'>关闭</span>";
             break;
         default:
             return "未知状态";
