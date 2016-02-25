@@ -47,6 +47,7 @@ class DocumentNewsClientData extends BaseClientData {
                 dn.IsHot,
                 dn.CommentCount,
                 dn.ShowMutiPicInClientList,
+                dn.ClientIconType,
                 uf1.UploadFilePath AS TitlePic1UploadFilePath,
                 uf1.UploadFileMobilePath AS TitlePic1UploadFileMobilePath,
                 uf1.UploadFilePadPath AS TitlePic1UploadFilePadPath,
