@@ -5,7 +5,7 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Newspaper
  * @author zhangchi
  */
-class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen {
+class NewspaperArticleClientGen extends NewspaperBaseClientGen implements IBaseClientGen {
 
     /**
      * 引导方法
@@ -28,6 +28,9 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
 
             case "check_is_bought":
                 $result = self::CheckIsBought();
+                break;
+            case "get_one_by_right_check":
+                $result = self::GetOneByRightCheck();
                 break;
 
         }
@@ -179,5 +182,41 @@ class NewspaperArticleClientGen extends BaseClientGen implements IBaseClientGen 
         }
         return '{"result_code":"' . $resultCode . '","result":' . $result . '}';
 
+    }
+
+    /**
+     * 根据条件判断用户是否能看报纸
+     * @return string
+     */
+    function GetOneByRightCheck()
+    {
+        $result = "[{}]";
+        $resultCode = 0;
+        $siteId = Control::PostOrGetRequest("site_id", 0);
+        $newspaperArticleId = intval(Control::PostOrGetRequest("newspaper_article_id", 0));
+        if ($newspaperArticleId > 0) {
+            $newspaperArticleClientData = new NewspaperArticleClientData();
+            $arrOne = $newspaperArticleClientData->GetOne($newspaperArticleId, true);
+            $result = Format::FixJsonEncode($arrOne);
+        }
+        if (self::IsFreeReadByNewspaperArticleId($newspaperArticleId)) {
+            $resultCode = 1;
+        } else {
+            $userId = parent::GetUserId();
+            //结果标志判断
+            if ($userId <= 0) {
+                $resultCode = $userId; //会员检验失败,参数错误
+            } else {
+                if ($siteId > 0 && $newspaperArticleId > 0) {
+                    $isAuthorizedUser = self::IsAuthorizedUser($siteId, $userId, $newspaperArticleId);
+                    if ($isAuthorizedUser) {
+                        $resultCode = 1;
+                    }
+                } else {
+                    $resultCode = -5; //参数不正确
+                }
+            }
+        }
+        return '{"result_code":"' . $resultCode . '","result":' . $result . '}';
     }
 } 
