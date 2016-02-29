@@ -274,6 +274,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $forumPostTitle = Format::FormatHtmlTag($forumPostTitle);
 
             $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
+
             $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);
@@ -298,7 +299,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
 
                 parent::UploadMultiple(
-                    "file_upload_to_content_of_wap",
+                    "file_upload_to_content",
                     $tableType,
                     $tableId,
                     $arrUploadFile, //UploadFile类型的数组

@@ -8,7 +8,6 @@
  */
 class UserPublicData extends BasePublicData {
 
-
     /**
      * 混合登录
      * @param string $userAccount 会员登录帐号，可以是会员名，会员邮箱，会员手机号码
@@ -177,10 +176,12 @@ class UserPublicData extends BasePublicData {
     {
         $result = -1;
         if ($userId > 0) {
+            $userPassMd5 = md5($userPass);
             $dataProperty = new DataProperty();
-            $sql = "SELECT Count(*) FROM " . self::TableName_User . " WHERE userPass=:userPass AND userId=:userId";
+            $sql = "SELECT Count(*) FROM " . self::TableName_User . " WHERE (userPass=:userPass OR left(REPLACE(UserPassWithMd5, '0', ''),20) = :UserPassWithMd5) AND userId=:userId";
             $dataProperty->AddField("userId", $userId);
             $dataProperty->AddField("userPass", $userPass);
+            $dataProperty->AddField('UserPassWithMd5', $userPassMd5);
             $result = $this->GetInfoOfIntValue($sql,$dataProperty,false,"","");
         }
         return $result;
