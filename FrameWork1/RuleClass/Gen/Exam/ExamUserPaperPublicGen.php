@@ -375,7 +375,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $csv="<table><tr>";
         $csv.="<td>姓名</td>";
         $csv.="<td>部门</td>";
-        $csv.="</td>是否必须答题</td>";
+        $csv.="<td>是否必须答题</td>";
         $csv.="<td>分数</td>";
         $csv.="</tr>";
 
