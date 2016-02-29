@@ -70,7 +70,7 @@ class SiteFilterManageGen extends BaseManageGen implements IBaseManageGen {
                     if($alreadyFilter==0){
 
                         $newFilterId = $siteFilterManageData->Create($_POST);
-
+                        parent::DelAllCache();
 
                         //记入操作log
                         $operateContent = "Create site_filter：SiteFilterId：" . $newFilterId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $newFilterId;
@@ -154,7 +154,7 @@ class SiteFilterManageGen extends BaseManageGen implements IBaseManageGen {
                     if($siteFilterWord!=""){
 
                             $Modified = $siteFilterManageData->Modify($_POST,$siteFilterId);
-
+                        parent::DelAllCache();
 
                             //记入操作log
                             $operateContent = "Modify site_filter：SiteFilterId：" . $siteFilterId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $Modified;
@@ -279,6 +279,8 @@ class SiteFilterManageGen extends BaseManageGen implements IBaseManageGen {
         if ($siteFilterId > 0) {
             $siteFilterManageData = new SiteFilterManageData();
             $result = $siteFilterManageData->ModifyState($siteFilterId,$state);
+
+            parent::DelAllCache();
             //加入操作日志
             $operateContent = 'ModifyState site_filter,Get FORM:' . implode('|', $_GET) . ';\r\nResult:site_ad:' . $result;
             self::CreateManageUserLog($operateContent);
