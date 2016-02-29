@@ -251,6 +251,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $score8 = 0;
             $score9 = 0;
             $score10 = 0;
+            $rightCount = 0;
             $examUserAnswerPublicData = new ExamUserAnswerPublicData();
             $examUserPaperPublicData = new ExamUserPaperPublicData();
             $examQuestionClassPublicData = new ExamQuestionClassPublicData();
@@ -279,7 +280,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 //单选题
                 else if ($examQuestionType == 1) {
                     if (strtolower($answer) == strtolower($userAnswer)) {
-
+                        $rightCount = $rightCount+1;
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined1);
                         $score1 = $score1 + $scoreDefined1;
                     }
@@ -287,10 +288,12 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 //多选
                 else if ($examQuestionType == 2) {
                     if (strtolower($answer) == strtolower($userAnswer)) {
+                        $rightCount = $rightCount+1;
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined2);
                         $score2 = $score2 + $scoreDefined2;
                     }
                 } else if ($examQuestionType == 3) {
+                    $rightCount = $rightCount+1;
                     if (strtolower($answer) == strtolower($userAnswer)) {
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined3);
                         $score3 = $score3 + $scoreDefined3;
@@ -338,7 +341,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 }
             }
             $scoreAll = $score0 + $score1 + $score2 + $score3 + $score4 + $score5 + $score6 + $score7 + $score8 + $score9 + $score10;
-            $scoreResult = $examUserPaperPublicData->ModifyScore($examUserPaperId, $scoreAll);
+            $scoreResult = $examUserPaperPublicData->ModifyScoreAndRightCount($examUserPaperId, $scoreAll,$rightCount);
             $endTimeResult = $examUserPaperPublicData->ModifyEndTime($examUserPaperId);
             if ($scoreResult > 0 && $endTimeResult > 0) {
                 $result = $scoreAll;
