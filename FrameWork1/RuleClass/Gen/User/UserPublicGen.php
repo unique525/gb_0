@@ -102,6 +102,24 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             case "temp_register":  //临时自动注册
                 $result = self::TempRegister();
                 break;
+
+            /** 临时用户表 **/
+            case "async_temp_user_login":
+                $result = self::AsyncTempUserLogin();
+                break;
+            case "async_temp_user_logout":
+                $result = self::AsyncTempUserLogout();
+                break;
+            case "async_get_temp_user":
+                $result = self::AsyncGetTempUser();
+                break;
+            case "async_get_user_name_of_department":
+                $result = self::AsyncGetUserNameOfDepartment();
+                break;
+            case "async_get_login_name":
+                $result = self::AsyncGetLoginName();
+                break;
+
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -1246,6 +1264,123 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
         }
         return Control::GetRequest("jsonpcallback", "") . '({"result":"' . $result . '"})';
     }
+
+
+
+
+
+
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /********** 临时会员 ****************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /***********       ******************************************************/
+    /************     *******************************************************/
+    /*************   ********************************************************/
+    /************** *********************************************************/
+
+
+    private function AsyncTempUserLogin(){
+        $loginName = Control::GetRequest("login_name", "");
+        $hour = Control::GetRequest("hour", 10000);
+        //$userPassWithMd5 = Control::GetRequest("user_pass_with_md5", "");
+
+        if(!empty($loginName)){
+            //$userPassWithMd5 = $userPass;
+            $userPublicData = new UserPublicData();
+            $userId = $userPublicData->TempUserLogin($loginName);
+            if($userId <= 0){
+                return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
+            }else {
+
+                $hour = 9999999;
+
+                //
+
+
+                Control::SetUserCookie($userId,$loginName, $hour);
+                return Control::GetRequest("jsonpcallback","").'({"result":'.$userId.'})';
+            }
+        }else{
+            return Control::GetRequest("jsonpcallback","").'({"result":'.self::ILLEGAL_PARAMETER.'})';
+        }
+    }
+
+
+    private function AsyncTempUserLogout(){
+
+            Control::DelUserCookie();
+            session_start();
+            session_destroy();
+            $reUrl = Control::GetRequest("re_url", "");
+
+            if(strlen($reUrl)>0){
+
+                $reUrl = str_ireplace("&amp;","&",$reUrl);
+
+                Control::GoUrl(urldecode($reUrl));
+            }else{
+                Control::GoUrl("/");
+            }
+            return "";
+    }
+
+
+    private function AsyncGetTempUser(){
+        $tempUserId = intval(Control::GetUserId());
+        if($tempUserId > 0){
+
+            $userPublicData = new UserPublicData();
+            $userName = $userPublicData->GetTempUserName($tempUserId, false);
+            return Control::GetRequest("jsonpcallback","").
+            '({"result":"' . Format::FormatJson($userName) . '"})';
+
+        }
+
+        return Control::GetRequest("jsonpcallback","").
+        '({"result":""})';
+    }
+
+    private function AsyncGetUserNameOfDepartment(){
+        $userDepartment=Control::GetRequest("user_department","");
+        if($userDepartment !=""){
+
+            $userPublicData = new UserPublicData();
+            $userName = $userPublicData->GetTempUserNameOfDepartment($userDepartment, false);
+
+            if(!empty($userName)){
+                foreach ($userName as $key => $value) {
+                    $userName[$key]["ExamUserName"] = urlencode($value["ExamUserName"]);
+                }
+                return Control::GetRequest("jsonpcallback","").'({"result":' . urldecode ( json_encode ( $userName ) ) . '})';
+            }
+        }
+
+        return Control::GetRequest("jsonpcallback","").
+        '({"result":""})';
+    }
+
+    private function AsyncGetLoginName(){
+        $userDepartment=Control::GetRequest("user_department","");
+        $examUserName=Control::GetRequest("exam_user_name","");
+        if($userDepartment !=""){
+
+            $userPublicData = new UserPublicData();
+            $loginName = $userPublicData->GetLoginName($userDepartment,$examUserName, false);
+
+            return Control::GetRequest("jsonpcallback","").
+            '({"result":"' . Format::FormatJson($loginName) . '"})';
+        }
+
+        return Control::GetRequest("jsonpcallback","").
+        '({"result":""})';
+    }
+
+
 
 }
 

@@ -250,6 +250,131 @@ class UserPublicData extends BasePublicData {
         return $result;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /********** 临时会员表 ****************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /************** *********************************************************/
+    /***********       ******************************************************/
+    /************     *******************************************************/
+    /*************   ********************************************************/
+    /************** *********************************************************/
+
+
+    /**
+     * 混合登录
+     * @param string $userAccount 会员登录帐号，可以是会员名，会员邮箱，会员手机号码
+     * @return int 返回userId
+     */
+    public function TempUserLogin($userAccount){
+        $result = -1;
+
+        $tableName="temp_exam_user";
+        if(!empty($userAccount)){
+            $sql = "SELECT ExamUserId FROM ".$tableName."
+                        WHERE (ExamUserName = :ExamUserName OR LoginName = :LoginName);";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ExamUserName",$userAccount);
+            $dataProperty->AddField("LoginName",$userAccount);
+            $result = $this->dbOperator->GetInt($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得会员名
+     * @param int $userId 会员id
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 会员帐号
+     */
+    public function GetTempUserName($userId, $withCache)
+    {
+        $tableName="temp_exam_user";
+        $result = "";
+        if ($userId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$userId;
+            $cacheFile = 'user_get_temp_user_name.cache_' . $userId . '';
+            $sql = "SELECT ExamUserName FROM ".$tableName." WHERE ExamUserId=:ExamUserId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ExamUserId", $userId);
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得会员名
+     * @param string $userDepartment 部门
+     * @param bool $withCache 是否从缓冲中取
+     * @return array 会员帐号
+     */
+    public function GetTempUserNameOfDepartment($userDepartment, $withCache)
+    {
+        $tableName="temp_exam_user";
+        $result = "";
+        if ($userDepartment!="") {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$userDepartment;
+            $cacheFile = 'user_get_temp_user_name_of_department.cache_' . $userDepartment . '';
+            $sql = "SELECT ExamUserName FROM ".$tableName." WHERE UserDepartment='$userDepartment';";
+            $dataProperty = new DataProperty();
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 取得登陆名
+     * @param string $userDepartment 部门
+     * @param string $examUserName 名字
+     * @param bool $withCache 是否从缓冲中取
+     * @return string 会员帐号
+     */
+    public function GetLoginName($userDepartment,$examUserName,$withCache)
+    {
+        $tableName="temp_exam_user";
+        $result = "";
+        if ($userDepartment!="") {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'user_data'
+                . DIRECTORY_SEPARATOR .$userDepartment;
+            $cacheFile = 'user_get_login_name.cache_' . $userDepartment . '';
+            $sql = "SELECT LoginName FROM ".$tableName." WHERE UserDepartment='$userDepartment' AND ExamUserName='$examUserName';";
+            $dataProperty = new DataProperty();
+            $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
+
+
+    public function GetTopScoreOfDay($time){
+        $tableName="temp_exam_user";
+        $sql="SELECT * FROM
+        (SELECT e.*,u.ExamUserName,u.UserDepartment,u.IsNecessary FROM cst_exam_user_paper e
+        LEFT OUTER JOIN ".$tableName." u ON u.ExamUserId=e.UserId
+        where BeginTime>'$time 00:00:00' and BeginTime<'$time 23:59:59' ORDER BY GetScore DESC)
+        TableNameTemp1
+        GROUP BY UserId ORDER BY GetScore DESC ";
+        $result=$this->dbOperator->GetArrayList($sql);
+        return $result;
+    }
 }
 
 ?>
