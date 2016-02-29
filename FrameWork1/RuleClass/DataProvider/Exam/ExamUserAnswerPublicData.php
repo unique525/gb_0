@@ -7,15 +7,18 @@
  */
 class ExamUserAnswerPublicData extends BasePublicData{
 
-    public function GetList($examUserPaperId)
+    public function GetList($examUserPaperId,$number)
     {
         $result = null;
         if($examUserPaperId > 0){
-
+            $sqlLimit="";
+            if($number!=""){
+                $sqlLimit= " LIMIT $number";
+            }
             $dataProperty = new DataProperty();
 
-            $sql = "SELECT eq.*,eua.ExamUserAnswerId FROM ".self::TableName_ExamUserAnswer." eua,".self::TableName_ExamQuestion." eq WHERE
-                    ExamUserPaperId=:ExamUserPaperId AND eua.ExamQuestionId=eq.ExamQuestionId";
+            $sql = "SELECT eq.*,eua.ExamUserAnswerId,eua.Answer as UserAnswer FROM ".self::TableName_ExamUserAnswer." eua,".self::TableName_ExamQuestion." eq WHERE
+                    ExamUserPaperId=:ExamUserPaperId AND eua.ExamQuestionId=eq.ExamQuestionId ORDER BY eua.ExamUserAnswerId $sqlLimit";
             $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
@@ -98,9 +101,15 @@ class ExamUserAnswerPublicData extends BasePublicData{
     public function GetUserAnswerErrorList($examUserPaperId){
         $sql = "SELECT
         q.ExamQuestionTitle,
+        q.SelectItem,
+        q.ExamQuestionId,
+        q.ExamQuestionClassId,
         q.Answer,
+        q.ExamQuestionType,
+        q.Score,
+        a.ExamUserAnswerId,
         a.Answer as UserAnswer
-        FROM ".self::TableName_ExamQuestion." q,".self::TableName_ExamUserAnswer." a WHERE a.ExamQuestionId = q.ExamQuestionId AND a.ExamUserPaperId = :ExamUserPaperId AND a.GetScore=0";
+        FROM ".self::TableName_ExamQuestion." q,".self::TableName_ExamUserAnswer." a WHERE a.ExamQuestionId = q.ExamQuestionId AND a.ExamUserPaperId = :ExamUserPaperId ";// AND a.GetScore=0
         $dataProperty = new DataProperty();
         $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
         $result = $this->dbOperator->GetArrayList($sql,$dataProperty);

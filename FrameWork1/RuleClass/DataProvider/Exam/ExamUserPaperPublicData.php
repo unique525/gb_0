@@ -77,5 +77,24 @@ class ExamUserPaperPublicData extends BasePublicData{
     }
 
 
+    /**
+     * 取得日期
+     * @param int $examUserPaperId 试题分类id
+     * @param bool $withCache 是否从缓冲中取
+     * @return array 日期
+     */
+    public function GetTime($examUserPaperId, $withCache)
+    {
+        $result = array();
+        if ($examUserPaperId > 0) {
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'exam_user_paper_data';
+            $cacheFile = 'exam_user_paper_get_date.cache_' . $examUserPaperId . '';
+            $sql = "SELECT BeginTime,EndTime FROM " . self::TableName_ExamUserPaper . " WHERE ExamUserPaperId=:ExamUserPaperId;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
+            $result = $this->GetInfoOfArray($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 
 }
