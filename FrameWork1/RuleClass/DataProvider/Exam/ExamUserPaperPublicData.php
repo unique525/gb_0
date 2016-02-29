@@ -37,11 +37,12 @@ class ExamUserPaperPublicData extends BasePublicData{
         return $result;
     }
 
-    public function ModifyScore($examUserPaperId, $getScore) {
-        $sql = "update " . self::TableName_ExamUserPaper . " set GetScore= :GetScore where " . self::TableId_ExamUserPaper . "=:ExamUserPaperId";
+    public function ModifyScoreAndRightCount($examUserPaperId, $getScore,$rightCount) {
+        $sql = "update " . self::TableName_ExamUserPaper . " set GetScore= :GetScore,RightCount= :RightCount where " . self::TableId_ExamUserPaper . "=:ExamUserPaperId";
         $dataProperty = new DataProperty();
         $dataProperty->AddField("GetScore", $getScore);
         $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
+        $dataProperty->AddField("RightCount", $rightCount);
         $result = $this->dbOperator->Execute($sql, $dataProperty);
         return $result;
     }

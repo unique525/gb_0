@@ -30,12 +30,6 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             case "error_list":
                 $result = self::GenErrorAnswerList();
                 break;
-
-            /** 导出临时表结果（jkq） **/
-
-            case "get_csv":
-                $result = self::GetCsv();
-                break;
         }
 
         $result = str_ireplace("{action}", $action, $result);
@@ -52,8 +46,9 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             return "exam question class is null";
         }
 
+
         if($userId<=0){
-            /*/没有登录则自动注册一个帐号
+            //没有登录则自动注册一个帐号
 
             $userName = uniqid();
             $userPass = "111111";
@@ -125,13 +120,8 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             }
 
 
-*/
             //Control::GoUrl("/default.php?mod=user&a=login&re_url=". urlencode("/default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId));
-            Control::GoUrl("/default.php?mod=channel&a=default&temp=login_10573");
-            return "";
-
-
-
+            //return "";
         }
 
         $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
@@ -165,8 +155,6 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $nonCount = $examQuestionClassPublicData->GetNonMustSelectType3Count($examQuestionClassId,$withCache);
         $arrNonMustType3QuestionList = $examQuestionPublicData->GetList($examQuestionClassId, $mustSelect, $nonCount,$examQuestionType);
 
-
-
         $beginTime = date("Y-m-d H:i:s", time());
         $endTime = "";
         $getScore = 0;
@@ -186,22 +174,22 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 $lastExamUserAnswerId1 = $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType1QuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustType1QuestionList[$i]['State'],$getScore);
             }
             for($j=0;$j<count($arrMustType1QuestionList);$j++){
-                $lastExamUserAnswerId2= $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType2QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrMustType2QuestionList[$j]['State'],$getScore);
+                $lastExamUserAnswerId2= $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType2QuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustType2QuestionList[$i]['State'],$getScore);
             }
             for($k=0;$k<count($arrMustType1QuestionList);$k++){
-                $lastExamUserAnswerId3 = $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType3QuestionList[$k]['ExamQuestionId'],$createData,$answer,$arrMustType3QuestionList[$k]['State'],$getScore);
+                $lastExamUserAnswerId3 = $examUserAnswerPublicData->Create($examUserPaperId,$arrMustType3QuestionList[$i]['ExamQuestionId'],$createData,$answer,$arrMustType3QuestionList[$i]['State'],$getScore);
             }
 
             for($m=0;$m<count($arrNonMustType1QuestionList);$m++){
-                $lastExamUserAnswerId4 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType1QuestionList[$m]['ExamQuestionId'],$createData,$answer,$arrNonMustType1QuestionList[$m]['State'],$getScore);
+                $lastExamUserAnswerId4 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType1QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustType1QuestionList[$j]['State'],$getScore);
             }
-            for($n=0;$n<count($arrNonMustType2QuestionList);$n++){
-                $lastExamUserAnswerId5 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType2QuestionList[$n]['ExamQuestionId'],$createData,$answer,$arrNonMustType2QuestionList[$n]['State'],$getScore);
+            for($n=0;$m<count($arrNonMustType2QuestionList);$n++){
+                $lastExamUserAnswerId5 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType2QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustType2QuestionList[$j]['State'],$getScore);
             }
             for($o=0;$o<count($arrNonMustType3QuestionList);$o++){
-                $lastExamUserAnswerId6 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType3QuestionList[$o]['ExamQuestionId'],$createData,$answer,$arrNonMustType3QuestionList[$o]['State'],$getScore);
+                $lastExamUserAnswerId6 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType3QuestionList[$j]['ExamQuestionId'],$createData,$answer,$arrNonMustType3QuestionList[$j]['State'],$getScore);
             }
-            header("location: /default.php?mod=exam_user_answer&a=list&exam_question_class_id=".$examQuestionClassId."&exam_user_paper_id=" .$examUserPaperId."&question_number=1");
+            header("location: /default.php?mod=exam_user_answer&a=list&exam_user_paper_id=" .$examUserPaperId."");
 
         }
     }
@@ -223,10 +211,6 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $tempContent = parent::GetDynamicTemplateContent(
             $defaultTemp, $siteId);
         $arrExamUserAnswerErrorList = $examUserAnswerPublicData->GetUserAnswerErrorList($examUserPaperId);
-        foreach($arrExamUserAnswerErrorList as &$answer){
-            $answer["Answer"]=str_ireplace("|", "", $answer["Answer"]);
-            $answer["UserAnswer"]=str_ireplace("|", "", $answer["UserAnswer"]);
-        }
         Template::ReplaceList($tempContent, $arrExamUserAnswerErrorList, $tagId);
         return $tempContent;
     }
@@ -251,6 +235,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $score8 = 0;
             $score9 = 0;
             $score10 = 0;
+            $rightCount = 0;
             $examUserAnswerPublicData = new ExamUserAnswerPublicData();
             $examUserPaperPublicData = new ExamUserPaperPublicData();
             $examQuestionClassPublicData = new ExamQuestionClassPublicData();
@@ -260,13 +245,9 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 //题型
                 $examQuestionType = intval($examUserAnswerList[$i]["ExamQuestionType"]);
 
-
                 $examQuestionClassId = intval($examUserAnswerList[$i]["ExamQuestionClassId"]);
                 //本题分数
-                $score=0;//临时加的防止下面飘红
-                $scoreDefined1 = $examQuestionClassPublicData->GetTypeScore1($examQuestionClassId,$withCache);
-                $scoreDefined2 = $examQuestionClassPublicData->GetTypeScore2($examQuestionClassId,$withCache);
-                $scoreDefined3 = $examQuestionClassPublicData->GetTypeScore3($examQuestionClassId,$withCache);
+                $score = $examQuestionClassPublicData->GetTypeScore1($examQuestionClassId,$withCache);
 
                 //正确答案
                 $answer = $examUserAnswerList[$i]["Answer"];
@@ -276,24 +257,30 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 if ($examQuestionType == 0) {
 
                 }
+
                 //单选题
                 else if ($examQuestionType == 1) {
                     if (strtolower($answer) == strtolower($userAnswer)) {
-
-                        $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined1);
-                        $score1 = $score1 + $scoreDefined1;
+                        $rightCount = $rightCount+1;
+                        $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
+                        $score1 = $score1 + $score;
                     }
                 }
                 //多选
                 else if ($examQuestionType == 2) {
                     if (strtolower($answer) == strtolower($userAnswer)) {
-                        $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined2);
-                        $score2 = $score2 + $scoreDefined2;
+                        $rightCount = $rightCount+1;
+                        $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
+                        $score2 = $score2 + $score;
                     }
-                } else if ($examQuestionType == 3) {
-                    if (strtolower($answer) == strtolower($userAnswer)) {
-                        $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined3);
-                        $score3 = $score3 + $scoreDefined3;
+                }
+                //判断
+                else if ($examQuestionType == 3) {
+
+                    if (strpos($answer, $userAnswer) != false) {
+                        $rightCount = $rightCount+1;
+                        $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $score);
+                        $score3 = $score3 + $score;
                     }
                 } else if ($examQuestionType == 4) {
 
@@ -338,7 +325,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                 }
             }
             $scoreAll = $score0 + $score1 + $score2 + $score3 + $score4 + $score5 + $score6 + $score7 + $score8 + $score9 + $score10;
-            $scoreResult = $examUserPaperPublicData->ModifyScore($examUserPaperId, $scoreAll);
+            $scoreResult = $examUserPaperPublicData->ModifyScoreAndRightCount($examUserPaperId, $scoreAll,$rightCount);
             $endTimeResult = $examUserPaperPublicData->ModifyEndTime($examUserPaperId);
             if ($scoreResult > 0 && $endTimeResult > 0) {
                 $result = $scoreAll;
@@ -350,40 +337,4 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         return Control::GetRequest("jsonpcallback", "") . '({"result":"'.$result.'"})';
     }
 
-
-
-    private function GetCsv(){
-        $time=Control::GetRequest("time","");
-        $userPublicData=new UserPublicData();
-        $array=$userPublicData->GetTopScoreOfDay($time);
-
-        $csv="";
-        $csv.="姓名\t";
-        $csv.="部门\t";
-        $csv.="是否必须答题\t";
-        $csv.="分数\r\n";
-
-        foreach($array as $k=>$rs){
-            $csv.=$rs["ExamUserName"]."\t";
-            $csv.=$rs["UserDepartment"]."\t";
-            $csv.=$rs["IsNecessary"]."\t";
-            $csv.=$rs["GetScore"]."\r\n";
-        }
-
-        $name=$time.".xls";
-
-        Header("Content-type:application/vnd.ms-excel");
-        Header('Content-type: charset=UTF-8');
-        Header("Content-type: application/octet-stream");
-        Header("Accept-Ranges:bytes");
-        Header("Content-Disposition: attachment; filename=" . $name);
-        iconv("utf-8", "gb2312", $csv);
-        echo $csv;
-
-
-        //header("Content-type:application/vnd.ms-excel");
-        //header("Content-Disposition:attachment;filename=test_data.xls");
-
-
-    }
 }
