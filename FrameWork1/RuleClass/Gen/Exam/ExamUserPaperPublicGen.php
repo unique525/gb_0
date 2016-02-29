@@ -356,7 +356,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $time=Control::GetRequest("time","");
         $userPublicData=new UserPublicData();
         $array=$userPublicData->GetTopScoreOfDay($time);
-
+             /*
         $csv="";
         $csv.="姓名\t";
         $csv.="部门\t";
@@ -369,6 +369,25 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $csv.=$rs["IsNecessary"]."\t";
             $csv.=$rs["GetScore"]."\r\n";
         }
+*/
+
+
+        $csv="<table><tr>";
+        $csv.="<td>姓名</td>";
+        $csv.="<td>部门</td>";
+        $csv.="</td>是否必须答题</td>";
+        $csv.="<td>分数</td>";
+        $csv.="</tr>";
+
+        foreach($array as $k=>$rs){
+            $csv.="<tr>";
+            $csv.="<td>".$rs["ExamUserName"]."</td>";
+            $csv.="<td>".$rs["UserDepartment"]."</td>";
+            $csv.="<td>".$rs["IsNecessary"]."</td>";
+            $csv.="<td>".$rs["GetScore"]."</td>";
+            $csv.="</tr>";
+        }
+        $csv.="</table>";
 
         $name=$time.".xls";
 
