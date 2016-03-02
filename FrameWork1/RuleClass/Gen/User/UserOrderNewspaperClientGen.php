@@ -50,7 +50,17 @@ class UserOrderNewspaperClientGen extends BaseClientGen implements IBaseClientGe
                 $beginDate = date('Y-m-d');
                 $endDate = date("Y-m-d", strtotime("+1 year"));
                 $newspaperClientData = new NewspaperClientData();
+                $newspaperArticleClientData = new NewspaperArticleClientData();
+                $newspaperPageClientData = new NewspaperPageClientData();
+                $channelId=0;
+                if($newspaperId>0){
                 $channelId = $newspaperClientData->GetChannelId($newspaperId, true);
+                }
+                else if($newspaperArticleId>0){
+                    $newspaperPageId = $newspaperArticleClientData->GetNewspaperPageId($newspaperArticleId, true);
+                    $newspaperId = $newspaperPageClientData->GetNewspaperId($newspaperPageId,true);
+                    $channelId = $newspaperClientData->GetChannelId($newspaperId, true);
+                }
 
                 $userOrderNewspaperClientData = new UserOrderNewspaperClientData();
                 $newUserOrderNewspaperId = $userOrderNewspaperClientData->Create(
