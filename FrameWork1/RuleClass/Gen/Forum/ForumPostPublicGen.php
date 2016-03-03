@@ -288,7 +288,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $uploadFiles = "";
 
             //直接上传内容图的处理
-            if (!empty($_FILES) && !empty($_FILES['file_upload_to_content']['tmp_name'][0])) {
+            if (!empty($_FILES) && !empty($_FILES['file_upload_to_content_of_wap']['tmp_name'][0])) {
 
                 $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
                 $tableId = $forumTopicId;
@@ -301,7 +301,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 $attachWatermark = intval(Control::PostOrGetRequest("attach_watermark", 0));
 
                 parent::UploadMultiple(
-                    "file_upload_to_content",
+                    "file_upload_to_content_of_wap",
                     $tableType,
                     $tableId,
                     $arrUploadFile, //UploadFile类型的数组

@@ -369,7 +369,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                 $uploadFiles = Control::PostRequest("f_UploadFiles", "");
 
                 //直接上传内容图的处理（WAP、H5页面）
-                if (!empty($_FILES)) {
+                if (!empty($_FILES) && !empty($_FILES['file_upload_to_content_of_wap']['tmp_name'][0])) {
 
                     $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
                     $tableId = $forumTopicId;
