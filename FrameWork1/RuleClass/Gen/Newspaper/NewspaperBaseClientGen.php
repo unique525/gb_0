@@ -6,7 +6,8 @@
  * @package iCMS_FrameWork1_RuleClass_Gen_Newspaper
  * @author zhangchi
  */
-class NewspaperBaseClientGen extends BaseClientGen {
+class NewspaperBaseClientGen extends BaseClientGen
+{
 
     //检查当前版面是否属于免费内容
     function IsFreeReadByNewspaperArticleId($newspaperArticleId)
@@ -18,30 +19,32 @@ class NewspaperBaseClientGen extends BaseClientGen {
         $newspaperArticleTitle = $newspaperArticlePublicData->GetNewspaperArticleTitle($newspaperArticleId, true);
         $newspaperArticleType = $newspaperArticlePublicData->GetNewspaperArticleType($newspaperArticleId, true);
         $newspaperPageId = $newspaperArticlePublicData->GetNewspaperPageId($newspaperArticleId, true);
-        $newspaperPageName = $newspaperPagePublicData->GetNewspaperPageName($newspaperPageId,true);
+        $newspaperPageName = $newspaperPagePublicData->GetNewspaperPageName($newspaperPageId, true);
         $newspaperId = $newspaperPagePublicData->GetNewspaperId($newspaperPageId, true);
         //如果文章属于广告类别或者文章所属版面名称带了广告两字或文章标题带有广告两字可以免费查看
-        if($newspaperArticleType==2
-            ||(!empty($newspaperPageName)&&strpos($newspaperPageName,"广告")!==false)
-            ||(!empty($newspaperArticleTitle)&&strpos($newspaperArticleTitle,"广告")!==false)
-        ){
-            $result=true;
+        if ($newspaperArticleType == 2
+            || (!empty($newspaperPageName) && strpos($newspaperPageName, "广告") !== false)
+            || (!empty($newspaperArticleTitle) && strpos($newspaperArticleTitle, "广告") !== false)
+        ) {
+            $result = true;
         }
-        else if ($newspaperId > 0 && $newspaperPageId > 0) {//当日报纸前八版免费
-            $pageIndex = self::GetNewspaperPageIndex($newspaperId, $newspaperPageId);
-            //if($newspaperId==43)
-            //{
-                $publishDate=$newspaperPublicData->GetPublishDate($newspaperId,true);
-                $publishDate=date("Y-m-d",strtotime($publishDate));
-                $nowDate=date("Y-m-d",time());
-                if ($publishDate==$nowDate&&$pageIndex >=0 && $pageIndex < 8) {
-                    $result = true;
-                }
-            //}
-            //else{
-                //$result = true;
-            //}
+        else if ($newspaperId > 0 && $newspaperPageId > 0) { //当日报纸免费
+            $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+            $publishDate = date("Y-m-d", strtotime($publishDate));
+            $nowDate = date("Y-m-d", time());
+            if ($publishDate == $nowDate) {
+                $result = true;
+            }
         }
+//        else if ($newspaperId > 0 && $newspaperPageId > 0) { //当日报纸前八版免费
+//            $pageIndex = self::GetNewspaperPageIndex($newspaperId, $newspaperPageId);
+//            $publishDate = $newspaperPublicData->GetPublishDate($newspaperId, true);
+//            $publishDate = date("Y-m-d", strtotime($publishDate));
+//            $nowDate = date("Y-m-d", time());
+//            if ($publishDate == $nowDate && $pageIndex >= 0 && $pageIndex < 8) {
+//                $result = true;
+//            }
+//        }
         return $result;
     }
 

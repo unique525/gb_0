@@ -233,9 +233,8 @@ class NewspaperArticlePublicGen extends NewspaperBasePublicGen
 
             $isAuthorizedUser = self::IsAuthorizedUser($userId, $newspaperArticleId);
 
+            //已经购买或者属于免费阅读
             if($isAuthorizedUser || self::IsFreeReadByNewspaperArticleId($newspaperArticleId)){
-                //已经购买或者前八版免费内容
-
                 $defaultTemp = "newspaper_article_buy_content";
                 $newspaperArticleBuyContent = self::GetDynamicTemplateContent(
                     $defaultTemp,
