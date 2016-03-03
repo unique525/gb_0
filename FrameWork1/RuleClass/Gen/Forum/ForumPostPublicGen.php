@@ -283,10 +283,12 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             $userId = Control::GetUserId();
             $userName = Control::GetUserName();
 
+
+
             $uploadFiles = "";
 
             //直接上传内容图的处理
-            if (!empty($_FILES)) {
+            if (!empty($_FILES['file_upload_to_content']['tmp_name'][0])) {
 
                 $tableType = UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT;
                 $tableId = $forumTopicId;
@@ -361,8 +363,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
                     //直接上传时，在内容中插入上传的图片
 
-                    if (strlen($arrUploadFile[$u]->UploadFileWatermarkPath1) > 0
-                    ) {
+                    if (strlen($arrUploadFile[$u]->UploadFileWatermarkPath1) > 0) {
                         //有水印图时，插入水印图
 
                         $insertHtml = Format::FormatUploadFileToHtml(
@@ -372,7 +373,8 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
                             ""
                         );
 
-                    } else {
+                    }
+                    else {
                         //没有水印图时，插入原图
                         $insertHtml = Format::FormatUploadFileToHtml(
                             $arrUploadFile[$u]->UploadFilePath,
