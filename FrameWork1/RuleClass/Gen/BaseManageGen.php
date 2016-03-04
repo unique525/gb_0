@@ -16,7 +16,7 @@ class BaseManageGen extends BaseGen
     /**
      * 系统广告的根目录
      */
-    const SITE_AD_PATH = "front_js/site_ad";
+    const SITE_AD_PATH = "upload/site_ad";
 
     /**
      * 发布频道 返回值 未操作
