@@ -2,35 +2,14 @@
 <project version="4">
   <component name="PublishConfigData" overwriteAll="false" preserveTimestamps="false">
     <serverData>
-      <paths name="130.1.0.71">
+      <paths name="Bird">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="52cpb">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="cswb_aliyun_ecs_01">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="cswb_aliyun_ecs_02">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="cswb_aliyun_ecs_03">
+      <paths name="icms">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
@@ -40,3 +19,4 @@
     </serverData>
   </component>
 </project>
+

@@ -58,7 +58,6 @@ class ForumTopicManageData extends BaseManageData {
                 " . self::TableName_ForumTopic . "
                 WHERE SiteId=:SiteId " . $searchSql . " AND ForumId=:ForumId LIMIT " . $pageBegin . "," . $pageSize . " ;";
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
-
             $sql = "
                 SELECT
                 COUNT(*)
@@ -120,6 +119,37 @@ class ForumTopicManageData extends BaseManageData {
             $dataProperty->AddField("ForumTopicTitle", $forumTopicTitle);
 
             $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+    /**
+     * 修改主题状态
+     * @param int $forumTopicId 论坛主题id
+     * @param string $state 论坛主题状态
+     * @return int  执行结果
+     */
+    public function ModifyState($forumTopicId,$state)
+    {
+        $result = -1;
+        if($forumTopicId>0){
+            $dataProperty = new DataProperty();
+
+            $sql = "UPDATE " . self::TableName_ForumTopic . " SET State=:State WHERE ForumTopicId=:ForumTopicId";
+
+            $dataProperty->AddField("ForumTopicId", $forumTopicId);
+            $dataProperty->AddField("State", $state);
+
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+            if($result > 0){
+                $dataProperty = new DataProperty();
+
+                $sql = "UPDATE " . self::TableName_ForumPost . " SET State=:State WHERE ForumTopicId=:ForumTopicId";
+
+                $dataProperty->AddField("ForumTopicId", $forumTopicId);
+                $dataProperty->AddField("State", $state);
+                $result = $this->dbOperator->Execute($sql, $dataProperty);
+            }
         }
         return $result;
     }

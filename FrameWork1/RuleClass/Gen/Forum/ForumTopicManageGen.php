@@ -28,6 +28,9 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             case "move_topic_to_other_block":
                 $result = self::moveTopicToOtherBlock();
                 break;
+            case "modify_state":
+                $result = self::AsyncModifyState();
+                break;
         }
         $result = str_ireplace("{action}", $method, $result);
         return $result;
@@ -158,6 +161,20 @@ class ForumTopicManageGen extends BaseManageGen implements IBaseManageGen  {
             $result = $forumTopicManageData->MoveTopicToOtherBlock($siteId, $forumIdMoveTo, $forumTopicIdArr);
         }
         return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+    }
+
+    private function AsyncModifyState(){
+        $forumTopicId = Control::GetRequest("forum_topic_id", 0);
+        $state = Control::GetRequest("state", -1);
+        $result = -1;
+        if ($forumTopicId > 0 && $state >= 0) {
+            $forumTopicManageData = new ForumTopicManageData();
+            $result = $forumTopicManageData->ModifyState($forumTopicId, $state);
+
+            //删除缓冲
+            parent::DelAllCache();
+        }
+        return Control::GetRequest("jsonpcallback", "") . '({"result":"'.$result.'"})';
     }
 }
 
