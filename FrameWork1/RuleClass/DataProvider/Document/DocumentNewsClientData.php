@@ -34,6 +34,7 @@ class DocumentNewsClientData extends BaseClientData {
                 dn.Author,
                 dn.DirectUrl,
                 dn.ShowDate,
+                dn.ShowFullDate,
                 dn.SourceName,
                 dn.DocumentNewsMainTag,
                 dn.DocumentNewsTag,
