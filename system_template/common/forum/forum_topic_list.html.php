@@ -7,6 +7,11 @@
 
     <script type="text/javascript">
         $("document").ready(function () {
+
+            //格式化站点状态
+            $(".span_topic_state").each(function(){
+                $(this).html(FormatTopicState($(this).text()));
+            });
             var siteId = Request["site_id"];
             var forumId = Request["forum_id"];
 
@@ -64,6 +69,46 @@
             });
 
         });
+        /**
+         * 修改状态值
+         * @param method 业务
+         * @param idvalue 业务id
+         * @param state 状态
+         * @return
+         */
+        function ModifyState(method, idvalue, state) {
+            $.ajax({
+                url:"/default.php?secu=manage&mod="+method+"&m=modify_state",
+                data:{state:state,forum_topic_id:idvalue},
+                dataType:"jsonp",
+                jsonp:"jsonpcallback",
+                success:function(data){
+                    if (parseInt(data["result"]) > 0) {
+                        $("#span_state_" + idvalue).html(FormatTopicState(state));
+                    }
+                    else alert("修改失败，请联系管理员");
+                }
+            });
+        }
+        /**
+         * 格式化状态值
+         * @param state 状态
+         * @return string
+         */
+        function FormatTopicState(state){
+            state = parseInt(state);
+            switch (state){
+                case 0:
+                    return "启用";
+                    break;
+                case 100:
+                    return "<"+"span style='color:#990000'>停用<"+"/span>";
+                    break;
+                default :
+                    return "未知";
+                    break;
+            }
+        }
 
 
     </script>
@@ -76,7 +121,7 @@
     </div>
 </div>
 <div class="div_list">
-    <table cellpadding="0" cellspacing="0" width="100%"">
+    <table cellpadding="0" cellspacing="0" width="100%">
         <tbody><tr>
             <td id="td_main_btn">
                 <input style="cursor: pointer;" id="btn_move" class="btn2" value="移动" idvalue="{f_ForumId}" title="移动帖子到另一个板块" type="button">
@@ -88,6 +133,9 @@
             <td style="width: 30px; text-align: center; cursor: pointer;" id="btn_select_all">全</td>
             <td style="width:60px;text-align:center;">ID</td>
             <td style="width:60px;text-align:center;">编辑</td>
+            <td style="width:40px;text-align:center;">状态</td>
+            <td style="width:40px;text-align:center;">启用</td>
+            <td style="width:40px;text-align:center;">停用</td>
             <td style="width:500px;text-align:center;">标题</td>
             <td style="width:200px;text-align:center;">创建时间</td>
             <td style="width:200px;text-align:center;">最后编辑时间</td>
@@ -107,6 +155,15 @@
                                                                           src="/system_template/default/images/manage/edit.gif"
                                                                           alt="编辑" title="{f_ForumTopicId}"
                                                                           idvalue="{f_ForumTopicId}"/></td>
+                    <td class="spe_line2" style="width:90px;text-align:center;"><span id="span_state_{f_ForumTopicId}" class="span_topic_state">{f_State}</span></td>
+                    <td class="spe_line2" style="width:40px;text-align:center;"><span title="{f_ForumTopicId}"><img
+                                style=" cursor: pointer" alt="点击启用"
+                                src="/system_template/default/images/manage/start.jpg"
+                                onclick="ModifyState('forum_topic', '{f_ForumTopicId}', '0')"/></span></td>
+                    <td class="spe_line2" style="width:40px;text-align:center;"><span title="{f_ForumTopicId}"><img
+                                style=" cursor: pointer" alt="停用或删除"
+                                src="/system_template/default/images/manage/stop.jpg"
+                                onclick="ModifyState('forum_topic', '{f_ForumTopicId}', '100')"/></span></td>
                     <td class="spe_line2" style="text-align:center;">{f_ForumTopicTitle}</td>
                     <td class="spe_line2" style="text-align:center;">{f_PostTime}</td>
                     <td class="spe_line2" style="text-align:center;">{f_LastPostTime}</td>
