@@ -26,6 +26,9 @@ class ForumTopicClientGen extends BaseClientGen implements IBaseClientGen
             case "list_of_user":
                 $result = self::GenListOfUser();
                 break;
+            case "list_of_user_post_forum"://根据参与发帖的用户进行搜索
+                $result = self::GenListOfUserPostForum();
+                break;
 
             case "create":
                 $result = self::GenCreate();
@@ -66,6 +69,45 @@ class ForumTopicClientGen extends BaseClientGen implements IBaseClientGen
             }
         } else {
             $resultCode = -1;
+        }
+
+        return '{"result_code":"' . $resultCode . '","forum_topic":{"forum_topic_list":' . $result . '}}';
+    }
+
+    /**
+     * 返回列表数据集
+     * @return string
+     */
+    public function GenListOfUserPostForum()
+    {
+
+        $result = "[{}]";
+
+        $userId = parent::GetUserId();
+
+        if ($userId <= 0) {
+            $resultCode = $userId; //会员检验失败,参数错误
+        } else {
+            if ($userId > 0) {
+                $pageSize = intval(Control::GetRequest("ps", 20));
+                $pageIndex = intval(Control::GetRequest("p", 1));
+
+                $pageBegin = ($pageIndex - 1) * $pageSize;
+                $forumTopicClientData = new ForumTopicClientData();
+                $arrList = $forumTopicClientData->GetListOfUserPostForum(
+                    $userId,
+                    $pageBegin,
+                    $pageSize
+                );
+                if (count($arrList) > 0) {
+                    $resultCode = 1;
+                    $result = Format::FixJsonEncode($arrList);
+                } else {
+                    $resultCode = -2;
+                }
+            } else {
+                $resultCode = -1;
+            }
         }
 
         return '{"result_code":"' . $resultCode . '","forum_topic":{"forum_topic_list":' . $result . '}}';

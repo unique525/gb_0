@@ -200,6 +200,73 @@ class ForumTopicClientData extends BaseClientData {
     }
 
     /**
+     * 根据参与回帖的用户取得列表信息
+     * @param int $userId 会员id
+     * @param int $pageBegin
+     * @param int $pageSize
+     * @return array 帖子信息数组
+     */
+    public function GetListOfUserPostForum($userId, $pageBegin, $pageSize)
+    {
+
+        $searchSql = "";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UserId", $userId);
+        $sql = "
+            SELECT
+                        ft.*,
+                        ui.AvatarUploadFileId,
+                        uf.UploadFilePath AS AvatarUploadFilePath,
+                        uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
+                        uf.UploadFilePadPath AS AvatarUploadFilePadPath,
+
+                        uf2.UploadFilePath AS ContentUploadFilePath1,
+                        uf3.UploadFilePath AS ContentUploadFilePath2,
+                        uf4.UploadFilePath AS ContentUploadFilePath3
+            FROM
+            " . self::TableName_ForumTopic . " ft
+            INNER JOIN " . self::TableName_UserInfo . " ui ON (ui.UserId=ft.UserId)
+
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf2 ON (ft.ContentUploadFileId1=uf2.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf3 ON (ft.ContentUploadFileId2=uf3.UploadFileId)
+            LEFT OUTER JOIN " . self::TableName_UploadFile . " uf4 ON (ft.ContentUploadFileId3=uf4.UploadFileId)
+
+            WHERE ft.ForumTopicId IN (SELECT ForumTopicId FROM " . self::TableName_ForumPost . " WHERE UserId=:UserId) " . $searchSql . " AND ft.State<".ForumTopicData::FORUM_TOPIC_STATE_REMOVED."
+            ORDER BY ft.Sort DESC,ft.PostTime DESC
+            LIMIT " . $pageBegin . "," . $pageSize . ";";
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        return $result;
+
+        /**
+        $result = null;
+        if($userId>0){
+        $sql = "SELECT fp.*,
+        ui.AvatarUploadFileId,
+        uf.UploadFilePath AS AvatarUploadFilePath,
+        uf.UploadFileMobilePath AS AvatarUploadFileMobilePath,
+        uf.UploadFilePadPath AS AvatarUploadFilePadPath
+        FROM " . self::TableName_ForumPost . " fp
+
+        INNER JOIN " .self::TableName_UserInfo." ui ON (ui.UserId=fp.UserId)
+
+        LEFT OUTER JOIN " .self::TableName_UploadFile." uf ON (ui.AvatarUploadFileId=uf.UploadFileId)
+
+        WHERE fp.UserId=:UserId
+
+        ORDER BY fp.IsTopic DESC, fp.PostTime
+
+        LIMIT " .$pageBegin . "," . $pageSize . ";";
+        $dataProperty = new DataProperty();
+        $dataProperty->AddField("UserId", $userId);
+        $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+         */
+    }
+
+    /**
      * 取得一条信息
      * @param int $forumTopicId 论坛主题id
      * @return array 论坛主题信息数组
