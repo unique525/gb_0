@@ -35,7 +35,7 @@ class PromotionRecordPublicData extends BasePublicData {
      */
     public function Create($promoterId,$createDate,$deviceType,$deviceNumber,$userId){
         $result = -1;
-        if($promoterId > 0 && $deviceType > 0 && $userId > 0 && !empty($deviceNumber)){
+        if($promoterId > 0 && !empty($deviceNumber)){
             $sql = "INSERT INTO ".self::TableName_PromotionRecord
                 ." (PromoterId,CreateDate,DeviceType,DeviceNumber,UserId)
                 VALUES (:PromoterId,:CreateDate,:DeviceType,:DeviceNumber,:UserId);";
