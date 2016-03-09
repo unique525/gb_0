@@ -31,16 +31,16 @@ class PromotionRecordClientGen extends BaseClientGen implements IBaseClientGen {
     private function GenCreate(){
 
         $userId = parent::GetUserId();
-        if ($userId > 0) {
+        //if ($userId > 0) {
 
-            $encryptStr = Control::PostOrGetRequest("key_1", 0);
+            $encryptStr = Control::PostOrGetRequest("device_id", "");
             $md5Str = Control::PostOrGetRequest("key_2", "");
 
             //检查密文和指纹
             if (!empty($encryptStr) && !empty($md5Str)) {
 
                 $des = DesFitAllPlatForm::GetInstance();
-                $decryptStr = $des->Decode($encryptStr, "c!S&w(B~");
+                $decryptStr = $des->Decode($encryptStr, "ZAQ!xsw2");
                 $decryptMd5Str = md5($decryptStr);
 
                 //密文指纹比对
@@ -52,7 +52,7 @@ class PromotionRecordClientGen extends BaseClientGen implements IBaseClientGen {
                     if (!$isExist) {
                         $promoterId = Control::PostOrGetRequest("promoter_id", "");
                         $createDate = date("Y-m-d H:i:s", time());
-                        $deviceType = Control::PostOrGetRequest("device_type", "");
+                        $deviceType = Control::PostOrGetRequest("device_type", 0);
                         $deviceNumber = $decryptStr;
                         $newPromotionRecordId = $promotionRecordClientData->Create($promoterId,$createDate,$deviceType,$deviceNumber,$userId);
                         //添加成功
@@ -71,9 +71,9 @@ class PromotionRecordClientGen extends BaseClientGen implements IBaseClientGen {
             } else {
                 $resultCode = -1; //参数错误;
             }
-        } else {
-            $resultCode = $userId; //会员检验失败,参数错误
-        }
+//        } else {
+//            $resultCode = $userId; //会员检验失败,参数错误
+//        }
 
         return '{"result_code":"' . $resultCode . '"}';
     }

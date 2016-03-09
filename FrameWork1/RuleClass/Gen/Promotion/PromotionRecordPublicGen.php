@@ -55,7 +55,7 @@ class PromotionRecordPublicGen extends BasePublicGen implements IBasePublicGen {
                     if (!$isExist) {
                         $promoterId = Control::PostOrGetRequest("promoter_id", "");
                         $createDate = date("Y-m-d H:i:s", time());
-                        $deviceType = Control::PostOrGetRequest("device_type", "");
+                        $deviceType = Control::PostOrGetRequest("device_type", 0);
                         $deviceNumber = $decryptStr;
                         $newPromotionRecordId = $promotionRecordPublicData->Create($promoterId,$createDate,$deviceType,$deviceNumber,$userId);
                         //添加成功
