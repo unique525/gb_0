@@ -541,7 +541,7 @@ function UploadFileFormatHtml(fileName){
             url += "</object>";
             break;
         default:
-            url = '<a href="'+fileName+'" target="_blank">'+fileName+'</a>';
+            url = '<a href="'+fileName+'" target="_blank">下载文件</a>';
             break;
     }
     return url;
