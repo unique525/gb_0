@@ -34,13 +34,15 @@ class ExamUserAnswerPublicGen extends BasePublicGen implements IBasePublicGen{
         $siteId = parent::GetSiteIdByDomain();
         $examUserPaperId = Control::GetRequest("exam_user_paper_id", 0);
         $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
+        $defaultTemp = "exam_user_answer_list";
+        $temp=Control::GetRequest("temp", $defaultTemp);
 
         /** 检查该试卷是否完成（防止回来改答案满分）**/
         $examUserPaperPublicData = new ExamUserPaperPublicData();
         $timeArray=$examUserPaperPublicData->GetTime($examUserPaperId,false);
         if($timeArray["BeginTime"]<$timeArray["EndTime"]){
-            Control::GoUrl("default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId);
-            return "";
+            //Control::GoUrl("default.php?mod=exam_user_paper&a=gen&temp=$temp&exam_question_class_id=".$examQuestionClassId);
+            //return "";
         }
 
 
@@ -58,9 +60,8 @@ class ExamUserAnswerPublicGen extends BasePublicGen implements IBasePublicGen{
         $arrUserAnswerList = $examUserAnswerPublicData->GetList($examUserPaperId,$number);
 
         $templateMode = 0;
-        $defaultTemp = "exam_user_answer_list";
         $tempContent = parent::GetDynamicTemplateContent(
-        $defaultTemp, $siteId, "", $templateMode);
+            $temp, $siteId, "", $templateMode);
 
         Template::ReplaceList($tempContent, $arrUserAnswerList, $tagId);
         return $tempContent;

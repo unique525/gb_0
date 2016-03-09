@@ -317,8 +317,11 @@ class NewspaperArticleManageGen extends BaseManageGen {
                                             $doWaterMark=Control::PostRequest("DoWaterMark","off");
                                             $watermarkUploadFilePath="";
                                             if($doWaterMark=='on'){
+                                                if($toSiteId==0){
+                                                    $toSiteId=$channelManageData->GetSiteId($targetCid,false);
+                                                }
                                                 $siteConfigData = new SiteConfigData($toSiteId);
-                                                $watermarkUploadFileId = $siteConfigData->NewspaperArticlePicWatermarkUploadFileId;
+                                                $watermarkUploadFileId = $siteConfigData->DocumentNewsContentPicWatermarkUploadFileId;
                                                 if ($watermarkUploadFileId > 0) {
                                                     $uploadFileData = new UploadFileData();
                                                     $watermarkUploadFilePath =

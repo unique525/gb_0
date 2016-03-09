@@ -164,6 +164,10 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $ClientDirectUrlPublicGen = new ClientDirectUrlPublicGen();
                 $result = $ClientDirectUrlPublicGen->GenPublic();
                 break;
+            case "promotion_record":
+                $promotionRecordPublicGen = new PromotionRecordPublicGen();
+                $result = $promotionRecordPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;

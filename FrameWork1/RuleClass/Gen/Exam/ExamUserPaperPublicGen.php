@@ -127,12 +127,19 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
 
 */
             //Control::GoUrl("/default.php?mod=user&a=login&re_url=". urlencode("/default.php?mod=exam_user_paper&a=gen&exam_question_class_id=".$examQuestionClassId));
-            Control::GoUrl("/default.php?mod=channel&a=default&temp=login_10573");
-            return "";
-
+            //Control::GoUrl("/default.php?mod=channel&a=default&temp=login_10573");
+            //return "";
+            $userId=0;
 
 
         }
+
+        $nowClock=date("H");
+            if($nowClock<8||$nowClock>22){
+               // Control::GoUrl("http://www.cetzgh.org.cn/h/10573/message.html");die();
+            }
+
+
 
         $examQuestionClassId = Control::GetRequest("exam_question_class_id", 0);
 
@@ -201,7 +208,8 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             for($o=0;$o<count($arrNonMustType3QuestionList);$o++){
                 $lastExamUserAnswerId6 = $examUserAnswerPublicData->Create($examUserPaperId,$arrNonMustType3QuestionList[$o]['ExamQuestionId'],$createData,$answer,$arrNonMustType3QuestionList[$o]['State'],$getScore);
             }
-            header("location: /default.php?mod=exam_user_answer&a=list&exam_question_class_id=".$examQuestionClassId."&exam_user_paper_id=" .$examUserPaperId."&question_number=1");
+            $templateName=Control::GetRequest("temp","");
+            header("location: /default.php?mod=exam_user_answer&a=list&temp=".$templateName."&exam_question_class_id=".$examQuestionClassId."&exam_user_paper_id=" .$examUserPaperId."&question_number=1");
 
         }
     }
@@ -209,8 +217,9 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
     private function GenFinished(){
         $siteId = parent::GetSiteIdByDomain();
         $defaultTemp = "exam_user_paper_score_gen";
+        $temp=Control::GetRequest("temp",$defaultTemp);
         $tempContent = parent::GetDynamicTemplateContent(
-            $defaultTemp, $siteId);
+            $temp, $siteId);
         return $tempContent;
     }
 
@@ -293,8 +302,8 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
                         $score2 = $score2 + $scoreDefined2;
                     }
                 } else if ($examQuestionType == 3) {
-                    $rightCount = $rightCount+1;
                     if (strtolower($answer) == strtolower($userAnswer)) {
+                        $rightCount = $rightCount+1;
                         $examUserAnswerPublicData->ModifyScore($examUserAnswerId, $scoreDefined3);
                         $score3 = $score3 + $scoreDefined3;
                     }
@@ -380,6 +389,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
         $csv.="<td>部门</td>";
         $csv.="<td>是否必须答题</td>";
         $csv.="<td>分数</td>";
+        $csv.="<td>正确数</td>";
         $csv.="</tr>";
 
         foreach($array as $k=>$rs){
@@ -388,6 +398,7 @@ class ExamUserPaperPublicGen extends BasePublicGen implements IBasePublicGen{
             $csv.="<td>".$rs["UserDepartment"]."</td>";
             $csv.="<td>".$rs["IsNecessary"]."</td>";
             $csv.="<td>".$rs["GetScore"]."</td>";
+            $csv.="<td>".$rs["RightCount"]."</td>";
             $csv.="</tr>";
         }
         $csv.="</table>";

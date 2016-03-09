@@ -9,7 +9,7 @@ class ExamUserPaperPublicData extends BasePublicData{
 
     public function Create($userId,$beginTime,$endTime,$getScore){
         $result = 0;
-        if($userId > 0){
+        if($userId >= 0){
 
             $sql = "INSERT INTO " . self::TableName_ExamUserPaper . "
                     (
@@ -79,7 +79,7 @@ class ExamUserPaperPublicData extends BasePublicData{
 
 
     /**
-     * 取得日期
+     * 取得日期与用户
      * @param int $examUserPaperId 试题分类id
      * @param bool $withCache 是否从缓冲中取
      * @return array 日期
@@ -90,12 +90,11 @@ class ExamUserPaperPublicData extends BasePublicData{
         if ($examUserPaperId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'exam_user_paper_data';
             $cacheFile = 'exam_user_paper_get_date.cache_' . $examUserPaperId . '';
-            $sql = "SELECT BeginTime,EndTime FROM " . self::TableName_ExamUserPaper . " WHERE ExamUserPaperId=:ExamUserPaperId;";
+            $sql = "SELECT BeginTime,EndTime,UserId FROM " . self::TableName_ExamUserPaper . " WHERE ExamUserPaperId=:ExamUserPaperId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ExamUserPaperId", $examUserPaperId);
             $result = $this->GetInfoOfArray($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
         }
         return $result;
     }
-
 }
