@@ -36,14 +36,14 @@ class PromotionRecordPublicGen extends BasePublicGen implements IBasePublicGen {
         $userId = Control::GetUserId();
         if ($userId > 0) {
 
-            $encryptStr = Control::PostOrGetRequest("device_id", 0);
+            $encryptStr = Control::PostOrGetRequest("device_id", "");
             $md5Str = Control::PostOrGetRequest("key_2", "");
 
             //检查密文和指纹
             if (!empty($encryptStr) && !empty($md5Str)) {
 
                 $des = DesFitAllPlatForm::GetInstance();
-                $decryptStr = $des->Decode($encryptStr, "c!S&w(B~");
+                $decryptStr = $des->Decode($encryptStr, "ZAQ!xsw2");
                 $decryptMd5Str = md5($decryptStr);
 
                 //密文指纹比对
