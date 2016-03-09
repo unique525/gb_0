@@ -34,7 +34,7 @@ class PromotionRecordPublicGen extends BasePublicGen implements IBasePublicGen {
     private function GenCreate(){
 
         $userId = Control::GetUserId();
-        if ($userId > 0) {
+        //if ($userId > 0) {
 
             $encryptStr = Control::PostOrGetRequest("device_id", "");
             $md5Str = Control::PostOrGetRequest("key_2", "");
@@ -74,9 +74,9 @@ class PromotionRecordPublicGen extends BasePublicGen implements IBasePublicGen {
             } else {
                 $resultCode = -1; //参数错误;
             }
-        } else {
-            $resultCode = $userId; //会员检验失败,参数错误
-        }
+        //} else {
+        //    $resultCode = $userId; //会员检验失败,参数错误
+        //}
 
         return '{"result_code":"' . $resultCode . '"}';
     }
