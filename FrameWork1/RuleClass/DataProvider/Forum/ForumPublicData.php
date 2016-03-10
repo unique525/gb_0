@@ -171,7 +171,7 @@ class ForumPublicData extends BasePublicData {
         if ($forumId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_data';
             $cacheFile = 'channel_get_last_post_info.cache_' . $forumId . '';
-            $sql = "SELECT ChannelName FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
+            $sql = "SELECT LastPostInfo FROM " . self::TableName_Forum . " WHERE ForumId=:ForumId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("ForumId", $forumId);
             $result = $this->GetInfoOfStringValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
