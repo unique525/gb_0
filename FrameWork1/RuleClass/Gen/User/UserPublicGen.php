@@ -708,7 +708,7 @@ class UserPublicGen extends BasePublicGen implements IBasePublicGen
             if($userId <= 0){
                 return Control::GetRequest("jsonpcallback","").'({"result":'.self::ERROR_USER_PASS.'})';
             }else {
-                $hour = 9999999;
+                $hour = 24000;
 
                 //
 
