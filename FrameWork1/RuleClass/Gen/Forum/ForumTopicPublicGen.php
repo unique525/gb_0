@@ -45,6 +45,9 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             case "async_cancel_best":
                 $result = self::AsyncCancelBest();
                 break;
+            case "list_like_tieba";
+                $result = self::GenListSameAsBaiduTieba();
+                break;
             default:
                 $result = self::GenList();
                 break;
@@ -142,7 +145,123 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
             . '_mode_' . $templateMode
             . '_p_' . $pageIndex
             . '_ps_' . $pageSize;
-        $withCache = true;
+        $withCache = false;
+        if ($withCache) {
+
+            $pageCache = parent::GetCache($cacheDir, $cacheFile);
+
+            if ($pageCache === false) {
+
+                $result = self::getListOfTemplateContent(
+                    $siteId,
+                    $forumId,
+                    $tempContent,
+                    $pageIndex,
+                    $pageSize
+                );
+
+
+                parent::AddCache($cacheDir, $cacheFile, $result, 60);
+            } else {
+                $result = $pageCache;
+            }
+        } else {
+            $result = self::getListOfTemplateContent(
+                $siteId,
+                $forumId,
+                $tempContent,
+                $pageIndex,
+                $pageSize
+            );
+        }
+
+        /*******************页面级的缓存 end  ********************** */
+        parent::ReplaceUserInfoPanel($result, $siteId, "forum_user_is_login", "forum_user_no_login");
+        return $result;
+    }
+
+    private function GenListSameAsBaiduTieba()
+    {
+        $siteId = parent::GetSiteIdByDomain();
+
+        $forumId = Control::GetRequest("forum_id", 0);
+
+
+        if ($forumId <= 0) {
+
+            return "";
+        }
+
+        $pageSize = Control::GetRequest("ps", 25);
+        $pageIndex = Control::GetRequest("p", 1);
+
+
+        $forumPublicData = new ForumPublicData();
+
+        $forumAccess = $forumPublicData->GetForumAccess($forumId, true);
+
+        if($forumAccess == ForumData::FORUM_ACCESS_USER_GROUP){
+            //按身份加密
+            $userId = Control::GetUserId();
+
+            $message = Language::Load("forum",6);
+            $selfUrl = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+            $selfUrl = urlencode($selfUrl);
+            $message = str_ireplace("{re_url}", $selfUrl, $message);
+
+            if($userId<=0){
+                return $message;
+            }
+
+            $userRolePublicData = new UserRolePublicData();
+            $userGroupId = $userRolePublicData->GetUserGroupId($siteId, $userId, true);
+
+            if($userGroupId<=0){
+                return $message;
+            }
+
+            $forumAccessLimit = $forumPublicData->GetForumAccessLimit($forumId, true);
+
+            $arrAccessLimitContent = explode(',',$forumAccessLimit);
+            $canExplore = false;
+            if(is_array($arrAccessLimitContent)
+                && !empty($arrAccessLimitContent)){
+
+                if (in_array($userGroupId, $arrAccessLimitContent)){
+                    $canExplore = true;
+                }
+
+            }else{
+
+                if($userGroupId == $forumAccessLimit){
+                    $canExplore = true;
+                }
+
+            }
+
+
+            if(!$canExplore){
+
+                return $message;
+
+            }
+
+
+        }
+
+        /*******************页面级的缓存 begin********************** */
+        $templateMode = 0;
+        $defaultTemp = "forum_topic_list_like_baidutieba";
+        $tempContent = parent::GetDynamicTemplateContent(
+            $defaultTemp, 0, "", $templateMode); //site id 为0时，全系统搜索模板
+
+        $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'forum_page';
+        $cacheFile = 'forum_topic_list_forum_id_'
+            . $forumId
+            . '_mode_' . $templateMode
+            . '_p_' . $pageIndex
+            . '_ps_' . $pageSize;
+        $withCache = false;
         if ($withCache) {
 
             $pageCache = parent::GetCache($cacheDir, $cacheFile);
@@ -548,10 +667,7 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
                     $forumPublicData = new ForumPublicData();
                     $lastPostInfo = $forumPublicData->GetLastPostInfo($forumId, false);
 
-                    $lastPostInfo = Format::AddToInfoString(
-                        $forumTopicId,
-                        $forumTopicTitle,
-                        $lastPostInfo);
+                    $lastPostInfo = Format::AddToInfoString($forumTopicId, $forumTopicTitle, $lastPostInfo);
 
                     //更新版块信息
                     $forumPublicData->UpdateForumInfoWhenCreateTopic(
@@ -929,18 +1045,18 @@ class ForumTopicPublicGen extends ForumBasePublicGen implements IBasePublicGen
 
             if ($canSetTop) {
                 $sort = 0;
-                switch ($mode) {
-
-                    case 0:
-                        $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
-                        break;
-                    case 1:
-                        $sort = ForumTopicData::FORUM_TOPIC_SORT_REGION_TOP;
-                        break;
-                    case 2:
-                        $sort = ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP;
-                        break;
-                }
+//                switch ($mode) {
+//
+//                    case 0:
+//                        $sort = ForumTopicData::FORUM_TOPIC_SORT_BOARD_TOP;
+//                        break;
+//                    case 1:
+//                        $sort = ForumTopicData::FORUM_TOPIC_SORT_REGION_TOP;
+//                        break;
+//                    case 2:
+//                        $sort = ForumTopicData::FORUM_TOPIC_SORT_ALL_TOP;
+//                        break;
+//                }
 
                 $forumTopicPublicData = new ForumTopicPublicData();
                 $result = $forumTopicPublicData->ModifySort(
