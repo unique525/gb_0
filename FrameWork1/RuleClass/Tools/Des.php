@@ -111,7 +111,7 @@ class Des {
     }
 
 
-    private function PKCS5Padding($text, $blockSize)
+    private static function PKCS5Padding($text, $blockSize)
     {
 
         $pad = $blockSize - (strlen($text) % $blockSize);
@@ -121,7 +121,7 @@ class Des {
     }
 
 
-    private function PKCS5UnPadding($text)
+    private static function PKCS5UnPadding($text)
     {
 
         $pad = ord($text{strlen($text) - 1});
