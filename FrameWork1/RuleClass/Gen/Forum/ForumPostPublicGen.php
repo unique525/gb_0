@@ -497,7 +497,7 @@ class ForumPostPublicGen extends ForumBasePublicGen implements IBasePublicGen
             }
 
             $forumPostTitle = "";
-            $forumPostContent = Control::PostRequest("f_ForumPostContent", "");
+            $forumPostContent = Control::PostRequest("f_ForumPostContent", "", false);
             $forumPostContent = str_ireplace('\"', '"', $forumPostContent);
             //内容中不允许脚本等
             $forumPostContent = Format::RemoveScript($forumPostContent);

@@ -287,6 +287,19 @@ class UploadFilePublicGen extends BasePublicGen implements IBasePublicGen
 
                         }
                         break;
+
+                    case UploadFileData::UPLOAD_TABLE_TYPE_FORUM_POST_CONTENT:
+                        $siteId = parent::GetSiteIdByDomain();
+                        $siteConfigData = new SiteConfigData($siteId);
+                        $watermarkUploadFileId = $siteConfigData->ForumPostContentWatermarkUploadFileId;
+                        if($attachWatermark > 0){
+                            $uploadFileData = new UploadFileData();
+                            $watermarkFilePath = $uploadFileData->GetUploadFilePath(
+                                $watermarkUploadFileId,
+                                true
+                            );
+                        }
+                    break;
                 }
 
                 $sourceType = self::MAKE_WATERMARK_SOURCE_TYPE_SOURCE_PIC;
