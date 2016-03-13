@@ -79,7 +79,7 @@ class DataCache {
      */
     public static function RemoveDir($cacheDir) {
         $cacheDir = RELATIVE_PATH . '/' . $cacheDir;
-        return FileObject::DeleteDir($cacheDir);
+        return FileObject::DeleteDir($cacheDir, false);
     }
 
     /**

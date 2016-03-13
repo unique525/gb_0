@@ -94,16 +94,23 @@ class FileObject
             $dir = dirname($filePath);
             FileObject::CreateDir($dir);
             $fp = fopen($filePath, "w+"); //打开文件指针，创建文件
-            if (!is_writable($filePath)) {
-                $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
-            }else{
-                if($mode!=null){
-                    $result = file_put_contents($filePath, $fileContent, FILE_APPEND); //该函数将返回写入到文件内数据的字节数
-                }else{
-                    $result = file_put_contents($filePath, $fileContent); //该函数将返回写入到文件内数据的字节数
-                }
 
+            if (flock($fp,LOCK_EX)){  //独占锁
+                if (!is_writable($filePath)) {
+                    $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
+                }else{
+                    if($mode!=null){
+                        $result = file_put_contents($filePath, $fileContent, FILE_APPEND); //该函数将返回写入到文件内数据的字节数
+                    }else{
+                        $result = file_put_contents($filePath, $fileContent); //该函数将返回写入到文件内数据的字节数
+                    }
+
+                }
+            }else{
+                $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
             }
+
+
             fclose($fp);
         } else {
             $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_FILE_PATH_IS_EMPTY;
@@ -266,9 +273,10 @@ class FileObject
     /**
      * 递归删除目录
      * @param string $dirPath 要删除的目录路径
+     * @param bool $deleteSelf  是否删除的目录本身
      * @return bool 是否成功
      */
-    public static function DeleteDir($dirPath)
+    public static function DeleteDir($dirPath,$deleteSelf = true)
     {
         if(!is_dir($dirPath)){ //没有找到文件夹，直接返回成功
             return true;
@@ -285,11 +293,16 @@ class FileObject
             }
         }
         $dirHandler->close();
-        if (rmdir($dirPath)) {
+        if($deleteSelf){
+            if (rmdir($dirPath)) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
             return true;
-        } else {
-            return false;
         }
+
     }
 
     /**

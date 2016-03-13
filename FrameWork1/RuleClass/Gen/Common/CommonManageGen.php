@@ -64,10 +64,10 @@ class CommonManageGen extends BaseManageGen implements IBaseManageGen {
 
                 for($i=0;$i<count($arrChannelList);$i++){
 
-                    $documentNewsId = intval($arrChannelList[$i]["ChannelId"]);
-                    if($documentNewsId>0){
+                    $channelId = intval($arrChannelList[$i]["ChannelId"]);
+                    if($channelId>0){
                         $executeTransfer = false; //不分别执行传送
-                        parent::PublishChannel($documentNewsId, $publishQueueManageData, $executeTransfer);
+                        parent::PublishChannel($channelId, $publishQueueManageData, $executeTransfer);
                     }
                 }
 

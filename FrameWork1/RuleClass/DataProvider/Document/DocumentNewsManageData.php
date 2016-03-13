@@ -1964,7 +1964,9 @@ class DocumentNewsManageData extends BaseManageData
                 $selectSite=" AND SiteId=:SiteId ";
                 $dataProperty->AddField("SiteId", $siteId);
             }
-            $sql = "SELECT DocumentNewsId FROM ".self::TableName_DocumentNews." WHERE WaitPublish=1 AND State=:State ".$selectSite." LIMIT $topCount";
+            $sql = "SELECT DocumentNewsId FROM ".self::TableName_DocumentNews."
+
+            WHERE WaitPublish=1 AND State=:State ".$selectSite." ORDER BY DocumentNewsId DESC LIMIT $topCount";
             $dataProperty->AddField("State", $state);
             $dbOperator = DBOperator::getInstance();
             $result = $dbOperator->GetArrayList($sql, $dataProperty);
