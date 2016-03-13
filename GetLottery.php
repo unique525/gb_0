@@ -20,8 +20,6 @@ $server = $_SERVER['SERVER_NAME'];
  *
 
 
-
-
 */
 if (stripos(strtolower($server), 'qcbll.com') !== false) {
     header('Location: http://qcbll.com');
