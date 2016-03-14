@@ -1,4 +1,4 @@
-o<?php
+<?php
 /**
  * 客户端 频道 生成类
  * @category iCMS

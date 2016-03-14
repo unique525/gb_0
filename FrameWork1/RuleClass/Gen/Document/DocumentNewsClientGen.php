@@ -15,7 +15,6 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         $result = "";
         $function = Control::GetRequest("f", "");
         switch ($function) {
-
             case "list_of_site":
                 $result = self::GenListOfSite();
                 break;
@@ -261,4 +260,4 @@ class DocumentNewsClientGen extends BaseClientGen implements IBaseClientGen {
         return '{"result_code":"'.$resultCode.'","document_news":{"document_news_list":' . $result . '}}';
 
     }
-} 
+}
