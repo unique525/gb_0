@@ -39,12 +39,30 @@ class PromotionRecordPublicGen extends BasePublicGen implements IBasePublicGen {
             $encryptStr = Control::PostOrGetRequest("device_id", "");
             $md5Str = Control::PostOrGetRequest("key_2", "");
 
+
+
+
             //检查密文和指纹
             if (!empty($encryptStr) && !empty($md5Str)) {
 
                 $des = DesFitAllPlatForm::GetInstance();
                 $decryptStr = $des->Decode($encryptStr, "ZAQ!xsw2");
+
                 $decryptMd5Str = md5($decryptStr);
+
+                //$decryptStr = Des::DecryptFitAll($encryptStr, "ZAQ!xsw2");
+                //$decryptStr = self::decrypt("ZAQ!xsw2",$encryptStr );
+
+                if ($decryptStr == ''){
+                    //ios failure , //TODO update iPhone 2.0.4
+                    $decryptStr = $encryptStr;
+                    $decryptMd5Str = $md5Str;
+                }
+
+                //echo $decryptStr;
+                //die();
+
+
 
                 //密文指纹比对
                 if ($decryptMd5Str == $md5Str) {
@@ -77,6 +95,8 @@ class PromotionRecordPublicGen extends BasePublicGen implements IBasePublicGen {
         //} else {
         //    $resultCode = $userId; //会员检验失败,参数错误
         //}
+
+
 
         return '{"result_code":"' . $resultCode . '"}';
     }

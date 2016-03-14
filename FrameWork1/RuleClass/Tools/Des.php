@@ -1,6 +1,7 @@
 <?php
-class Des {
 
+class Des
+{
 
 
     /**
@@ -39,14 +40,15 @@ class Des {
      * @param string $key 加密key
      * @return string 加密后的字符串
      */
-    public static function Encrypt($content,$key) {
+    public static function Encrypt($content, $key)
+    {
 
         //5.6以上版本不支持8位KEY
-        $key = $key.$key;
+        $key = $key . $key;
 
-        $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
-        $passCrypt = mcrypt_encrypt ( MCRYPT_RIJNDAEL_256, $key, $content, MCRYPT_MODE_ECB, $iv );
-        $encode = urlencode( $passCrypt );
+        $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND);
+        $passCrypt = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $content, MCRYPT_MODE_ECB, $iv);
+        $encode = urlencode($passCrypt);
         return $encode;
     }
 
@@ -56,14 +58,15 @@ class Des {
      * @param string $key 加密key
      * @return string 解密后的字符串
      */
-    public static function Decrypt($content,$key) {
+    public static function Decrypt($content, $key)
+    {
 
         //5.6以上版本不支持8位KEY
-        $key = $key.$key;
+        $key = $key . $key;
 
-        $decoded = urldecode( $content );
-        $iv = mcrypt_create_iv ( mcrypt_get_iv_size ( MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB ), MCRYPT_RAND );
-        $decrypted = mcrypt_decrypt ( MCRYPT_RIJNDAEL_256, $key, $decoded, MCRYPT_MODE_ECB, $iv );
+        $decoded = urldecode($content);
+        $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND);
+        $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $decoded, MCRYPT_MODE_ECB, $iv);
         return $decrypted;
     }
 
@@ -139,5 +142,40 @@ class Des {
         return substr($text, 0, -1 * $pad);
 
     }
+
+    /**
+     * Encrypt for Obj-c
+     * @param $encrypt
+     * @param $key
+     * @return string
+     */
+    public static function EncryptForObjc ($encrypt, $key)
+    {
+        // 根據 PKCS#7 RFC 5652 Cryptographic Message Syntax (CMS) 修正 Message 加入 Padding
+        $block = mcrypt_get_block_size(MCRYPT_DES, MCRYPT_MODE_ECB);
+        $pad = $block - (strlen($encrypt) % $block);
+        $encrypt .= str_repeat(chr($pad), $pad);
+
+        // 不需要設定 IV 進行加密
+        $result = mcrypt_encrypt(MCRYPT_DES, $key, $encrypt, MCRYPT_MODE_ECB);
+        return base64_encode($result);
+    }
+
+    /**
+     * Decrypt for Obj-c
+     * @param $decrypt
+     * @param $key
+     * @return string
+     */
+    public static function DecryptForObjc($decrypt, $key)
+    {
+        // 不需要設定 IV
+        $str = mcrypt_decrypt(MCRYPT_DES, $key, base64_decode($decrypt), MCRYPT_MODE_ECB);
+
+        // 根據 PKCS#7 RFC 5652 Cryptographic Message Syntax (CMS) 修正 Message 移除 Padding
+        $pad = ord($str[strlen($str) - 1]);
+        return substr($str, 0, strlen($str) - $pad);
+    }
 }
+
 ?>
