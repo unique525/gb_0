@@ -1658,6 +1658,18 @@ class ManageUserAuthorityManageData extends BaseManageData
         return self::GetFieldValue($siteId, $channelId, $manageUserId, "ManageUserGroupModify");
     }
 
+
+    /**
+     * 是否有编辑管理员赛事的权限
+     * @param int $siteId 站点id
+     * @param int $manageUserId 后台管理员id
+     * @return bool 是否有编辑管理员分组的权限
+     */
+    public function CanManageLeague($siteId, $manageUserId)
+    {
+        return true;
+    }
+
     /**
      * 取得字段数据集
      * @param string $tableName 表名

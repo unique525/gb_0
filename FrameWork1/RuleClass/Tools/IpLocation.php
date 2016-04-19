@@ -18,7 +18,7 @@ class IpLocation {
      * @param string $datFile 的值为纯真IP数据库的名子,可自行修改
      */
 
-    function ipLocation($datFile = "") {
+     function __construct($datFile = "") {
         $datFile = ROOTPATH . DIRECTORY_SEPARATOR . "data/ipLocation.dat";
         $this->fp = fopen($datFile, 'rb');   //二制方式打开
         $this->firstIp = $this->Get4b(); //第一条ip索引的绝对偏移地址

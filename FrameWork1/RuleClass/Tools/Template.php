@@ -98,6 +98,23 @@ class Template
      */
     const TAG_TYPE_INTERFACE_CONTENT_LIST = "interface_content_list";
 
+
+
+
+    /**
+     * 模板标签类型： 比赛列表
+     */
+    const TAG_TYPE_MATCH_LIST = "match_list";
+    /**
+     * 模板标签类型： 球队列表
+     */
+    const TAG_TYPE_TEAM_LIST = "team_list";
+    /**
+     * 模板标签类型： 队员列表
+     */
+    const TAG_TYPE_MEMBER_LIST = "member_list";
+
+
     /**
      * 读取模板内容
      * @param string $templateFileUrl 模板文件路径

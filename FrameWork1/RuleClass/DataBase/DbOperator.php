@@ -358,7 +358,7 @@ class DbOperator {
                         echo "TIME:".($timeEnd - $timeStart)." [".implode("|",str_ireplace("\n",'',$sqlList))."]<br />";
                     }
                     if($this->openLog){
-                        $logSql = str_ireplace("\n",'',$sqlList);
+                        $logSql = str_ireplace("\n",'',$sql);
                         $logSql = str_ireplace("\r",'',$logSql);
 
                         $param = '';
@@ -383,6 +383,69 @@ class DbOperator {
             return -1;
         }
     }
+
+    /**
+     * 批量insert SQL
+     * @param array $sqlList 要查询的SQL语句数组
+     * @param array $arrDataProperty 数据对象的数组
+     * @param array $resultArr 结果id
+     * @return int 批量执行结果
+     */
+    public function InsertBatch($sqlList, $arrDataProperty, &$resultArr) {
+
+        try {
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE,  PDO::ERRMODE_EXCEPTION);//开启异常处理
+
+
+            $result = -1;
+            $this->pdo->beginTransaction();
+            for ($i = 0; $i < count($sqlList); $i++) {
+                $sql = $sqlList[$i];
+
+                if (strlen($sql) > 0) {
+                    $timeStart = Control::GetMicroTime();
+                    $stmt = $this->pdo->prepare($sql);
+                    $dataProperty = $arrDataProperty[$i];
+                    if ($dataProperty != null) {
+                        $this->BindStmt($stmt, $dataProperty);
+                    }
+                    $result = $stmt->execute();
+                    $resultArr[$i]["LastInsertId"] = $this->pdo->lastInsertId();
+                    if(intval($result)<=0){
+                        throw new PDOException("affected_rows<=0");//抛出异常
+                    }
+
+                    $timeEnd = Control::GetMicroTime();
+                    if($this->debugExecuteTime>0){
+                        echo "TIME:".($timeEnd - $timeStart)." [".implode("|",str_ireplace("\n",'',$sqlList))."]<br />";
+                    }
+                    if($this->openLog){
+                        $logSql = str_ireplace("\n",'',$sql);
+                        $logSql = str_ireplace("\r",'',$logSql);
+
+                        $param = '';
+                        //if($dataProperty!= null && is_array($dataProperty->ArrayField) && !empty($dataProperty->ArrayField)){
+                        //$param = implode(',',$dataProperty->ArrayField);
+                        //}
+
+                        FileObject::Append('log.txt',"TIME:".($timeEnd - $timeStart).
+                            " [".str_ireplace("\n",'',$logSql)."]\n".$param."\n----------------------------------------\n");
+                    }
+                }
+            }
+
+            $this->pdo->commit();
+            $stmt = null;
+
+
+
+            return $result;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            return -1;
+        }
+    }
+
 
     /**
      * 执行SQL，返回insert后的新的id

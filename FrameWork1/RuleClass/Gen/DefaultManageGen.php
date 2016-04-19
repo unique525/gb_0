@@ -324,6 +324,30 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $lotteryAwardUserManageGen = new LotteryAwardUserManageGen();
                     $result = $lotteryAwardUserManageGen->Gen();
                     break;
+
+
+                case "league":
+                    $leagueManageGen = new LeagueManageGen();
+                    $result = $leagueManageGen->Gen();
+                    break;
+                case "match":
+                    $matchManageGen = new MatchManageGen();
+                    $result = $matchManageGen->Gen();
+                    break;
+                case "team":
+                    $teamManageGen = new TeamManageGen();
+                    $result = $teamManageGen->Gen();
+                    break;
+                case "member":
+                    $memberManageGen = new MemberManageGen();
+                    $result = $memberManageGen->Gen();
+                    break;
+
+
+
+                case "del_all_cache":
+                    parent::DelAllCache();
+                    break;
                 default :
                     $result = self::GenDefault();
                     break;
@@ -373,6 +397,8 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $tempContent = str_ireplace("{manage_menu_of_system_config}", $manageMenuOfSystemConfigTemplateContent, $tempContent);
         $manageMenuOfTaskTemplateContent = Template::Load("manage/manage_menu_of_task.html","common");
         $tempContent = str_ireplace("{manage_menu_of_task}", $manageMenuOfTaskTemplateContent, $tempContent);
+        $manageMenuOfLeagueTemplateContent = Template::Load("manage/manage_menu_of_league.html","common");
+        $tempContent = str_ireplace("{manage_menu_of_league}", $manageMenuOfLeagueTemplateContent, $tempContent);
 
 
         $tagId = "select_site";

@@ -9,11 +9,11 @@ $incSystemName = 'iCMS';
  * 系统数据库配置
  */
 $incDatabaseInfo = array();
-$incDatabaseInfo[] = 'rdshei1x738p1t3xat65.mysql.rds.aliyuncs.com';
+$incDatabaseInfo[] = '127.0.0.1';
 $incDatabaseInfo[] = 3306;
-$incDatabaseInfo[] = 'dbicms2';
-$incDatabaseInfo[] = 'dbicms2';
-$incDatabaseInfo[] = 'zaq1xsw2';
+$incDatabaseInfo[] = 'gb';
+$incDatabaseInfo[] = 'root';
+$incDatabaseInfo[] = '123456';
 $incDatabaseInfo[] = '0'; //debug
 $incDatabaseInfo = implode('|',$incDatabaseInfo);
 
@@ -26,8 +26,8 @@ $incLanguage = "language/zh";
  * 系统域名
  */
 $incDomain = array();
-$incDomain['webapp'] = 'http://www.icswb.com';
-$incDomain['manage'] = 'http://www.icswb.com';
+$incDomain['webapp'] = 'localhost';
+$incDomain['manage'] = 'localhost';
 
 /**
  * 是否开启管理日志

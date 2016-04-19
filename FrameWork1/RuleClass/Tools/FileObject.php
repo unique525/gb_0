@@ -95,7 +95,7 @@ class FileObject
             FileObject::CreateDir($dir);
             $fp = fopen($filePath, "w+"); //打开文件指针，创建文件
 
-            if (flock($fp,LOCK_EX)){  //独占锁
+            //if (flock($fp,LOCK_EX)){  //独占锁
                 if (!is_writable($filePath)) {
                     $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
                 }else{
@@ -106,9 +106,10 @@ class FileObject
                     }
 
                 }
-            }else{
-                $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
-            }
+
+            //}else{
+            //    $result = DefineCode::FILE_OBJECT + self::FILE_WRITE_RESULT_CAN_NOT_WRITE;
+            //}
 
 
             fclose($fp);

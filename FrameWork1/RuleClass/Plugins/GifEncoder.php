@@ -36,7 +36,7 @@ class GifEncoder
      * @param int $gifBlue  指定静态gif文件上面的透明色，蓝色代码，如不指定则，统一为-1
      * @param int $gifMod  一般采用url，指$gifPath指向了静态gif文件
      * */
-    public function GifEncoder($gifPath, $gifDelay, $gifLop, $gifDis, $gifRed, $gifGreen, $gifBlue, $gifMod)
+    public function __construct($gifPath, $gifDelay, $gifLop, $gifDis, $gifRed, $gifGreen, $gifBlue, $gifMod)
     {
         if (!is_array($gifPath) && !is_array($gifDelay)) {
             printf("%s: %s", $this->VER, $this->ERR ['ERR00']);

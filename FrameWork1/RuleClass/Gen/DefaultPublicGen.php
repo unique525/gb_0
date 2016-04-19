@@ -168,6 +168,23 @@ class DefaultPublicGen extends BasePublicGen implements IBasePublicGen {
                 $promotionRecordPublicGen = new PromotionRecordPublicGen();
                 $result = $promotionRecordPublicGen->GenPublic();
                 break;
+
+            case "league":
+                $leaguePublicGen = new LeaguePublicGen();
+                $result = $leaguePublicGen->GenPublic();
+                break;
+            case "match":
+                $matchPublicGen = new MatchPublicGen();
+                $result = $matchPublicGen->GenPublic();
+                break;
+            case "team":
+                $teamPublicGen = new TeamPublicGen();
+                $result = $teamPublicGen->GenPublic();
+                break;
+            case "member":
+                $memberPublicGen = new MemberPublicGen();
+                $result = $memberPublicGen->GenPublic();
+                break;
             default:
                 $result = self::GenDefaultPublic();
                 break;

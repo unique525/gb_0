@@ -824,6 +824,78 @@ class BaseData
 
 
 
+    /**
+     * 赛事 数据表名
+     */
+    const TableName_League = "gb_league";
+    /**
+     * 赛事 数据表自增字段名
+     */
+    const TableId_League = "LeagueId";
+    /**
+     * 比赛 数据表名
+     */
+    const TableName_Match = "gb_match";
+    /**
+     * 比赛 数据表自增字段名
+     */
+    const TableId_Match = "MatchId";
+
+
+    /**
+     * 参加赛事的球队 数据表名
+     */
+    const TableName_TeamOfLeague = "gb_team_of_league";
+    /**
+     * 球队 数据表名
+     */
+    const TableName_Team = "gb_team";
+    /**
+     * 球队 数据表自增字段名
+     */
+    const TableId_Team = "TeamId";
+    /**
+     * 球员 数据表名
+     */
+    const TableName_Member = "gb_member";
+    /**
+     * 球员 数据表自增字段名
+     */
+    const TableId_Member = "MemberId";
+    /**
+     * 进球 数据表名
+     */
+    const TableName_Goal = "gb_goal";
+    /**
+     * 进球 数据表自增字段名
+     */
+    const TableId_Goal = "GoalId";
+    /**
+     * 红黄牌 数据表名
+     */
+    const TableName_RedYellowCard = "gb_red_yellow_card";
+    /**
+     * 红黄牌 数据表自增字段名
+     */
+    const TableId_RedYellowCard = "RedYellowCardId";
+    /**
+     * 裁判 数据表名
+     */
+    const TableName_Judge = "gb_judge";
+    /**
+     * 裁判 数据表自增字段名
+     */
+    const TableId_Judge = "JudgeId";
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 调试 数据表名
