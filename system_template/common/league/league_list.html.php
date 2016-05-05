@@ -140,7 +140,7 @@
                     <td class="spe_line">{f_LeagueName}</td>
 
                     <td class="spe_line" style="width:180px;text-align:center;cursor: pointer">
-                        <span class="span_filter span_match" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_LeagueId}">参赛队伍管理</span>
+                        <!--<span class="span_filter span_match" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_LeagueId}">参赛队伍管理</span>-->
                         <span class="span_filter span_match" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_LeagueId}">赛程管理</span>
 
                     </td>

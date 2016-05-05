@@ -26,6 +26,9 @@ class TeamManageGen extends BaseManageGen implements IBaseManageGen
             case "list":
                 $result = self::GenList();
                 break;
+            case "list_of_league":
+                $result = self::GenListOfLeague();
+                break;
             case "import":
                 $result = self::GenImport();
                 break;
@@ -277,7 +280,63 @@ class TeamManageGen extends BaseManageGen implements IBaseManageGen
         return $tempContent;
     }
 
+    /**
+     * 生成赛事列表页面
+     */
+    private function GenListOfLeague()
+    {
+        $result="";
 
+        $leagueId = Control::GetRequest("league_id", 0);
+        $manageUserId=Control::GetManageUserId();
+
+        ///////////////判断是否有操作权限///////////////////
+        $leagueManageData=new LeagueManageData();
+        $siteId=$leagueManageData->GetSiteId($leagueId,true);
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $canExplore = $manageUserAuthorityManageData->CanManageLeague($siteId, $manageUserId);
+        if (!$canExplore) {
+            die(Language::Load('channel', 4));
+        }
+
+
+
+
+
+
+
+
+        $tempContent = Template::Load("league/team_list.html","common");
+
+        $allCount = 0;
+
+        $teamManageData = new TeamManageData();
+        $arrList = $teamManageData->GetListOfLeague($leagueId);
+
+        $listName = "team_list";
+        if(count($arrList)>0){
+            Template::ReplaceList($tempContent, $arrList, $listName);
+
+            $tempContent = str_ireplace("{PagerButton}", "", $tempContent);
+        }else{
+            Template::RemoveCustomTag($tempContent, $listName);
+            $tempContent = str_ireplace("{PagerButton}", Language::Load("document", 7), $tempContent);
+        }
+
+
+        Template::ReplaceList($tempContent, $arrList, $listName);
+
+        //删除缓冲(没做modify暂时放这里)
+        parent::DelAllCache();
+
+        $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+        $tempContent = str_ireplace("{league_id}", $leagueId, $tempContent);
+        parent::ReplaceEnd($tempContent);
+
+
+
+        return $tempContent;
+    }
 
     /**
      * 导入

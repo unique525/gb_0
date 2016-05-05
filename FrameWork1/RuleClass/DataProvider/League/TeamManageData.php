@@ -148,6 +148,27 @@ class TeamManageData extends BaseManageData
         return $result;
     }
 
+
+    /**
+     * 获取一个赛事的队伍分页列表
+     * @param int $leagueId id
+     * @return array 数据集
+     */
+    public function GetListOfLeague($leagueId) {
+        $result=array();
+        if($leagueId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LeagueId", $leagueId);
+            $sql = "
+                SELECT "." tol.*,t.TeamName,t.TeamShortName
+                FROM ".self::TableName_TeamOfLeague." tol
+                LEFT OUTER JOIN " . self::TableName_Team . " t ON tol.TeamId=t.TeamId
+                WHERE tol.LeagueId=:LeagueId ;";
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
     /**
      * 检查重复项
      * @param $checkStr

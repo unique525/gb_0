@@ -13,7 +13,7 @@ $incDatabaseInfo[] = '127.0.0.1';
 $incDatabaseInfo[] = 3306;
 $incDatabaseInfo[] = 'gb';
 $incDatabaseInfo[] = 'root';
-$incDatabaseInfo[] = '123456';
+$incDatabaseInfo[] = '525525';
 $incDatabaseInfo[] = '0'; //debug
 $incDatabaseInfo = implode('|',$incDatabaseInfo);
 
