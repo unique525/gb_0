@@ -74,10 +74,11 @@ class TeamManageData extends BaseManageData
             foreach($importArray as $key=>$value){
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("TeamName",$value["TeamName"]);
+                $dataProperty->AddField("TeamShortName",$value["TeamShortName"]);
                 $dataProperty->AddField("SiteId",$siteId);
                 $arrDataProperty[]=$dataProperty;
                 $arrSql[]="INSERT "." INTO ".parent::TableName_Team."
-                (TeamName,SiteId,CreateTime) VALUES(:TeamName,:SiteId,'$createDate'); ";
+                (TeamName,TeamShortName,SiteId,CreateTime) VALUES(:TeamName,:TeamShortName,:SiteId,'$createDate'); ";
             }
             $resultIdArray=$importArray;
             $result=$this->dbOperator->InsertBatch($arrSql,$arrDataProperty,$resultIdArray);

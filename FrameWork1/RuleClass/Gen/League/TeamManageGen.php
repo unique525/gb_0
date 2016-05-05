@@ -306,6 +306,13 @@ class TeamManageGen extends BaseManageGen implements IBaseManageGen
                 $importJson=$_POST["import_json"];
                 $importArray=json_decode($importJson,true);
 
+                //修复短名为空
+                foreach($importArray as &$oneTeam){
+                    if($oneTeam["TeamShortName"]==""){
+                        $oneTeam["TeamShortName"]=$oneTeam["TeamName"];
+                    }
+                }
+
                 $teamManageData=new TeamManageData();
                 $createDate=date('Y-m-d H:i:s', time());
                 $resultIdArray=array();

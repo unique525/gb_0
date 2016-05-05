@@ -103,9 +103,10 @@
             <td class="spe_line" style="width:40px;text-align:center;">编辑</td>
             <!--<td class="spe_line" style="width:40px;text-align:center;">状态</td>
             <td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>-->
-            <td class="spe_line" style="width:80px;text-align:left;">名称</td>
-            <td class="spe_line" style="width:120px;text-align:left;">开球时间</td>
-            <td class="spe_line" style="width:80px;text-align:left;">主队 - 客队</td>
+            <td class="spe_line" style="width:100px;text-align:left;">名称</td>
+            <td class="spe_line" style="width:120px;text-align:left;">场地</td>
+            <td class="spe_line" style="width:180px;text-align:left;">开球时间</td>
+            <td class="spe_line" style="text-align:left;">主队 - 客队</td>
             <td class="spe_line" style="width:80px;text-align:center;"></td>
         </tr>
         <icms id="match_list" type="list">
@@ -126,8 +127,9 @@
                     </td>-->
 
                     <td class="spe_line">{f_MatchName}</td>
+                    <td class="spe_line">{f_StadiumName}</td>
                     <td class="spe_line date_time">{f_BeginDate} {f_BeginTime}</td>
-                    <td class="spe_line">{f_HomeTeamName} - {f_GuestTeamName}</td>
+                    <td class="spe_line">{f_HomeTeamShortName} - {f_GuestTeamShortName}</td>
 
                     <td class="spe_line" style="width:180px;text-align:center;cursor: pointer">
                         <!--<span class="span_filter" id="span_match" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_MatchId}">赛程管理</span>

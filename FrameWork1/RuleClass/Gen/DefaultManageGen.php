@@ -24,8 +24,7 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $commonManageGen = new CommonManageGen();
                     $result = $commonManageGen->Gen();
                     break;
-                case "manage_use
-                r":
+                case "manage_user":
                     $manageUserManageGen = new ManageUserManageGen();
                     $result = $manageUserManageGen->Gen();
                     break;
@@ -340,6 +339,10 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     break;
                 case "member":
                     $memberManageGen = new MemberManageGen();
+                    $result = $memberManageGen->Gen();
+                    break;
+                case "stadium":
+                    $memberManageGen = new StadiumManageGen();
                     $result = $memberManageGen->Gen();
                     break;
 

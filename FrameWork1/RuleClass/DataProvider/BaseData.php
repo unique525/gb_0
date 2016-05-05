@@ -879,6 +879,22 @@ class BaseData
      */
     const TableId_RedYellowCard = "RedYellowCardId";
     /**
+     * 换人 数据表名
+     */
+    const TableName_MemberChange = "gb_member_change";
+    /**
+     * 换人 数据表自增字段名
+     */
+    const TableId_MemberChange = "MemberChangeId";
+    /**
+     * 其他事件 数据表名
+     */
+    const TableName_OtherEvent = "gb_other_event";
+    /**
+     * 其他事件 数据表自增字段名
+     */
+    const TableId_OtherEvent = "OtherEventId";
+    /**
      * 裁判 数据表名
      */
     const TableName_Judge = "gb_judge";
@@ -886,6 +902,15 @@ class BaseData
      * 裁判 数据表自增字段名
      */
     const TableId_Judge = "JudgeId";
+    /**
+     * 球场 数据表名
+     */
+    const TableName_Stadium = "gb_stadium";
+    /**
+     * 球场 数据表自增字段名
+     */
+    const TableId_Stadium = "StadiumId";
+
 
 
 

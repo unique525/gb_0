@@ -113,6 +113,26 @@ class Template
      * 模板标签类型： 队员列表
      */
     const TAG_TYPE_MEMBER_LIST = "member_list";
+    /**
+     * 模板标签类型： 进球列表
+     */
+    const TAG_TYPE_GOAL_LIST = "goal_list";
+    /**
+     * 模板标签类型： 红黄牌列表
+     */
+    const TAG_TYPE_RED_YELLOW_CARD_LIST = "red_yellow_card_list";
+    /**
+     * 模板标签类型： 替补事件列表
+     */
+    const TAG_TYPE_MEMBER_CHANGE_LIST = "member_change_list";
+    /**
+     * 模板标签类型： 其他事件列表
+     */
+    const TAG_TYPE_OTHER_EVENT_LIST = "other_event_list";
+    /**
+     * 模板标签类型： 赛场事件（包括进球，红牌黄牌，上下场和其他特殊事件）列表
+
+    const TAG_TYPE_EVENT_LIST = "event_list";*/
 
 
     /**

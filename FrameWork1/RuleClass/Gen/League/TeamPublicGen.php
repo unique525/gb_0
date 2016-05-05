@@ -41,13 +41,7 @@ class TeamPublicGen extends BasePublicGen implements IBasePublicGen
             $matchPublicData = new MatchPublicData();
             $leaguePublicData = new LeaguePublicData();
 
-            if ($leagueId > 0 && $channelId <= 0) {
-                $channelId = $leaguePublicData->GetChannelId($leagueId, true);
-            }
-
-
-            $channelPublicData = new ChannelPublicData();
-            $siteId = $channelPublicData->GetSiteId($channelId, true);
+            $siteId = $leaguePublicData->GetSiteId($leagueId, true);
             $defaultTemp = "league_team_list";
             $temp = Control::GetRequest("temp", $defaultTemp);
             $templateContent = parent::GetDynamicTemplateContent(
@@ -61,7 +55,7 @@ class TeamPublicGen extends BasePublicGen implements IBasePublicGen
 
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
             $cacheFile = 'team_list_of_league_site_id_' . $siteId .
-                '_channel_id_' . $channelId .
+                '_league_id_' . $leagueId .
                 '_temp_' . $defaultTemp .
                 '_lid_' . $leagueId .
                 '_mode_' . $templateMode;

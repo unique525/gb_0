@@ -260,6 +260,7 @@
                         <div id="into" class="div_list">
                             <ul >
                                 <li idvalue="TeamName" class="btn">队名</li>
+                                <li idvalue="TeamShortName" class="">短名</li>
                                 <li idvalue="GroupName" class="">分组</li>
                             </ul>
                         </div>

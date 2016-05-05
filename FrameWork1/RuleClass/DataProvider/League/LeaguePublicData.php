@@ -52,19 +52,21 @@ class LeaguePublicData extends BasePublicData
     }
 
 
+
+
     /**
-     * 获取节点id
-     * @param $leagueId
-     * @param bool $withCache
-     * @return int
+     * 取得站点id
+     * @param int $leagueId
+     * @param bool $withCache 是否从缓冲中取
+     * @return int 站点id
      */
-    public function GetChannelId($leagueId,$withCache=false){
-        $result=-1;
-        if($leagueId>0){
+    public function GetSiteId($leagueId, $withCache)
+    {
+        $result = -1;
+        if ($leagueId > 0) {
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'league_data';
-            $cacheFile = 'league_get_channel_id.cache_' . $leagueId .'';
-            $sql = 'SELECT ChannelId '.'  FROM ' . self::TableName_League . '
-             WHERE LeagueId=:LeagueId;';
+            $cacheFile = 'league_get_site_id.cache_' . $leagueId . '';
+            $sql = "SELECT SiteId FROM " . self::TableName_Channel . " WHERE LeagueId = :LeagueId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LeagueId", $leagueId);
             $result = $this->GetInfoOfIntValue($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

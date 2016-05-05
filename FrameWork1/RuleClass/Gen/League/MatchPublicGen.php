@@ -20,6 +20,9 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
             case "default":
                 $result = self::GetPage();
                 break;
+            case "m_get_one":
+                $result = self::MobileGetOne();
+                break;
         }
         return $result;
     }
@@ -40,14 +43,7 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
         if($leagueId>0){
 
         $leaguePublicData = new LeaguePublicData();
-
-        if ($leagueId > 0 && $channelId <= 0) {
-            $channelId = $leaguePublicData->GetChannelId($leagueId, true);
-        }
-
-
-        $channelPublicData = new ChannelPublicData();
-        $siteId = $channelPublicData->GetSiteId($channelId, true);
+        $siteId = $leaguePublicData->GetSiteId($leagueId, true);
         $defaultTemp = "league_match_list";
         $temp=Control::GetRequest("temp",$defaultTemp);
         $templateContent = parent::GetDynamicTemplateContent(
@@ -104,14 +100,14 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
     /**
      * 取得模板内容
      * @param $siteId
-     * @param $channelId
+     * @param $matchId
      * @param $leagueId
      * @param $tempContent
      * @return string
      */
     private function GetTemplateContent(
         $siteId,
-        $channelId,
+        $matchId,
         $leagueId,
         $tempContent
     )
@@ -120,12 +116,17 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
         $arrayOneLeague=$leaguePublicData->GetOne($leagueId,false);
         Template::ReplaceOne($tempContent,$arrayOneLeague);
 
+        if($matchId>0){
+            $matchPublicData = new MatchPublicData();
+            $arrayOneMatch=$matchPublicData->GetOne($matchId,false);
+            Template::ReplaceOne($tempContent,$arrayOneMatch);
+        }
 
-        $tempContent = str_ireplace("{ChannelId}", $channelId, $tempContent);
+        $tempContent = str_ireplace("{ChannelId}", $matchId, $tempContent);
         parent::ReplaceFirst($tempContent);
 
         $channelPublicData = new ChannelPublicData();
-        $currentChannelName = $channelPublicData->GetChannelName($channelId,true);
+        $currentChannelName = $channelPublicData->GetChannelName($matchId,true);
         $voteIdFromUrl = Control::GetRequest("vote_id","0");
         $tempContent = str_ireplace("{vote_id_from_url}", $voteIdFromUrl, $tempContent);  //替换icms投票标签的id（参数在url内get）
         $tempContent = str_ireplace("{CurrentChannelName}", $currentChannelName, $tempContent);
@@ -135,9 +136,95 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
         $tempContent =  parent::ReplaceTemplate($tempContent);
 
         parent::ReplaceSiteInfo($siteId, $tempContent);
-        parent::ReplaceChannelInfo($channelId, $tempContent);
+        parent::ReplaceChannelInfo($matchId, $tempContent);
         parent::ReplaceEnd($tempContent);
         return $tempContent;
+    }
+
+
+    private function MobileGetOne(){
+        $matchId=Control::GetRequest("match_id",0);
+        $result="";
+        if($matchId>0){
+
+            $leaguePublicData=new LeaguePublicData();
+            $matchPublicData=new MatchPublicData();
+            $leagueId=$matchPublicData->GetLeagueId($matchId,true);
+            $siteId=$leaguePublicData->GetSiteId($leagueId,true);
+
+
+
+
+
+
+            $defaultTemp="match_detail";
+            $temp=Control::GetRequest("temp",$defaultTemp);
+            if($temp=="default"){
+                $temp=$defaultTemp;
+            }
+            $templateContent = parent::GetDynamicTemplateContent(
+                $temp,
+                $siteId,
+                "",
+                $templateMode);
+
+            /*******************页面级的缓存 begin********************** */
+
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'default_page';
+            $cacheFile = 'match_default_site_id_' . $siteId .
+                '_match_id_'.$matchId.
+                '_temp_'.$temp.
+                '_lid_'.$leagueId.
+                '_mode_' . $templateMode;
+            if($temp==$defaultTemp){
+                $withCache = false;
+            }else{
+                $withCache = false;
+            }
+
+            if($withCache){
+                $pageCache = parent::GetCache($cacheDir, $cacheFile);
+
+                if ($pageCache === false) {
+                    $result = self::GetTemplateContent(
+                        $siteId,
+                        $matchId,
+                        $leagueId,
+                        $templateContent);
+                    parent::AddCache($cacheDir, $cacheFile, $result, 60);
+                } else {
+                    $result = $pageCache;
+                }
+            }else{
+                $result = self::GetTemplateContent(
+                    $siteId,
+                    $matchId,
+                    $leagueId,
+                    $templateContent);
+            }
+
+
+
+            //是否是管理员
+            $isManage=0;
+            $manageUserId=Control::GetManageUserId();
+            if($manageUserId>0){
+
+                //////////////判断是否有操作权限///////////////////
+                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                $canExplore = $manageUserAuthorityManageData->CanManageLeague($siteId, $manageUserId);
+                if ($canExplore) {
+                    $isManage=1;
+                }
+            }
+
+            if($isManage>0){
+
+            }
+
+        }
+        return $result;
+
     }
 
 }

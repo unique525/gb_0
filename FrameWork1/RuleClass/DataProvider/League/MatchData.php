@@ -31,4 +31,26 @@ class MatchData {
      */
     const STATE_REMOVED = 100;
 
+
+    /**
+     * 主队胜
+     */
+    const RESULT_HOME_WIN = 1;
+    /**
+     * 客队胜
+     */
+    const RESULT_GUEST_WIN = 2;
+    /**
+     * 平
+     */
+    const RESULT_DRAW = 3;
+    /**
+     * 主队点球大战胜
+     */
+    const RESULT_HOME_WIN_PENALTY = 4;
+    /**
+     * 客队点球大战胜
+     */
+    const RESULT_GUEST_WIN_PENALTY = 5;
+
 }

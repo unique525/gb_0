@@ -303,6 +303,59 @@ class BasePublicGen extends BaseGen
                                 $state
                             );
                         break;
+
+
+                    case Template::TAG_TYPE_GOAL_LIST:
+                        $templateContent = self::ReplaceTemplateOfGoalList(
+                            $templateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder,
+                            $state
+                        );
+                        break;
+
+                    case Template::TAG_TYPE_RED_YELLOW_CARD_LIST:
+                        $templateContent = self::ReplaceTemplateOfRedYellowCardList(
+                            $templateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder,
+                            $state
+                        );
+                        break;
+
+                    case Template::TAG_TYPE_MEMBER_CHANGE_LIST:
+                        $templateContent = self::ReplaceTemplateOfMemberChangeList(
+                            $templateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder,
+                            $state
+                        );
+                        break;
+
+                    case Template::TAG_TYPE_OTHER_EVENT_LIST:
+                        $templateContent = self::ReplaceTemplateOfOtherEventList(
+                            $templateContent,
+                            $tagId,
+                            $tagContent,
+                            $tagTopCount,
+                            $tagWhere,
+                            $tagWhereValue,
+                            $tagOrder,
+                            $state
+                        );
+                        break;
                 }
             }
         }
@@ -2125,6 +2178,286 @@ class BasePublicGen extends BaseGen
 
         return $channelTemplateContent;
     }
+
+
+    /**
+     * 替换进球列表内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param string $tagId 标签id
+     * @param $tagContent
+     * @param string $tagTopCount
+     * @param string $tagWhere 检索条件
+     * @param $tagWhereValue
+     * @param $tagOrder
+     * @param $state
+     * @return string
+     */
+    private function ReplaceTemplateOfGoalList(
+        $channelTemplateContent,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagWhereValue,
+        $tagOrder,
+        $state
+    )
+    {
+
+        $goalPublicData = new GoalPublicData();
+        switch($tagWhere){
+            case "match":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,False);
+                break;
+            case "member":
+                break;
+            case "member_of_league":
+                break;
+            case "league":
+                break;
+            case "team":
+                break;
+            default:
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,False);
+            break;
+        }
+
+        if (!empty($arrGoalList)) {
+            Template::ReplaceList($tagContent, $arrGoalList, $tagId);
+            //把对应ID的CMS标记替换成指定内容
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+        } else {
+            //替换为空
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+        }
+
+        return $channelTemplateContent;
+    }
+
+
+
+
+
+    /**
+     * 替换card事件列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param string $tagId 标签id
+     * @param $tagContent
+     * @param string $tagTopCount
+     * @param string $tagWhere 检索条件
+     * @param $tagWhereValue
+     * @param $tagOrder
+     * @param $state
+     * @return string
+     */
+    private function ReplaceTemplateOfRedYellowCardList(
+        $channelTemplateContent,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagWhereValue,
+        $tagOrder,
+        $state
+    ){
+
+        $cardPublicData = new RedYellowCardPublicData();
+        switch($tagWhere){
+            case "match":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,False);
+                break;
+            case "member":
+                break;
+            case "member_of_league":
+                break;
+            case "league":
+                break;
+            case "team":
+                break;
+            default:
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,False);
+                break;
+        }
+
+        if (!empty($arrCardList)) {
+            Template::ReplaceList($tagContent, $arrCardList, $tagId);
+            //把对应ID的CMS标记替换成指定内容
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+        } else {
+            //替换为空
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+        }
+
+        return $channelTemplateContent;
+    }
+
+
+
+    /**
+     * 替换替补事件列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param string $tagId 标签id
+     * @param $tagContent
+     * @param string $tagTopCount
+     * @param string $tagWhere 检索条件
+     * @param $tagWhereValue
+     * @param $tagOrder
+     * @param $state
+     * @return string
+     */
+    private function ReplaceTemplateOfMemberChangeList(
+        $channelTemplateContent,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagWhereValue,
+        $tagOrder,
+        $state
+    ){
+
+        $memberChangePublicData = new MemberChangePublicData();
+        switch($tagWhere){
+            case "match":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,False);
+                break;
+            case "member":
+                break;
+            case "member_of_league":
+                break;
+            case "league":
+                break;
+            case "team":
+                break;
+            default:
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,False);
+                break;
+        }
+
+        if (!empty($arrMemberChangeList)) {
+            Template::ReplaceList($tagContent, $arrMemberChangeList, $tagId);
+            //把对应ID的CMS标记替换成指定内容
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+        } else {
+            //替换为空
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+        }
+
+        return $channelTemplateContent;
+    }
+
+
+    /**
+     * 替换其他事件列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param string $tagId 标签id
+     * @param $tagContent
+     * @param string $tagTopCount
+     * @param string $tagWhere 检索条件
+     * @param $tagWhereValue
+     * @param $tagOrder
+     * @param $state
+     * @return string
+     */
+    private function ReplaceTemplateOfOtherEventList(
+        $channelTemplateContent,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $tagWhere,
+        $tagWhereValue,
+        $tagOrder,
+        $state
+    ){
+
+        $otherEventPublicData = new OtherEventPublicData();
+        switch($tagWhere){
+            case "match":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,False);
+                break;
+            case "member":
+                break;
+            case "member_of_league":
+                break;
+            case "league":
+                break;
+            case "team":
+                break;
+            default:
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,False);
+                break;
+        }
+
+        if (!empty($arrOtherEventList)) {
+            Template::ReplaceList($tagContent, $arrOtherEventList, $tagId);
+            //把对应ID的CMS标记替换成指定内容
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+        } else {
+            //替换为空
+            $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+        }
+
+        return $channelTemplateContent;
+    }
+
+
+
+
+    /**
+     * 替换比赛事件列表的内容
+     * @param string $channelTemplateContent 要处理的模板内容
+     * @param int $matchId 球队id
+     * @param string $tagId 标签id
+     * @param string $tagContent 标签内容
+     * @param int $tagTopCount 显示条数
+     * @param int $state 状态
+     * @return mixed|string 内容模板
+
+    private function ReplaceTemplateOfEventList(
+        $channelTemplateContent,
+        $matchId,
+        $tagId,
+        $tagContent,
+        $tagTopCount,
+        $state
+    )
+    {
+        if ($matchId > 0) {
+            $arrEventList = null;
+
+            $goalPublicData = new GoalPublicData();
+            $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,False);
+            $redYellowCardPublicData=new RedYellowCardPublicData();
+            $arrCardList=$redYellowCardPublicData->GetAllListOfMatch($matchId,false);
+            $memberChangePublicData=new MemberChangePublicData();
+            $arrMemberChangeList=$memberChangePublicData->GetAllListOfMatch($matchId,false);
+            $otherEventPublicData=new OtherEventPublicData();
+            $arrOtherEventList=$otherEventPublicData->GetAllListOfMatch($matchId,false);
+
+            $arrEventList=array_merge($arrGoalList,$arrCardList,$arrMemberChangeList,$arrOtherEventList);
+
+            if (!empty($arrEventList)) {
+                Template::ReplaceList($tagContent, $arrEventList, $tagId);
+                //把对应ID的CMS标记替换成指定内容
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, $tagContent);
+            } else {
+                //替换为空
+                $channelTemplateContent = Template::ReplaceCustomTag($channelTemplateContent, $tagId, '');
+            }
+        }else{
+
+        }
+
+        return $channelTemplateContent;
+    }*/
 
 }
 

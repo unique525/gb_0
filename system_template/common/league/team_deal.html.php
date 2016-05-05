@@ -106,6 +106,14 @@
                 submit=0;
             }
             if(submit==1) {
+
+                //自动填入短名
+                var shortName=$("#f_TeamShortName").val();
+                if(shortName==""){
+                    $("#f_TeamShortName").val($("#f_TeamName").val());
+                }
+
+
                 if (continueCreate == 1) {
                     $("#CloseTab").val("0");
                 } else {
@@ -135,6 +143,10 @@
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_TeamName">队名：</label></td>
                 <td class="spe_line"><input type="text" id="f_TeamName" name="f_TeamName" value="{TeamName}"/></td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_TeamShortName">短名：</label></td>
+                <td class="spe_line"><input type="text" id="f_TeamShortName" name="f_TeamShortName" value="{TeamShortName}"/>(若不填则自动填入队名)</td>
             </tr>
         </table>
         <div id="bot_button">

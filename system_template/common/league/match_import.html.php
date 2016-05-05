@@ -97,12 +97,13 @@
                 var fieldName=$(into[i]).attr("idvalue");
                 var queryFieldName=$(into[i]).attr("title");
                 var fieldIdName=$(into[i]).attr("id_name");
+                var mod=$(into[i]).attr("mod");
                 var fieldShowName=$(into[i]).html();
                 var fieldClass=$(into[i]).attr("class");
                 if(fieldClass=="btn"){
                     importTitle+='<td class="btn" onclick="CheckRepeat(\''+fieldName+'\')">'+fieldShowName+'</td>';
                 }else if(fieldClass=="btn2"){
-                    importTitle+='<td class="btn2" onclick="GetIdsOfField(\''+fieldName+'\',\''+queryFieldName+'\',\''+fieldIdName+'\')">'+fieldShowName+'</td>';
+                    importTitle+='<td class="btn2" onclick="GetIdsOfField(\''+fieldName+'\',\''+queryFieldName+'\',\''+fieldIdName+'\',\''+mod+'\')">'+fieldShowName+'</td>';
                 }else{
                     importTitle+='<td class="spe_line2">'+fieldShowName+'</td>';
                 }
@@ -186,14 +187,15 @@
 
 
 
-        function GetIdsOfField(fieldName,queryFieldName,fieldIdName) {
+        function GetIdsOfField(fieldName,queryFieldName,fieldIdName,mod) {
+
             var importShowTitle=importTitle; //取全局的table title
             var jsonStr=$("#jsonStr").val();
             var jsonObj=JSON.parse(jsonStr);
             if(fieldName!=""&&jsonStr!=""){
                 $.ajax({
                     type: "post",
-                    url: "/default.php?secu=manage&mod=team&m=async_get_json_with_ids&site_id={SiteId}",
+                    url: "/default.php?secu=manage&mod="+mod+"&m=async_get_json_with_ids&site_id={SiteId}",
                     data: {
                         field_name: fieldName,
                         import_json: jsonStr,
@@ -296,13 +298,13 @@
                                 <li idvalue="t_BeginDate" class="">日期</li>
                                 <li idvalue="t_BeginTime" class="">时间</li>
                                 <li idvalue="f_HomeTeamId" class="">主队ID</li>
-                                <li idvalue="HomeTeamName" title="TeamName" id_name="f_HomeTeamId" class="btn2">主队</li>
+                                <li idvalue="HomeTeamName" title="TeamName" id_name="f_HomeTeamId" mod="team" class="btn2">主队</li>
                                 <li idvalue="f_GuestTeamId" class="">客队ID</li>
-                                <li idvalue="GuestTeamName" title="TeamName" id_name="f_GuestTeamId" class="btn2">客队</li>
+                                <li idvalue="GuestTeamName" title="TeamName" id_name="f_GuestTeamId" mod="team" class="btn2">客队</li>
                                 <!--<li idvalue="JudgeId" class="">裁判ID</li>
-                                <li idvalue="JudgeName" class="">裁判</li>
-                                <li idvalue="StadiumId" class="">场地ID</li>
-                                <li idvalue="StadiumName" class="">场地</li>-->
+                                <li idvalue="JudgeName" class="">裁判</li>-->
+                                <li idvalue="f_StadiumId" class="">场地ID</li>
+                                <li idvalue="StadiumName" title="StadiumName" id_name="f_StadiumId" mod="stadium" class="btn2">场地</li>
                             </ul>
                         </div>
                         <div style="position: relative; height: 50px; float: left;width:100%">(深色为唯一约束字段,浅色点击获取ID）</div>

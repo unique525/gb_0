@@ -104,6 +104,47 @@
 
             }
         }
+
+
+
+
+
+        function GetStadiumId(stadiumDomId,toDomId,leagueId){
+
+            var stadiumName=$("#"+stadiumDomId).val();
+            if(stadiumName==""){
+                alert("请输入球场名！");
+            }else{
+                $.ajax({
+                    type: "get",
+                    url: "/default.php?secu=manage&mod=stadium&m=async_get_id_by_name",
+                    data: {
+                        stadium_name: stadiumName,
+                        league_id:leagueId
+
+                    },
+                    dataType: "jsonp",
+                    jsonp: "jsonpcallback",
+                    success: function(data) {
+                        var result=data["result"];
+                        var teamId=data["stadium_id"];
+                        switch(parseInt(result)){
+                            case 1:
+                                alert("获取成功");
+                                $("#"+toDomId).val(teamId);
+                                break;
+                            case 0:
+                                alert("球场名为空");
+                                break;
+                            case -1:
+                                alert("找不到球场");
+                                break;
+                        }
+                    }
+                });
+
+            }
+        }
         function submitForm(continueCreate) {
             var submit=1;
             if ($('#f_LotteryName').val() == '') {
@@ -149,6 +190,14 @@
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_BeginTime">时间：</label></td>
                 <td class="spe_line"><input type="text" class="GetTime" id="f_BeginTime" name="f_BeginTime" value="{BeginTime}"/></td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_StadiumId">球场：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_StadiumId" name="f_StadiumId" value="{StadiumId}"/>
+                    <input type="text" class="" id="StadiumName"  value="{StadiumName}"/>
+                    <input type="button" class="btn" onclick="GetStadiumId('StadiumName','f_StadiumId','{LeagueId}')" value="获取id"/>
+                </td>
             </tr>
             <tr class="grid_item">
                 <td class="spe_line" style="height:30px;text-align:right"><label for="f_HomeTeamId">主队：</label></td>

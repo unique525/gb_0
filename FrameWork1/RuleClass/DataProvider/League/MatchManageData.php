@@ -142,11 +142,14 @@ class MatchManageData extends BaseManageData
             }
 
             $sql = "
-                SELECT "." M.*,ht.TeamName as HomeTeamName,gt.TeamName as GuestTeamName
+                SELECT "." m.*,s.StadiumName,
+                ht.TeamName as HomeTeamName,gt.TeamName as GuestTeamName,
+                ht.TeamShortName as HomeTeamShortName,gt.TeamShortName as GuestTeamShortName
                 FROM
                 " . self::TableName_Match . " m
                 LEFT OUTER JOIN " . self::TableName_Team . " ht ON ht.TeamId=m.HomeTeamId
                 LEFT OUTER JOIN " . self::TableName_Team . " gt ON gt.TeamId=m.GuestTeamId
+                LEFT OUTER JOIN ".self::TableName_Stadium ." s ON s.StadiumId=m.StadiumId
                 WHERE LeagueId=:LeagueId " . $searchSql . " LIMIT " . $pageBegin . "," . $pageSize . " ;";
 
 
@@ -185,9 +188,13 @@ class MatchManageData extends BaseManageData
 
         $result = array();
         if ($matchId > 0) {
-            $sql = "SELECT "." m.*,ht.TeamName as HomeTeamName,gt.TeamName as GuestTeamName FROM " . self::TableName_Match . " m
+            $sql = "SELECT "." m.*,s.StadiumName,
+            ht.TeamName as HomeTeamName,gt.TeamName as GuestTeamName,
+            ht.TeamShortName as HomeTeamShortName,gt.TeamShortName as GuestTeamShortName
+             FROM " . self::TableName_Match . " m
              LEFT OUTER JOIN ".self::TableName_Team ." ht ON ht.TeamId=m.HomeTeamId
              LEFT OUTER JOIN ".self::TableName_Team ." gt ON gt.TeamId=m.GuestTeamId
+             LEFT OUTER JOIN ".self::TableName_Stadium ." s ON s.StadiumId=m.StadiumId
              WHERE m.MatchId=:MatchId;";
             $dataProperty = new DataProperty();
             $dataProperty->AddField("MatchId", $matchId);
@@ -205,5 +212,37 @@ class MatchManageData extends BaseManageData
     public function GetFields($tableName = self::TableName_Match){
         return parent::GetFields(self::TableName_Match);
     }
+
+
+
+    /**
+     * submit单场结果
+     * @param $matchId
+     * @param $matchResult
+     * @param $homeTeamGoal
+     * @param $guestTeamGoal
+     * @param $homePenalty
+     * @param $guestPenalty
+     * @return int
+     */
+    public function UpdateOneMatchResult($matchId,$matchResult,$homeTeamGoal,$guestTeamGoal,$homePenalty,$guestPenalty)
+    {
+        $result = -1;
+        if ($matchId > 0) {
+            $sql = 'UPDATE ' . self::TableName_Match . '
+             SET Result=:Result,HomeTeamGoal=:HomeTeamGoal,GuestTeamGoal=:GuestTeamGoal,HomeTeamPenalty=:HomeTeamPenalty,GuestTeamPenalty=:GuestTeamPenalty
+             WHERE MatchId=:MatchId;';
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("MatchId", $matchId);
+            $dataProperty->AddField("Result", $matchResult);
+            $dataProperty->AddField("HomeTeamGoal", $homeTeamGoal);
+            $dataProperty->AddField("GuestTeamGoal", $guestTeamGoal);
+            $dataProperty->AddField("HomeTeamPenalty", $homePenalty);
+            $dataProperty->AddField("GuestTeamPenalty", $guestPenalty);
+            $result=$this->dbOperator->Execute($sql,$dataProperty);
+        }
+        return $result;
+    }
+
 
 }
