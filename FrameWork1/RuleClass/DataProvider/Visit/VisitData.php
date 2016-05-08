@@ -36,6 +36,14 @@ class VisitData {
      * 活动
      */
     const VISIT_TABLE_TYPE_ACTIVITY = 7;
+    /**
+     * 赛事
+     */
+    const VISIT_TABLE_TYPE_LEAGUE = 8;
+    /**
+     * 赛事
+     */
+    const VISIT_TABLE_TYPE_MATCH = 9;
 
     /**
      * 统计类型 年

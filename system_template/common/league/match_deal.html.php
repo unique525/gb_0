@@ -180,7 +180,7 @@
     <div style="margin: 0 auto 10px;">
         <table width="99%" class="doc_grid" cellpadding="0" cellspacing="0">
             <tr class="grid_item">
-                <td class="spe_line" style="height:30px;text-align:right"><label for="f_MatchName">名称：</label></td>
+                <td class="spe_line" style="height:30px;width:200px;text-align:right"><label for="f_MatchName">名称：</label></td>
                 <td class="spe_line"><input type="text" id="f_MatchName" name="f_MatchName" value="{MatchName}"/></td>
             </tr>
             <tr class="grid_item">
@@ -213,6 +213,41 @@
                     <input type="number" class="" id="f_GuestTeamId" name="f_GuestTeamId" value="{GuestTeamId}"/>
                     <input type="text" class="" id="GuestTeamName"  value="{GuestTeamName}"/>
                     <input type="button" class="btn" onclick="GetTeamId('GuestTeamName','f_GuestTeamId','{LeagueId}')" value="获取id"/>
+                </td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_HomeTeamGoal">主队进球：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_HomeTeamGoal" name="f_HomeTeamGoal" value="{HomeTeamGoal}"/>
+                </td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_GuestTeamGoal">客队进球：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_GuestTeamGoal" name="f_GuestTeamGoal" value="{GuestTeamGoal}"/>
+                </td>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_HomeTeamPenalty">主队点球：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_HomeTeamPenalty" name="f_HomeTeamPenalty" value="{HomeTeamPenalty}"/>
+                </td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_HomeTeamPenalty">客队点球：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_HomeTeamPenalty" name="f_HomeTeamPenalty" value="{HomeTeamPenalty}"/>
+                </td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_State">状态：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_State" name="f_State" value="{State}"/>(0:一般 1：已结束)
+                </td>
+            </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_Result">结果：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_Result" name="f_Result" value="{Result}"/>（1:主队胜 2:客队胜 3:平 4:主队点球胜 5:客队点球胜）
                 </td>
             </tr>
 

@@ -71,17 +71,18 @@ class MemberManageData extends BaseManageData
             $arrSql=array();
             $arrDataProperty=array();
             foreach($importArray as $key=>$value){
+                if($value["BirthDay"]==""){
+                    $value["BirthDay"]="0000-00-00";
+                }
                 $dataProperty = new DataProperty();
                 $dataProperty->AddField("MemberName",$value["MemberName"]);
                 $dataProperty->AddField("TeamId",$value["TeamId"]);
                 $dataProperty->AddField("Number",$value["Number"]);
-                //$dataProperty->AddField("BirthDay",$value["BirthDay"]);
                 $dataProperty->AddField("SiteId",$siteId);
                 $arrDataProperty[]=$dataProperty;
                 $arrSql[]="INSERT "." INTO ".parent::TableName_Member."
-                (MemberName,SiteId,TeamId,Number,BirthDay,CreateTime) VALUES(:MemberName,:SiteId,:TeamId,:Number,'".$value["BirthDay"]."','$createDate'); ";
+                (MemberName,SiteId,TeamId,Number,BirthDay,CreateDate) VALUES(:MemberName,:SiteId,:TeamId,:Number,'".$value["BirthDay"]."','$createDate'); ";
             }
-            //print_r($arrSql);die();
             $result=$this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);
         }
         return $result;
@@ -171,6 +172,24 @@ class MemberManageData extends BaseManageData
             $dataProperty = new DataProperty();
             $dataProperty->AddField("MemberId", $memberId);
             $result = $this->dbOperator->GetArray($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+    /**
+     * 获取列表数据集
+     * @param $teamId
+     * @return int
+     */
+    public function GetListOfTeam($teamId)
+    {
+        $result = array();
+        if ($teamId > 0) {
+            $sql = 'SELECT '.' * FROM ' . self::TableName_Member . ' WHERE TeamId=:TeamId AND State<'.MemberData::STATE_REMOVED .' ORDER BY Number;';
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TeamId", $teamId);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
     }

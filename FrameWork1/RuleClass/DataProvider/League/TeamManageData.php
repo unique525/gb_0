@@ -78,7 +78,7 @@ class TeamManageData extends BaseManageData
                 $dataProperty->AddField("SiteId",$siteId);
                 $arrDataProperty[]=$dataProperty;
                 $arrSql[]="INSERT "." INTO ".parent::TableName_Team."
-                (TeamName,TeamShortName,SiteId,CreateTime) VALUES(:TeamName,:TeamShortName,:SiteId,'$createDate'); ";
+                (TeamName,TeamShortName,SiteId,CreateDate) VALUES(:TeamName,:TeamShortName,:SiteId,'$createDate'); ";
             }
             $resultIdArray=$importArray;
             $result=$this->dbOperator->InsertBatch($arrSql,$arrDataProperty,$resultIdArray);

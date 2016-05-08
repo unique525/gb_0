@@ -342,8 +342,12 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     $result = $memberManageGen->Gen();
                     break;
                 case "stadium":
-                    $memberManageGen = new StadiumManageGen();
-                    $result = $memberManageGen->Gen();
+                    $stadiumManageGen = new StadiumManageGen();
+                    $result = $stadiumManageGen->Gen();
+                    break;
+                case "goal":
+                    $goalManageGen = new GoalManageGen();
+                    $result = $goalManageGen->Gen();
                     break;
 
 

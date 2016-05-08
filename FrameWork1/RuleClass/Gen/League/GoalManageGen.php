@@ -5,7 +5,7 @@
  * Date: 2016/3/16
  * Time: 21:56
  */
-class MatchManageGen extends BaseManageGen implements IBaseManageGen
+class GoalManageGen extends BaseManageGen implements IBaseManageGen
 {
 
     /**
@@ -20,8 +20,14 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
             case "create":
                 $result = self::GenCreate();
                 break;
+            case "mobile_create":
+                $result = self::GenMobileCreate();
+                break;
             case "modify":
                 $result = self::GenModify();
+                break;
+            case "mobile_modify":
+                $result = self::GenMobileModify();
                 break;
             case "list":
                 $result = self::GenList();
@@ -29,28 +35,28 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
             case "import":
                 $result = self::GenImport();
                 break;
+            case "async_check_repeat":
+                $result = self::AsyncCheckRepeat();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
         return $result;
     }
 
-
     /**
      * 新增
      * @return string 执行结果
      */
-    private function GenCreate(){
-        $tempContent = Template::Load("league/match_deal.html","common");
+    private function GenMobileCreate(){
         $resultJavaScript="";
-        $leagueId=Control::GetRequest("league_id",-1);
-        $tabIndex=Control::GetRequest("tab_index",0);
+        $matchId=Control::GetRequest("match_id",-1);
 
 
         $matchManageData=new MatchManageData();
-        //////////////判断是否有操作权限///////////////////
-
         $leagueManageData=new LeagueManageData();
+        //////////////判断是否有操作权限///////////////////
+        $leagueId=$matchManageData->GetLeagueId($matchId,true);
         $siteId=$leagueManageData->GetSiteId($leagueId,true);
         $manageUserId = Control::GetManageUserId();
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -60,23 +66,24 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
         }
 
 
-        parent::ReplaceFirst($tempContent);
 
-        if (intval($leagueId) > 0) {
+        $goalManageData=new GoalManageData();
+        if (intval($matchId) > 0) {
+            $tempContent = Template::Load("league/match_event_deal_mobile.html","common");
+            parent::ReplaceFirst($tempContent);
             if (!empty($_POST)) {
-                $matchId = $matchManageData->Create($_POST, $leagueId);
-
+                $goalId = $goalManageData->Create($_POST,$manageUserId);
                 //记入操作log
-                $operateContent = "Create match：league：" . $leagueId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $matchId;
+                $operateContent = "Create goal：match：" . $matchId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $goalId;
                 self::CreateManageUserLog($operateContent);
 
-                if ($matchId > 0) {
+                if ($goalId > 0) {
 
                     Control::ShowMessage(Language::Load('lottery', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php?secu=manage&mod=match&m=list&league_id=$leagueId&tab_index=$tabIndex");
+                        Control::GoUrl("/a/match/m_get_one/match_detail/match_id=$matchId.html");
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -84,32 +91,57 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
 
 
                 }else{
-                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 2));//提交失败!插入或修改数据库错误！
+                    Control::ShowMessage(Language::Load('lottery', 2));//提交失败!插入或修改数据库错误！
                 }
 
 
             }
 
 
+            $oneMatch=$matchManageData->GetOne($matchId);
+            Template::ReplaceOne($tempContent,$oneMatch);
             $replaceArr = array(
-                "{HomeTeamName}" => "",
-                "{GuestTeamName}" => "",
-                "{TabIndex}" => $tabIndex,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);
-            $tempContent = str_ireplace("{LeagueId}", $leagueId, $tempContent);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 
-            $arrField = $matchManageData->GetFields();
+            $arrField = $goalManageData->GetFields();
             parent::ReplaceWhenCreate($tempContent, $arrField);
+
+
+
+            $memberManageData=new MemberManageData();
+            $homeList=$memberManageData->GetListOfTeam($oneMatch["HomeTeamId"]);
+            $listName = "home_list";
+            $listName2 = "home_list_assistor";
+            if(!empty($homeList)){
+                Template::ReplaceList($tempContent, $homeList, $listName);
+                Template::ReplaceList($tempContent, $homeList, $listName2);
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($tempContent, $listName2);
+            }
+            $guestList=$memberManageData->GetListOfTeam($oneMatch["GuestTeamId"]);
+            $listName = "guest_list";
+            $listName2 = "guest_list_assistor";
+            if(!empty($guestList)){
+                Template::ReplaceList($tempContent, $guestList, $listName);
+                Template::ReplaceList($tempContent, $guestList, $listName2);
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($tempContent, $listName2);
+            }
+
+
+
 
             //替换掉{s XXX}的内容
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         } else {
-            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 5));//id错误！;
+            Control::ShowMessage(Language::Load('lottery', 5));//id错误！;
         }
         parent::ReplaceEnd($tempContent);
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
@@ -122,18 +154,16 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
      * 编辑
      * @return string 执行结果
      */
-    private function GenModify(){
-        $tempContent = Template::Load("league/match_deal.html","common");
+    private function GenMobileModify(){
         $resultJavaScript="";
-        $matchId=Control::GetRequest("match_id",-1);
-        $tabIndex=Control::GetRequest("tab_index",0);
+        $goalId=Control::PostOrGetRequest("goal_id",-1);
 
-
+        $goalManageData=new GoalManageData();
         $matchManageData=new MatchManageData();
-        //////////////判断是否有操作权限///////////////////
-
-        $leagueId=$matchManageData->GetLeagueId($matchId,TRUE);
         $leagueManageData=new LeagueManageData();
+        //////////////判断是否有操作权限///////////////////
+        $matchId=$goalManageData->GetMatchId($goalId,true);
+        $leagueId=$matchManageData->GetLeagueId($matchId,true);
         $siteId=$leagueManageData->GetSiteId($leagueId,true);
         $manageUserId = Control::GetManageUserId();
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
@@ -143,23 +173,25 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
         }
 
 
-        parent::ReplaceFirst($tempContent);
 
+        $goalManageData=new GoalManageData();
         if (intval($matchId) > 0) {
+            $tempContent = Template::Load("league/match_event_deal_mobile.html","common");
+            parent::ReplaceFirst($tempContent);
             if (!empty($_POST)) {
-                $modifySuccess = $matchManageData->Modify($_POST, $matchId);
+                $result = $goalManageData->Modify($_POST,$goalId,$manageUserId);
 
                 //记入操作log
-                $operateContent = "Modify match：match：" . $matchId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $modifySuccess;
+                $operateContent = "Modify goal：goal：" . $goalId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
                 self::CreateManageUserLog($operateContent);
 
-                if ($modifySuccess > 0) {
+                if ($goalId > 0) {
 
                     Control::ShowMessage(Language::Load('lottery', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php?secu=manage&mod=match&m=list&league_id=$leagueId&tab_index=$tabIndex");
+                        Control::GoUrl("/a/match/m_get_one/match_detail/match_id=$matchId.html");
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -167,36 +199,61 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
 
 
                 }else{
-                    $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 2));//提交失败!插入或修改数据库错误！
+                    Control::ShowMessage(Language::Load('lottery', 2));//提交失败!插入或修改数据库错误！
                 }
 
 
             }
 
-            $arrOneMatch = $matchManageData->GetOne($matchId);
-            if(!empty($arrOneMatch)){
-                Template::ReplaceOne($tempContent, $arrOneMatch);
+
+            $oneMatch=$matchManageData->GetOne($matchId);
+            Template::ReplaceOne($tempContent,$oneMatch);
+
+
+            $oneGoal=$goalManageData->GetOne($goalId);
+            Template::ReplaceOne($tempContent,$oneGoal);
+            $replaceArr = array(
+                "{display}" => "inline"
+            );
+            $tempContent = strtr($tempContent, $replaceArr);
+            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+
+
+            $arrField = $goalManageData->GetFields();
+            parent::ReplaceWhenCreate($tempContent, $arrField);
+
+
+
+            $memberManageData=new MemberManageData();
+            $homeList=$memberManageData->GetListOfTeam($oneMatch["HomeTeamId"]);
+            $listName = "home_list";
+            $listName2 = "home_list_assistor";
+            if(!empty($homeList)){
+                Template::ReplaceList($tempContent, $homeList, $listName);
+                Template::ReplaceList($tempContent, $homeList, $listName2);
             }else{
-                $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 4));//原有数据获取失败！请谨慎修改！
+                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($tempContent, $listName2);
+            }
+            $guestList=$memberManageData->GetListOfTeam($oneMatch["GuestTeamId"]);
+            $listName = "guest_list";
+            $listName2 = "guest_list_assistor";
+            if(!empty($guestList)){
+                Template::ReplaceList($tempContent, $guestList, $listName);
+                Template::ReplaceList($tempContent, $guestList, $listName2);
+            }else{
+                Template::RemoveCustomTag($tempContent, $listName);
+                Template::RemoveCustomTag($tempContent, $listName2);
             }
 
 
-
-            $replaceArr = array(
-                "{TabIndex}" => $tabIndex,
-                "{display}" => "none"
-            );
-            $tempContent = strtr($tempContent, $replaceArr);
-            $tempContent = str_ireplace("{MatchId}", $matchId, $tempContent);
-            $tempContent = str_ireplace("{LeagueId}", $leagueId, $tempContent);
-            $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
 
 
             //替换掉{s XXX}的内容
             $patterns = '/\{s_(.*?)\}/';
             $tempContent = preg_replace($patterns, "", $tempContent);
         } else {
-            $resultJavaScript .= Control::GetJqueryMessage(Language::Load('lottery', 5));//id错误！;
+            Control::ShowMessage(Language::Load('lottery', 5));//id错误！;
         }
         parent::ReplaceEnd($tempContent);
         $tempContent = str_ireplace("{ResultJavascript}", $resultJavaScript, $tempContent);
@@ -205,19 +262,16 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
 
 
 
-
     /**
-     * 生成赛事列表页面
+     * 生成列表页面
      */
     private function GenList()
     {
         $result="";
 
-        $leagueId = Control::GetRequest("league_id", 0);
+        $siteId = Control::GetRequest("site_id", 0);
         $manageUserId=Control::GetManageUserId();
 
-        $leagueManageData=new LeagueManageData();
-        $siteId=$leagueManageData->GetSiteId($leagueId,true);
         ///////////////判断是否有操作权限///////////////////
         $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
         $canExplore = $manageUserAuthorityManageData->CanManageLeague($siteId, $manageUserId);
@@ -232,7 +286,7 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
 
 
 
-        $tempContent = Template::Load("league/match_list.html","common");
+        $tempContent = Template::Load("league/member_list.html","common");
 
         $pageSize = Control::GetRequest("ps", 20);
         $pageIndex = Control::GetRequest("p", 1);
@@ -242,16 +296,16 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
         $pageBegin = ($pageIndex - 1) * $pageSize;
         $allCount = 0;
 
-        $matchManageData = new MatchManageData();
-        $arrList = $matchManageData->GetListPager($leagueId,$pageBegin, $pageSize, $allCount, $searchKey);
+        $memberManageData = new MemberManageData();
+        $arrList = $memberManageData->GetListPager($siteId,$pageBegin, $pageSize, $allCount, $searchKey);
 
-        $listName = "match_list";
+        $listName = "member_list";
         if(count($arrList)>0){
             Template::ReplaceList($tempContent, $arrList, $listName);
             $styleNumber = 1;
             $pagerTemplate = Template::Load("pager/pager_style$styleNumber.html", "common");
             $isJs = FALSE;
-            $navUrl = "default.php?secu=manage&mod=match&m=list&league_id=$leagueId&p={0}&ps=$pageSize";
+            $navUrl = "default.php?secu=manage&mod=member&m=list&site_id=$siteId&p={0}&ps=$pageSize";
             $jsFunctionName = "";
             $jsParamList = "";
             $pagerButton = Pager::ShowPageButton($pagerTemplate, $navUrl, $allCount, $pageSize, $pageIndex ,$styleNumber = 1, $isJs, $jsFunctionName, $jsParamList);
@@ -269,7 +323,6 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
         parent::DelAllCache();
 
         $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-        $tempContent = str_ireplace("{LeagueId}", $leagueId, $tempContent);
         parent::ReplaceEnd($tempContent);
 
 
@@ -284,15 +337,12 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
      * @return string 执行结果
      */
     private function GenImport(){
-        $tempContent = Template::Load("league/match_import.html","common");
+        $tempContent = Template::Load("league/member_import.html","common");
         $resultJavaScript="";
-        $leagueId=Control::GetRequest("league_id",-1);
+        $siteId=Control::GetRequest("site_id",-1);
         $tabIndex=Control::GetRequest("tab_index",0);
 
-
-        if (intval($leagueId) > 0) {
-            $leagueManageData=new LeagueManageData();
-            $siteId=$leagueManageData->GetSiteId($leagueId,true);
+        if (intval($siteId) > 0) {
             //////////////判断是否有操作权限///////////////////
             $manageUserId = Control::GetManageUserId();
             $manageUserAuthority = new ManageUserAuthorityManageData();
@@ -308,11 +358,11 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
                 $importJson=$_POST["import_json"];
                 $importArray=json_decode($importJson,true);
 
-                $matchManageData=new MatchManageData();
+                $memberManageData=new MemberManageData();
                 $createDate=date('Y-m-d H:i:s', time());
-                $result = $matchManageData->Import($importArray,$leagueId,$createDate);
+                $result = $memberManageData->Import($importArray,$siteId,$createDate);
                 //记入操作log
-                $operateContent = "import match：league_id：" . $leagueId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
+                $operateContent = "import member：site_id：" . $siteId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $result;
                 self::CreateManageUserLog($operateContent);
 
                 if ($result > 0) {
@@ -321,7 +371,7 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
                     $closeTab = Control::PostRequest("CloseTab",0);
                     if($closeTab == 1){
                         //$resultJavaScript .= Control::GetCloseTab();
-                        Control::GoUrl("/default.php?secu=manage&mod=match&m=list&league_id=$leagueId&tab_index=$tabIndex");
+                        Control::GoUrl("/default.php?secu=manage&mod=member&m=list&site_id=$siteId&tab_index=$tabIndex");
                     }else{
                         Control::GoUrl($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
                     }
@@ -344,7 +394,6 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
             );
             $tempContent = strtr($tempContent, $replaceArr);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
-            $tempContent = str_ireplace("{LeagueId}", $leagueId, $tempContent);
 
             //$arrField = $siteManageData->GetFields();
             //parent::ReplaceWhenCreate($tempContent, $arrField);
@@ -368,4 +417,43 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
     }
 
 
+    /**
+     * 检查重复
+     * @return string 执行结果
+     */
+    private function AsyncCheckRepeat(){
+        $result="-1";
+        $repeatArray=array();
+        $siteId=Control::GetRequest("site_id",0);
+        $importJson=$_POST["import_json"];
+        $fieldName=Control::PostRequest("field_name","");
+        $fieldType=Control::PostRequest("field_type","");
+
+        if($fieldName!=""&&$importJson!=""&&$siteId>0){
+            $importArray=json_decode($importJson,true);
+            $checkStr="";
+            switch($fieldType){
+                case "int":
+                    foreach($importArray as $importItem){
+                        $checkStr.=','.$importItem[$fieldName];
+                    }
+                    break;
+                default:
+                    foreach($importArray as $importItem){
+                        $checkStr.=',"'.$importItem[$fieldName].'"';
+                    }
+                    break;
+            }
+            $checkStr=substr($checkStr,1);
+            $memberManageData=new MemberManageData();
+            $repeatArray=$memberManageData->GetRepeat($checkStr,$fieldName);
+            if(!empty($repeatArray)){
+                $result="1";
+            }else{
+                $result="0";
+            }
+        }
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'","repeat":'.json_encode($repeatArray).'})';
+
+    }
 }

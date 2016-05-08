@@ -25,12 +25,12 @@ class MatchPublicData extends BasePublicData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'match_data';
             $cacheFile = 'match_get_all_list_of_league.cache_' . $leagueId .'';
             $sql = 'SELECT '.' m.*,s.StadiumName,ta.TeamName as HomeTeamName,tb.TeamName as GuestTeamName,
-                ht.TeamShortName as HomeTeamShortName,gt.TeamShortName as GuestTeamShortName
+                ta.TeamShortName as HomeTeamShortName,tb.TeamShortName as GuestTeamShortName
                 FROM ' . self::TableName_Match . ' m
              LEFT OUTER JOIN '.self::TableName_Team.' ta ON ta.TeamId=m.HomeTeamId
              LEFT OUTER JOIN '.self::TableName_Team.' tb ON tb.TeamId=m.GuestTeamId
-             LEFT OUTER JOIN ".self::TableName_Stadium ." s ON s.StadiumId=m.StadiumId
-             WHERE m.LeagueId=:LeagueId AND m.State!='.MatchData::STATE_REMOVED .';';
+             LEFT OUTER JOIN '.self::TableName_Stadium .' s ON s.StadiumId=m.StadiumId
+             WHERE m.LeagueId=:LeagueId AND m.State!='.MatchData::STATE_REMOVED .' ORDER BY m.BeginDate,m.BeginTime,m.MatchId;';
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LeagueId", $leagueId);
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
@@ -73,11 +73,11 @@ class MatchPublicData extends BasePublicData
             $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'match_data';
             $cacheFile = 'match_get_one.cache_' . $matchId .'';
             $sql = 'SELECT m.*,s.StadiumName,t1.TeamName as HomeTeamName,t2.TeamName as GuestTeamName,
-                ht.TeamShortName as HomeTeamShortName,gt.TeamShortName as GuestTeamShortName
+                t1.TeamShortName as HomeTeamShortName,t2.TeamShortName as GuestTeamShortName
              '.'  FROM ' . self::TableName_Match . ' m
             LEFT OUTER JOIN ' . self::TableName_Team . ' t1 ON m.HomeTeamId=t1.TeamId
             LEFT OUTER JOIN ' . self::TableName_Team . ' t2 ON m.GuestTeamId=t2.TeamId
-             LEFT OUTER JOIN ".self::TableName_Stadium ." s ON s.StadiumId=m.StadiumId
+             LEFT OUTER JOIN '.self::TableName_Stadium .' s ON s.StadiumId=m.StadiumId
              WHERE MatchId=:MatchId;';
             $dataProperty = new DataProperty();
             $dataProperty->AddField("MatchId", $matchId);

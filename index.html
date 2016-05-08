@@ -1,45 +1,65 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>娜娜是冠军</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="{BrowserKeywords}" />
-    <meta name="description" content="{BrowserDescription}" />
-    <link rel="apple-touch-icon" href="/image_02/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/image_02/logo76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/image_02/logo114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/image_02/logo120.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/image_02/logo152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/image_02/logo180.png" />
+    <meta charset="utf-8">
+    <title>Goal ball</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content=""/>
+    <meta name="description" content="" />
+    <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="/images_gb/css.css">
 
-    <link rel="shortcut icon" type="image/ico" href="/image_02/favicon.ico" />
-    <link rel="stylesheet" href="/system_js/amaze_ui/assets/css/amazeui.min.css" />
-    <link rel="stylesheet" href="/image_02/style.css" />
+<style>
 
-    <script src="/system_js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/system_js/amaze_ui/assets/js/amazeui.min.js"></script>
-    <script type="text/javascript" src="/front_js/site/site_ad.js" charset="utf-8"></script>
-
-    <script type="text/javascript" charset="utf-8">
-        $(function() {
-        });
-        function GetRandomNum(Min,Max)
-        {
-            var Range = Max - Min;
-            var Rand = Math.random();
-            return(Min + Math.round(Rand * Range));
-        }
-    </script>
+    .ui-content {
+        border-width: 0;
+        overflow: visible;
+        overflow-x: hidden;
+        padding: 1em;
+    }
+</style>
 </head>
+
 <body>
-<div style="width: 100%; text-align: center; height: 500px; line-height: 500px; font-size: 100px; font-family: inherit;">
-    娜娜是冠军！
+
+
+
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+
+    <div data-role="header" data-position="fixed">
+        <a href="" data-rel="back" class="ui-btn-left ui-alt-icon ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" data-role="button" role="button">Back</a>
+        <h1>2016贺龙杯</h1>
+    </div>
+    <div role="main" class="ui-content jqm-content">
+    <div data-demo-html="true">
+        <ul data-role="listview" data-inset="true" data-divider-theme="a" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+            <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-a ui-first-child">小学组</li>
+            <li><a href="/a/match/default/league_match_list/league_id=1.html" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">赛程赛果</a></li>
+            <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">参赛队伍（敬请期待）</a></li>
+            <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">积分情况（敬请期待）</a></li>
+            <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">射手榜（敬请期待）</a></li>
+        </ul>
+    </div>
+
+    <div data-demo-html="true">
+        <ul data-role="listview" data-inset="true" data-divider-theme="a" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+            <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-a ui-first-child">初中组</li>
+            <li><a href="/a/match/default/league_match_list/league_id=2.html" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">赛程赛果</a></li>
+            <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">参赛队伍（敬请期待）</a></li>
+            <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">积分情况（敬请期待）</a></li>
+            <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r" data-ajax="false">射手榜（敬请期待）</a></li>
+        </ul>
+    </div>
 </div>
 
 
+</div>
 
-
+<script type="text/javascript">var visitConfig = encodeURIComponent("http://www.goalball.cn") +"||1||0||1||0||"+encodeURI("");</script>
+<script type="text/javascript" src="/front_js/visit.js" charset="utf-8"></script>
 </body>
 </html>

@@ -96,7 +96,7 @@ class MatchManageData extends BaseManageData
                 $dataProperty->AddField("LeagueId",$leagueId);
                 $arrDataProperty[]=$dataProperty;
                 $arrSql[]="INSERT "." INTO ".parent::TableName_Match."
-                ($fieldNames,CreateTime,LeagueId) VALUES ($fieldValues,'$createDate',:LeagueId); ";
+                ($fieldNames,CreateDate,LeagueId) VALUES ($fieldValues,'$createDate',:LeagueId); ";
             }
             $result=$this->dbOperator->ExecuteBatch($arrSql,$arrDataProperty);
         }

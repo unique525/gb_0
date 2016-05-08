@@ -1,24 +1,532 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>长沙晚报微报纸</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="长沙晚报 长沙新闻 长沙晚报微报纸 长沙晚报数字报 长沙晚报手机报" />
-    <meta name="description" content="长沙晚报“微报纸”，是长沙晚报报业集团在移动阅读时代推出的一款适应移动手机阅读的数字报产品" />
-    <script src="/system_js/jquery-1.9.1.min.js"></script>
-    <script>
+    <meta charset="utf-8">
+    <title>{LeagueName}{MatchName}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <script type="text/javascript" src="/system_js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-        $(function() {
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" href="/system_js/jquery.mobile-1.4.5/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="/images_gb/css.css">
 
-            //$("#main").load('/default.php?mod=newspaper&a=gen_one&channel_id=15');
+
+
+    <script type="text/javascript">
+        var homeTeam={HomeTeamId};
+        var guestTeam={GuestTeamId};
+        $().ready(function(){
+
+
+            /**
+             * 临时提示
+             * *
+            var state="{State}";
+            if(state==0){
+                $("#sig").html('<div style="width: 100%; text-align: center;">比赛详细信息之后更新</div>');
+            }
+            /**
+             * 临时提示 end
+             * */
+
+                    $("#add").click(function(){
+                        var matchId='{matchId}';
+                        var mod="goal";
+                        var method="mobile_create";
+                        window.location.href={ManageUrl}+"&match_id="+matchId;
+                    });
+
+            $(".event_content").click(function(){
+                var eventId=$(this).attr("idvalue");
+                var mod=$(this).attr("type");
+                var method="mobile_modify";
+                window.location.href={ManageUrl}+"&"+mod+"_id="+eventId;
+            });
+
+            var currentGroup="";
+            $(".group_name").each(function(){
+                var groupName=$(this).attr("idvalue");
+                if(currentGroup!=groupName){
+                    currentGroup=groupName;
+                    $(this).before('<li class="ui-li-divider ui-bar-inherit ui-li-has-count ui-first-child" role="heading" data-role="list-divider">'+currentGroup+'</li>');
+                }
+            });
+
+            $(".ui-first-child").removeClass("ui-first-child");
+
+            $("#about_match").click(function(){
+                $(".nav_content").hide();
+                $(".events_container").show();
+            });
+            $("#member_list").click(function(){
+                $(".nav_content").hide();
+                $(".member_list").show();
+            });
+
+            /*$(".detail_container").bind("swipeleft",function(){
+             $.mobile.changePage("#class-page");
+             });*/
+
+            var eventObj={},eventArr=[];
+            $("#data .event_box").each(function(){
+                var int=parseInt($(this).attr("minute"))*100;
+                var num=ObjAdd(eventObj,int);
+                eventObj[num]=$(this);
+            });
+
+            //eventObj.sort();
+            //eventObj.each(function(){
+            //   eventArr[eventArr.length]=$(this);
+            //});
+            var minutes=-1;
+            var minutesFromSort=-1;
+            var tempObj=$('<div>',{'class':'events'});
+            var tempLeft=$('<div>',{'class':'events_left'});
+            var tempRight=$('<div>',{'class':'events_right'});
+            var line_2="";
+            var firstLine=1;
+            //$(eventObj).each(function(){
+            $.each(eventObj,function(key,value){
+                minutesFromSort=parseInt(key/100);
+                if(minutesFromSort!=minutes){
+                    minutes=minutesFromSort;
+                    if(firstLine==0){
+                        tempObj.append(tempLeft);
+                        tempObj.append(tempRight);
+                        $("#shown").append(tempObj);
+                    }
+                    firstLine=0;
+                    tempObj=$('<div>',{'class':'events'});
+                    tempLeft=$('<div>',{'class':'events_left'});
+                    tempRight=$('<div>',{'class':'events_right'});
+
+                    tempObj.html('<div class="events_minute"><div class="minute">'+value.attr("minute")+"'</div></div>");
+                    line_2=$(value).attr("line_2");
+                    if(line_2!=""&&line_2!=undefined){
+                        $(value).addClass("two_line_box");
+                        $(value).find(".line_2").show();
+                    }
+                    if($(value).attr("team_id")==homeTeam){
+                        tempLeft.append($(value));
+                    }else{
+                        tempRight.append($(value));
+                    }
+                }else{
+                    line_2=$(value).attr("line_2");
+                    if(line_2!=""&&line_2!=undefined){
+                        $(value).addClass("two_line_box");
+                    }
+                    if($(value).attr("team_id")==homeTeam){
+                        tempLeft.append($(value));
+                    }else{
+                        tempRight.append($(value));
+                    }
+                }
+            });
+            if(firstLine==0){
+                tempObj.append(tempLeft);
+                tempObj.append(tempRight);
+                $("#shown").append(tempObj);
+            }
+
+
+            var homeId='{HomeTeamId}';
+            var guestId='{GuestTeamId}';
+            var homeGoal=$(".goal[team_id='"+homeId+"'][goal_type!='10'][goal_type!='9']").length;
+            var guestGoal=$(".goal[team_id='"+guestId+"'][goal_type!='10'][goal_type!='9']").length;
+            var p_homeGoal=$(".goal[team_id='"+homeId+"'][goal_type='9']").length;
+            var p_guestGoal=$(".goal[team_id='"+guestId+"'][goal_type='9']").length;
+
+            var p_h_str="";
+            var p_g_str="";
+            if(p_homeGoal>0||p_guestGoal>0){
+                p_h_str="<span style='font-size:.4em '>("+p_homeGoal+")</span>";
+                p_g_str="<span style='font-size:.4em '>("+p_guestGoal+")</span>";
+            }
+            $(".g_count").html(homeGoal+p_h_str+" - "+guestGoal+p_g_str);
 
         });
-        window.location.href='/newspaper-gen_one-15.html';
+
+        function ObjAdd(obj,int){
+            if(obj[int]==undefined){
+                return int;
+            }else{
+                return ObjAdd(obj,int +1);
+            }
+        }
+
 
     </script>
+
+
+
+
+    <style>
+
+        /* 重写jquery css */
+        .ui-icon-carat-r::after{background: none}
+        .ui-bar-a,
+        .ui-page-theme-a .ui-bar-inherit,
+        html .ui-bar-a .ui-bar-inherit,
+        html .ui-body-a .ui-bar-inherit,
+        html body .ui-group-theme-a .ui-bar-inherit {
+            background-color: rgb(39, 134, 103);
+            border-color: #ddd;
+            color: #FFF;
+            text-shadow: 0 1px 0 #011a06;
+            font-weight: 700;
+        }
+
+        .ui-page-theme-a .ui-btn,
+        html .ui-bar-a .ui-btn,
+        html .ui-body-a .ui-btn,
+        html body .ui-group-theme-a .ui-btn,
+        html head + body .ui-btn.ui-btn-a,
+        .ui-page-theme-a .ui-btn:visited,
+        html .ui-bar-a .ui-btn:visited,
+        html .ui-body-a .ui-btn:visited,
+        html body .ui-group-theme-a .ui-btn:visited,
+        html head + body .ui-btn.ui-btn-a:visited {
+            color: #0A1A2F;
+            text-shadow: 0 1px 0 #fefefe;
+        }
+
+        .ui-content{
+            margin: 0;
+            padding:0;
+        }
+
+        .ui-btn-icon-notext.ui-btn-corner-all, .ui-btn-icon-notext.ui-corner-all {
+            -webkit-border-radius: .2em;
+            border-radius: .2em;
+        }
+
+        .ui-page-theme-a .ui-btn.ui-btn-active {
+            background-color: #278667;
+            border-color: #38c;
+            color: #fff;
+            text-shadow: 0 1px 0 #059;
+        }
+
+
+
+
+
+
+
+        .team_name_left{margin:0 auto;text-align: center;padding:1em 2.3em .5em 0 }
+        .team_name_right{margin:0 auto;text-align: center;padding:1em 0 .5em 2.3em}
+        .team_icon{width:5em;height:8em}
+        .score_result{font-size: 2em;position: absolute;top:2.5em;width:100%;text-align: center}
+
+
+
+        .detail_container{padding:.5em}
+
+
+        /**  events  **/
+        .events_container {margin-top: 1em;}
+        .events_left {float:left;text-align: center;min-height:1em;width:50%}
+        .events_right {float:left;text-align: center;width:50%}
+
+        .event_box{position: relative;height: 2em;padding: .5em;}
+        .events_left .event_box{margin-right: 2em;}
+        .events_right .event_box{margin-left: 2em;}
+
+        .event_background{
+            position: absolute;
+            background: #f6f6f6;
+            padding: 0 .5em;
+            height: 2em;
+            line-height: 2em;
+            z-index: 1;
+            box-shadow: 0 0 1px 1px rgb(152, 152, 152);
+        }
+        .events_left .event_background{right: 0;}
+        .events_right .event_background{left: 0;}
+        .event_content{
+            position: absolute;
+            background: #f6f6f6;
+            padding: 0 .5em;
+            height: 2em;
+            line-height: 2em;
+            z-index: 10;
+            text-align:left
+        }
+        .events_left .event_content{right: 0;}
+        .events_right .event_content{left: 0;}
+
+        .event_arrow{
+            display:none;
+            position: absolute;
+            background: #f6f6f6;
+            box-shadow: 0 0 1px 1px rgb(152, 152, 152);
+            width: 1em;
+            height: 1em;
+            top: 1em;
+            transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            z-index: 5}
+        .events_left .event_arrow{right: -.2em;}
+        .events_right .event_arrow{left: -.2em;}
+        .event_box:first-child .event_arrow{display:block}
+
+        .line_2{display: none}
+
+        .events_minute{position:absolute;width:100%}
+        .minute{margin: .75em auto;
+            text-align: center;
+            box-shadow: 0 1px 3px rgb(152, 152, 152);
+            background-color: #f6f6f6;
+            border-color: #ddd;
+            width: 2em;
+            /* top: .75em; */
+            height: 1.5em;
+            line-height: 1.5em;}
+
+
+        .events {position:relative;list-style: none;overflow: hidden;}
+
+        .two_line_box{height:4em}
+        .member_change .event_background, .events_box_c .event_content{height:4em}
+        .two_line_box .event_background, .two_line_box .event_content{height:4em}
+        .two_line_box .line_2{display:inline}
+
+        .card_1 .event_background{box-shadow: 0 0 1px 1px rgb(206, 1, 1)}
+        .card_1 .event_arrow{box-shadow: 0 0 1px 1px rgb(206, 1, 1)}
+        .card_1 .card_string_0{display:none}
+
+        .card_0 .event_background{box-shadow: 0 0 1px 1px rgb(212, 212, 0)}
+        .card_0 .event_arrow{box-shadow: 0 0 .5em 1px rgb(212, 212, 0)}
+        .card_0 .card_string_1{display:none}
+
+        .goal .event_background{box-shadow: 0 0 1px 1px rgb(39, 134, 103)}
+        .goal .event_arrow{box-shadow: 0 0 1px 1px rgb(39, 134, 103)}
+        .goal_0 .goal_string_2{display:none}
+        .goal_0 .goal_string_5{display:none}
+        .goal_0 .goal_string_9{display:none}
+        .goal_0 .goal_string_10{display:none}
+
+        .goal_1 .goal_string_2{display:none}
+        .goal_1 .goal_string_5{display:none}
+        .goal_1 .goal_string_9{display:none}
+        .goal_1 .goal_string_10{display:none}
+
+        .goal_2 .goal_string_0{display:none}
+        .goal_2 .goal_string_5{display:none}
+        .goal_2 .goal_string_9{display:none}
+        .goal_2 .goal_string_10{display:none}
+
+        .goal_5 .goal_string_0{display:none}
+        .goal_5 .goal_string_2{display:none}
+        .goal_5 .goal_string_9{display:none}
+        .goal_5 .goal_string_10{display:none}
+
+        .goal_9 .goal_string_0{display:none}
+        .goal_9 .goal_string_2{display:none}
+        .goal_9 .goal_string_5{display:none}
+        .goal_9 .goal_string_10{display:none}
+
+        .goal_10 .goal_string_0{display:none}
+        .goal_10 .goal_string_2{display:none}
+        .goal_10 .goal_string_9{display:none}
+        .goal_10 .goal_string_5{display:none}
+
+
+        #add{background-color: rgb(39, 134, 103);
+            color: rgb(255, 255, 255);}
+        /* member */
+
+        .member_left {float:left;text-align: center;width:48%;padding:1em 1%}
+        .member_right {float:left;text-align: center;width:48%;padding:1em 1%}
+
+
+
+
+
+        .member_list{display:none}
+        .member_manage .member_manage_btn{background: #278667;text-shadow: 0 1px 0 #000000;color:#fff}
+    </style>
+    <style>.spraith-resizable-handle-e {position: absolute;cursor: e-resize;width:4px;height:100%;right:0px;top:0px;z-index: 10;}</style>
+
+
+
+    <!--del after pic added-->
+    <style>
+        .team_icon{display: none}
+        .score_result{top:.5em}
+    </style>
+    <!--del after pic added  end -->
+
+
+
 </head>
-<body>
-<div id="main"></div>
-</body>
-</html>
+
+<body class="ui-mobile-viewport ui-overlay-a">
+
+
+
+<div data-role="page" class="jqm-demos ui-page ui-page-theme-a ui-page-header-fixed ui-page-active" data-quicklinks="true" data-url="/index.html" tabindex="0" style="padding-top: 44px;">
+
+    <div data-role="header" data-position="fixed" role="banner" class="ui-header ui-bar-inherit ui-header-fixed slidedown">
+        <a href="" data-rel="back" class="ui-btn-left ui-alt-icon ui-nodisc-icon ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" data-role="button" role="button">Back</a>
+        <h1 class="ui-title" role="heading" aria-level="1">{MatchName}</h1>
+    </div>
+
+
+    <div role="main" class="ui-content jqm-content">
+
+
+        <div class="ui-grid-a" style="position: relative">
+            <div class="ui-block-a">
+                <div class="ui-bar">
+                    <div class="team_name_left">
+                        <div><img class="team_icon" src=""></div>
+                        <div>{HomeTeamShortName}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-block-b">
+                <div class="ui-bar">
+                    <div class="team_name_right">
+                        <div><img class="team_icon" src=""></div>
+                        <div>{GuestTeamShortName}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="score_result">
+                <span class="g_count" style="">0 - 0</span>
+            </div>
+        </div>
+
+        <div class="detail_container">
+            <div data-demo-html="true">
+                <div data-role="navbar" class="ui-navbar" role="navigation">
+                    <ul class="ui-grid-a">
+                        <li class="ui-block-a"><a id="about_match" class="ui-link ui-btn ui-btn-active">赛况</a></li>
+                        <li class="ui-block-b"><a id="member_list" class="ui-link ui-btn">阵容</a></li>
+                    </ul>
+                </div><!-- /navbar -->
+            </div>
+            <div class="nav_content events_container">
+                <ul id="data" style="display: none;">
+                    <icms id="match_{MatchId}" type="goal_list">
+                        <item><![CDATA[
+                            <div class="event_box goal goal_{f_Type}" goal_type="{f_Type}" minute="{f_MinuteInMatch}" team_id="{f_TeamId}" line_2="{f_AssistorName}">
+                                <div class="event_background">
+                                    <span class="goal_string_0">进球</span>
+                                    <span class="goal_string_2">点球</span>
+                                    <span class="goal_string_5">乌龙</span>
+                                    <span class="goal_string_9">点球</span>
+                                    <span class="goal_string_10">失点</span> {f_MemberName}
+                                    <span class="line_2"><br>
+                                    <span class="goal_string_0">助攻</span>
+                                    <span class="goal_string_2">造点</span>
+                                    <span class="goal_string_10">造点</span> {f_AssistorName}</span>
+                                </div>
+                                <div class="event_content" type="goal" idvalue="{f_GoalId}">
+                                    <span class="goal_string_0">进球</span>
+                                    <span class="goal_string_2">点球</span>
+                                    <span class="goal_string_5">乌龙</span>
+                                    <span class="goal_string_9">点球</span>
+                                    <span class="goal_string_10">失点</span> {f_MemberName}
+                                    <span class="line_2"><br>
+                                    <span class="goal_string_0">助攻</span>
+                                    <span class="goal_string_2">造点</span>
+                                    <span class="goal_string_10">造点</span> {f_AssistorName}</span>
+                                </div>
+                                <div class="event_arrow"></div>
+                            </div>
+                            ]]></item>
+                    </icms>
+                    <icms id="match_{MatchId}" type="red_yellow_card_list">
+                        <item><![CDATA[
+                            <div class="event_box card_{f_Type}" minute="{f_MinuteInMatch}" team_id="{f_TeamId}">
+                                <div class="event_background">
+                                    <span class="card_string_1">红牌</span>
+                                    <span class="card_string_0">黄牌</span> {f_MemberName}</div>
+                                <div class="event_content">
+                                    <span class="card_string_1">红牌</span>
+                                    <span class="card_string_0">黄牌</span> {f_MemberName}</div>
+                                <div class="event_arrow"></div>
+                            </div>
+                            ]]></item>
+                    </icms>
+                    <icms id="match_{MatchId}" type="member_change_list">
+                        <item><![CDATA[
+                            <div class="event_box member_change two_line_box" minute="{f_MinuteInMatch}" team_id="{f_TeamId}">
+                                <div class="event_background">下场 {f_OffMemberName}<br>上场 {f_AlternateMemberName}</div>
+                                <div class="event_content">下场 {f_OffMemberName}<br>上场 {f_AlternateMemberName}</div>
+                                <div class="event_arrow"></div>
+                            </div>
+                            ]]></item>
+                    </icms>
+                    <icms id="match_{MatchId}" type="other_event_list">
+                        <item><![CDATA[
+                            <div class="event_box event_box_d" minute="{f_MinuteInMatch}" team_id="{f_TeamId}">
+                                <div class="event_background">{f_OtherEventTitle} {f_PrincipalMemberName} {f_SecondaryMemberName}</div>
+                                <div class="event_content">{f_OtherEventTitle} {f_PrincipalMemberName} {f_SecondaryMemberName}</div>
+                                <div class="event_arrow"></div>
+                            </div>
+                            ]]></item>
+                    </icms>
+                </ul>
+                <ul class="ui-grid-b" id="shown">
+
+                </ul>
+                <ul class="ui-grid-b" >
+                    <div class="events">
+                        <div class="events_minute">
+                            <div class="minute" id="add" style="display: {display}">+</div>
+                        </div>
+                        <div class="events_left">
+                            <div class="event_box">
+                            </div>
+                        </div>
+                        <div class="events_right"></div>
+                    </div>
+                </ul>
+            </div>
+            <div class="nav_content member_list">
+                <div class="member_left">
+
+                    <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                        <icms id="team_{HomeTeamId}" type="member_list">
+                            <item><![CDATA[
+                                <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">{f_MemberName}</a></li>
+                                ]]></item>
+                        </icms>
+                    </ul>
+                    <!--<ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                        <li class=""><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">首发</a></li>
+                        <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">andy</a></li>
+                    </ul>
+                    <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                        <li class=""><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">替补</a></li>
+                    </ul>
+                    <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                        <li class="member_manage"><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r member_manage_btn">管理</a></li>
+                    </ul>-->
+                </div>
+                <div class="member_right">
+                    <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset ui-corner-all ui-shadow">
+                        <icms id="team_{GuestTeamId}" type="member_list">
+                            <item><![CDATA[
+                                <li><a href="#" class="ui-btn ui-btn-icon-right ui-icon-carat-r">{f_MemberName}</a></li>
+                                ]]></item>
+                        </icms>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{VisitCode}
+
+</body></html>

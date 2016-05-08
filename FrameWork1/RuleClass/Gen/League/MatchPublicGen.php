@@ -92,6 +92,7 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
 
         parent::ReplaceUserInfoPanel($result, $siteId);
 
+            parent::ReplaceVisitCode($result,$siteId,$leagueId,VisitData::VISIT_TABLE_TYPE_LEAGUE,$leagueId);
         }
         return $result;
     }
@@ -135,6 +136,11 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
 
         $tempContent =  parent::ReplaceTemplate($tempContent);
 
+
+
+
+
+
         parent::ReplaceSiteInfo($siteId, $tempContent);
         parent::ReplaceChannelInfo($matchId, $tempContent);
         parent::ReplaceEnd($tempContent);
@@ -167,6 +173,32 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
                 $siteId,
                 "",
                 $templateMode);
+
+
+
+            //是否是管理员
+            $isManage=0;
+            $manageUserId=Control::GetManageUserId();
+            if($manageUserId>0){
+
+                //////////////判断是否有操作权限///////////////////
+                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+                $canExplore = $manageUserAuthorityManageData->CanManageLeague($siteId, $manageUserId);
+                if ($canExplore) {
+                    $isManage=1;
+                }
+            }
+
+            if($isManage>0){
+                $manageUrl='"/default.php?secu=manage&mod="+mod+"&m="+method';
+                $templateContent = str_ireplace("{ManageUrl}", $manageUrl, $templateContent);
+                $templateContent = str_ireplace("{display}", "block", $templateContent);
+            }else{
+                $templateContent = str_ireplace("{ManageUrl}", "", $templateContent);
+                $templateContent = str_ireplace("{display}", "none", $templateContent);
+            }
+
+
 
             /*******************页面级的缓存 begin********************** */
 
@@ -204,23 +236,8 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
             }
 
 
+            parent::ReplaceVisitCode($result,$siteId,$leagueId,VisitData::VISIT_TABLE_TYPE_MATCH,$matchId);
 
-            //是否是管理员
-            $isManage=0;
-            $manageUserId=Control::GetManageUserId();
-            if($manageUserId>0){
-
-                //////////////判断是否有操作权限///////////////////
-                $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
-                $canExplore = $manageUserAuthorityManageData->CanManageLeague($siteId, $manageUserId);
-                if ($canExplore) {
-                    $isManage=1;
-                }
-            }
-
-            if($isManage>0){
-
-            }
 
         }
         return $result;
