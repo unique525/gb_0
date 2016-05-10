@@ -89,6 +89,9 @@
             float:left
         }
 
+        .ui-panel h3{
+            padding:1em 0 0 1em;
+        }
 
 
         .detail_container{padding:2em .5em 0;width:80%;margin:0 auto}
@@ -100,7 +103,7 @@
         $(function(){
             $("#f_MemberId").click(function(){
                 if($("#f_Team").val()<=0){
-                    alert("请先选择进球事件和队伍！")
+                    alert("请先选择类型和队伍！")
                 }
             });
 
@@ -117,7 +120,7 @@
             //只显示相关的队员表
             $("#f_Type,#f_TeamId").change(function(){
                 var teamId=$("#f_TeamId").val();
-                if($("#f_Type").val()!=5){
+                if($("#f_Type").val()==5){
                     $("#member_of_{HomeTeamId}").html("进球队员");
                     $("#member_of_{GuestTeamId}").html("进球队员");
                     $("#assistor_of_{HomeTeamId}").html("助攻（造点）队员");
@@ -126,12 +129,14 @@
                     $("#f_AssistorId").val("");
 
 
-                    $(".member_list_btn").hide();
-                    $("#member_of_"+teamId).css("display","block");
-                    $(".assistor_list_btn").hide();
-                    $("#assistor_of_"+teamId).css("display","block");
+                    if(teamId>0){
+                        $(".member_list_btn").css("display","block");
+                        $("#member_of_"+teamId).hide()
+                        $(".assistor_list_btn").css("display","block");
+                        $("#assistor_of_"+teamId).hide()
+                    }
                 }else{
-                    $(".member_list_btn").show();
+                    $(".member_list_btn").hide();
                     $("#member_of_"+teamId).css("display","block");
                     $(".assistor_list_btn").hide();
                     $("#assistor_of_"+teamId).css("display","block");
@@ -239,17 +244,20 @@
                     <input name="f_MemberId" id="f_MemberId" value="{MemberId}" type="hidden"/>
                     <a href="#leftpanel_member_home" id="member_of_{HomeTeamId}" class="member_list_btn ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">选择进球队员</a>
                     <div data-role="panel" id="leftpanel_member_home" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-open">
+                        <h3>{HomeTeamName}</h3>
                         <div class="ui-panel-inner">
                             <icms id="home_list" type="member_list">
                                 <item><![CDATA[
                                     <a href="#demo-links" data-rel="close" idvalue="{f_MemberId}" team_id="{f_TeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">{f_MemberName}({f_Number}号)</a>
                                     ]]></item>
                             </icms>
+                            <a href="#demo-links" data-rel="close" idvalue="525" team_id="{HomeTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
                         </div>
                     </div>
 
                     <a href="#leftpanel_member_guest" id="member_of_{GuestTeamId}" class="member_list_btn ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">选择进球队员</a>
                     <div data-role="panel" id="leftpanel_member_guest" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-open">
+                        <h3>{GuestTeamName}</h3>
                         <div class="ui-panel-inner">
                             <icms id="guest_list" type="member_list">
                                 <item><![CDATA[
@@ -257,6 +265,7 @@
                                     <a href="#demo-links" data-rel="close" idvalue="{f_MemberId}" team_id="{f_TeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">{f_MemberName}({f_Number}号)</a>
                                     ]]></item>
                             </icms>
+                            <a href="#demo-links" data-rel="close" idvalue="525" team_id="{GuestTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
                         </div>
                     </div>
 
@@ -264,17 +273,20 @@
                     <input name="f_AssistorId" id="f_AssistorId" value="{AssistorId}" type="hidden"/>
                     <a href="#leftpanel_assistor_home" id="assistor_of_{HomeTeamId}" class="member_list_btn ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">助攻（造点）队员</a>
                     <div data-role="panel" id="leftpanel_assistor_home" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-open">
+                        <h3>{HomeTeamName}</h3>
                         <div class="ui-panel-inner">
                             <icms id="home_list_assistor" type="member_list">
                                 <item><![CDATA[
                                     <a href="#demo-links" data-rel="close" idvalue="{f_MemberId}" team_id="{f_TeamId}" class="assistor_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">{f_MemberName}({f_Number}号)</a>
                                     ]]></item>
                             </icms>
+                            <a href="#demo-links" data-rel="close" idvalue="525" team_id="{HomeTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
                         </div>
                     </div>
 
                     <a href="#leftpanel_assistor_guest" id="assistor_of_{GuestTeamId}" class="member_list_btn ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">助攻（造点）队员</a>
                     <div data-role="panel" id="leftpanel_assistor_guest" data-position="left" data-display="overlay" data-theme="a" class="ui-panel ui-panel-position-left ui-panel-display-overlay ui-body-a ui-panel-animate ui-panel-open">
+                        <h3>{GuestTeamName}</h3>
                         <div class="ui-panel-inner">
                             <icms id="guest_list_assistor" type="member_list">
                                 <item><![CDATA[
@@ -282,6 +294,7 @@
                                     <a href="#demo-links" data-rel="close" idvalue="{f_MemberId}" team_id="{f_TeamId}" class="assistor_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">{f_MemberName}({f_Number}号)</a>
                                     ]]></item>
                             </icms>
+                            <a href="#demo-links" data-rel="close" idvalue="525" team_id="{GuestTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
                         </div>
                     </div>
 
@@ -296,11 +309,9 @@
 
                         <label for="f_State" class="ui-hidden-accessible" id="flip-8-label">state:</label>
                         <select name="f_State" id="f_State" data-role="slider" data-mini="true" tabindex="-1" class="ui-slider-switch">
-                            <option value="100">停用</option>
-                            <option value="1" selected="selected">启用</option>
+                            <option value="100" {select100}>停用</option>
+                            <option value="1" {select1}>启用</option>
                         </select>
-
-                        {s_State}
                     </div>
                     <div style="height:1em"></div>
                     <div data-demo-html="true">
