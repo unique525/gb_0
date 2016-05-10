@@ -108,11 +108,11 @@
                 }
             });
 
-            if(("#f_OtherEventTitle").val()==""){
-                ("#f_OtherEventTitle").val("请输入事件标题");
+            if($("#f_OtherEventTitle").val()==""){
+                $("#f_OtherEventTitle").val("请输入事件标题");
             }
-            if(("#f_OtherEventContent").html()==""){
-                ("#f_OtherEventContent").html("请输入事件详细");
+            if($("#f_OtherEventContent").html()==""){
+                $("#f_OtherEventContent").html("请输入事件详细");
             }
 
             if(parseInt($("#f_PrincipalMemberId").val())>0){
@@ -135,10 +135,10 @@
                 $(".assistor_list_btn").hide();
                 $("#assistor_of_"+teamId).css("display","block");
 
-                $("#member_of_{HomeTeamId}").html("离场队员");
-                $("#member_of_{GuestTeamId}").html("离场队员");
-                $("#assistor_of_{HomeTeamId}").html("登场队员");
-                $("#assistor_of_{GuestTeamId}").html("登场队员");
+                $("#member_of_{HomeTeamId}").html("主要队员");
+                $("#member_of_{GuestTeamId}").html("主要队员");
+                $("#assistor_of_{HomeTeamId}").html("第二主要队员");
+                $("#assistor_of_{GuestTeamId}").html("第二主要队员");
                 $("#f_PrincipalMemberId").val("");
                 $("#f_SecondaryMemberId").val("");
             });
@@ -169,16 +169,12 @@
                 error+="请选择队伍！\r\n";
                 submit=0;
             }
-            if ($('#f_PrincipalMemberId').val() == '') {
-                error+="请选择登场队员！\r\n";
-                submit=0;
-            }
-            if ($('#f_SecondaryMemberId').val() == '') {
-                error+="请选择离场队员！\r\n";
-                submit=0;
-            }
             if ($('#f_MinuteInMatch').val() == '') {
                 error+="请输入时间！\r\n";
+                submit=0;
+            }
+            if ($('#f_OtherEventTitle').val() == '') {
+                error+="请输入事件标题！\r\n";
                 submit=0;
             }
             if(submit==1) {
@@ -278,11 +274,11 @@
 
 
 
-                    <div class="ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset">
-                            <input name="f_OtherEventTitle" id="f_OtherEventTitle" value="{OtherEventTitle}" type="text">
-                    </div>
-                    <textarea style="height: 50px;" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all ui-textinput-autogrow" cols="40" rows="8" name="f_OtherEventContent" id="f_OtherEventContent">{OtherEventContent}</textarea>
+                    <div data-demo-html="true" style="overflow:hidden">
+                    <input type="text" name="{f_OtherEventTitle}" id="{f_OtherEventTitle}" value="{OtherEventTitle}" placeholder="请输入事件标题">
 
+                    <textarea style="height: 50px;" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all ui-textinput-autogrow" cols="40" rows="8" name="f_OtherEventContent" id="f_OtherEventContent" placeholder="请输入事件详细">{OtherEventContent}</textarea>
+                    </div>
 
 
                     <div style="height:.3em"></div>
