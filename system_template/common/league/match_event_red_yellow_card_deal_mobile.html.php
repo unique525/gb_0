@@ -252,7 +252,7 @@
                     <div data-demo-html="true">
 
                         <label for="f_MinuteInMatch" class="ui-hidden-accessible">时间点：</label>
-                        <input type="number" name="f_MinuteInMatch" id="f_MinuteInMatch" placeholder="输入时间" value="{MinuteInMatch}" data-mini="true">
+                        <input type="number" name="f_MinuteInMatch" id="f_MinuteInMatch" placeholder="时间(500=?)" value="{MinuteInMatch}" data-mini="true">
 
                         <label for="f_State" class="ui-hidden-accessible" id="flip-8-label">state:</label>
                         <select name="f_State" id="f_State" data-role="slider" data-mini="true" tabindex="-1" class="ui-slider-switch">
@@ -265,6 +265,7 @@
                         <label for="submit-4" class="ui-hidden-accessible">Send:</label>
                         <div class="ui-btn ui-shadow" onclick="submitForm(0)">提交</div>
                         <div class="ui-btn ui-shadow" onclick="submitForm(1)">提交并继续</div>
+                        <div class="ui-btn ui-shadow" onclick="window.location.href='/a/match/m_get_one/match_detail/match_id={MatchId}.html'">返回</div>
                     </div>
                 </div>
                 <!--<div class="nav_content member_list">
