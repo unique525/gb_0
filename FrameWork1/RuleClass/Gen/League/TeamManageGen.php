@@ -44,6 +44,9 @@ class TeamManageGen extends BaseManageGen implements IBaseManageGen
             case "async_join_league":
                 $result = self::AsyncJoinLeague();
                 break;
+            case "async_statistic_by_league":
+                $result = self::AsyncStatisticByLeague();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -628,4 +631,107 @@ class TeamManageGen extends BaseManageGen implements IBaseManageGen
         }
         return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
     }
+
+
+
+    private function AsyncStatisticByLeague(){
+        $result=-1;
+        $leagueId=Control::PostOrGetRequest("league_id",0);
+        if($leagueId>0){
+            //////////////判断是否有操作权限///////////////////
+            $leagueManageData=new LeagueManageData();
+            $siteId=$leagueManageData->GetSiteId($leagueId,true);
+            $manageUserId = Control::GetManageUserId();
+            $manageUserAuthority = new ManageUserAuthorityManageData();
+            $can = $manageUserAuthority->CanManageLeague($siteId, $manageUserId);
+            if ($can != 1) {
+                $result="-10";//没权限
+                return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+            }
+
+            $matchManageData=new MatchManageData();
+            $matchList=$matchManageData->GetListFinishedOfLeague($leagueId);
+            $teamList=array();
+            foreach($matchList as $oneMatch){
+                $homeTeamId=$oneMatch["HomeTeamId"];
+                $homeTeamGoal=$oneMatch["HomeTeamGoal"];
+                $guestTeamId=$oneMatch["GuestTeamId"];
+                $guestTeamGoal=$oneMatch["GuestTeamGoal"];
+                if(!isset($teamList[$homeTeamId])){
+                    $teamList[$guestTeamId]=array();
+                }
+                if(!isset($teamList[$guestTeamId])){
+                    $teamList[$guestTeamId]=array();
+                }
+                if(!isset($teamList[$homeTeamId]["Goal"])){
+                    $teamList[$homeTeamId]["Goal"]=$homeTeamGoal;
+                }else{
+                    $teamList[$homeTeamId]["Goal"]+=$homeTeamGoal;
+                }
+                if(!isset($teamList[$homeTeamId]["LoseGoal"])){
+                    $teamList[$homeTeamId]["LoseGoal"]=$guestTeamGoal;
+                }else{
+                    $teamList[$homeTeamId]["LoseGoal"]+=$guestTeamGoal;
+                }
+
+
+
+                if(!isset($teamList[$guestTeamId]["Goal"])){
+                    $teamList[$guestTeamId]["Goal"]=$guestTeamGoal;
+                }else{
+                    $teamList[$guestTeamId]["Goal"]+=$guestTeamGoal;
+                }
+                if(!isset($teamList[$guestTeamId]["LoseGoal"])){
+                    $teamList[$guestTeamId]["LoseGoal"]=$homeTeamGoal;
+                }else{
+                    $teamList[$guestTeamId]["LoseGoal"]+=$homeTeamGoal;
+                }
+                $matchResult=$oneMatch["Result"];
+                switch($matchResult){
+                    case 1:
+                        if(isset($teamList[$homeTeamId]["Point"])){
+                            $teamList[$homeTeamId]["Point"]+=3;
+                        }else{
+                            $teamList[$homeTeamId]["Point"]=3;
+                        }
+                        if(isset($teamList[$guestTeamId]["Point"])){
+                            $teamList[$guestTeamId]["Point"]+=0;
+                        }else{
+                            $teamList[$guestTeamId]["Point"]=0;
+                        }
+                    break;
+                    case 2:
+                        if(isset($teamList[$homeTeamId]["Point"])){
+                            $teamList[$homeTeamId]["Point"]+=0;
+                        }else{
+                            $teamList[$homeTeamId]["Point"]=0;
+                        }
+                        if(isset($teamList[$guestTeamId]["Point"])){
+                            $teamList[$guestTeamId]["Point"]+=3;
+                        }else{
+                            $teamList[$guestTeamId]["Point"]=3;
+                        }
+                        break;
+                    case 3:
+                        if(isset($teamList[$homeTeamId]["Point"])){
+                            $teamList[$homeTeamId]["Point"]+=1;
+                        }else{
+                            $teamList[$homeTeamId]["Point"]=1;
+                        }
+                        if(isset($teamList[$guestTeamId]["Point"])){
+                            $teamList[$guestTeamId]["Point"]+=1;
+                        }else{
+                            $teamList[$guestTeamId]["Point"]=1;
+                        }
+                        break;
+                    default:
+                    break;
+                }
+                print_r($teamList);
+            }
+        }
+        return Control::GetRequest("jsonpcallback","") . '({"result":"'.$result.'"})';
+    }
+
+
 }

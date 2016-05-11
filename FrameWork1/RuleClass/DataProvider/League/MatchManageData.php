@@ -160,6 +160,34 @@ class MatchManageData extends BaseManageData
         return $result;
     }
 
+
+
+
+    /**
+     * 获取比赛分页列表
+     * @param int $leagueId id
+     * @return array 数据集
+     */
+    public function GetListFinishedOfLeague($leagueId) {
+        $result=-1;
+        if($leagueId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LeagueId", $leagueId);
+
+            $sql = "
+                SELECT "." * FROM
+                " . self::TableName_Match . "
+                WHERE LeagueId=:LeagueId AND State=2 AND Result>0 ;";
+
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
+
+
+
+
     /**
      * @param $matchId
      * @param bool $withCache
