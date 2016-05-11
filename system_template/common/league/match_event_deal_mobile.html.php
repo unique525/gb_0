@@ -252,6 +252,7 @@
                                     ]]></item>
                             </icms>
                             <a href="#demo-links" data-rel="close" idvalue="525" team_id="{HomeTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
+                            <a href="#demo-links" data-rel="close" idvalue="0" team_id="{HomeTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">对面弃权</a>
                         </div>
                     </div>
 
@@ -266,6 +267,7 @@
                                     ]]></item>
                             </icms>
                             <a href="#demo-links" data-rel="close" idvalue="525" team_id="{GuestTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
+                            <a href="#demo-links" data-rel="close" idvalue="0" team_id="{GuestTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">对面弃权</a>
                         </div>
                     </div>
 
@@ -281,6 +283,7 @@
                                     ]]></item>
                             </icms>
                             <a href="#demo-links" data-rel="close" idvalue="525" team_id="{HomeTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
+                            <a href="#demo-links" data-rel="close" idvalue="" team_id="" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">取消</a>
                         </div>
                     </div>
 
@@ -295,6 +298,7 @@
                                     ]]></item>
                             </icms>
                             <a href="#demo-links" data-rel="close" idvalue="525" team_id="{GuestTeamId}" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">无名氏</a>
+                            <a href="#demo-links" data-rel="close" idvalue="" team_id="" class="member_option ui-btn ui-shadow ui-corner-all ui-btn-a ui-btn-inline">取消</a>
                         </div>
                     </div>
 

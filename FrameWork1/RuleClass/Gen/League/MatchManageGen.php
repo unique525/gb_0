@@ -29,6 +29,9 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
             case "import":
                 $result = self::GenImport();
                 break;
+            case "async_submit_one_match":
+                $result = self::AsyncSubmitOneMatch();
+                break;
         }
 
         $result = str_ireplace("{method}", $method, $result);
@@ -367,5 +370,90 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
         return $tempContent;
     }
 
+
+
+    /**
+     * 提交单场比赛结果
+     * @return string 执行结果
+     */
+    private function AsyncSubmitOneMatch(){
+        $result="";
+        $matchId=Control::GetRequest("match_id", 0);
+        $state=Control::GetRequest("state", 0);
+        $matchManageData=new MatchManageData();
+        $leagueId = $matchManageData->GetLeagueId($matchId,true);
+        $manageUserId=Control::GetManageUserId();
+
+        $leagueManageData=new LeagueManageData();
+        $siteId=$leagueManageData->GetSiteId($leagueId,true);
+        ///////////////判断是否有操作权限///////////////////
+        $manageUserAuthorityManageData = new ManageUserAuthorityManageData();
+        $canExplore = $manageUserAuthorityManageData->CanManageLeague($siteId, $manageUserId);
+        if (!$canExplore) {
+            $result=-4; //没有权限
+            return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+        }
+
+        $matchDetail=$matchManageData->GetOne($matchId);
+        if(!empty($matchDetail)){
+            $homeTeamId=$matchDetail["HomeTeamId"];
+            $guestTeamId=$matchDetail["GuestTeamId"];
+            $goalManageData=new GoalManageData();
+            $goalArray=$goalManageData->GetAllListOfMatch($matchId);
+            $homeGoal=0;
+            $homePenalty=0;
+            $guestGoal=0;
+            $guestPenalty=0;
+            foreach($goalArray as $oneGoal){
+                if($oneGoal["Type"]<9){
+                    if($homeTeamId==$oneGoal["TeamId"]){
+                        $homeGoal++;
+                    }
+                    if($guestTeamId==$oneGoal["TeamId"]){
+                        $guestGoal++;
+                    }
+                }elseif($oneGoal["Type"]==9){
+                    if($homeTeamId==$oneGoal["TeamId"]){
+                        $homePenalty++;
+                    }
+                    if($guestTeamId==$oneGoal["TeamId"]){
+                        $guestPenalty++;
+                    }
+                }
+            }
+
+            //完场结果
+            $resultMatch=0;
+            if($state==MatchData::STATE_END){
+                if($homeGoal>$guestGoal){
+                    $resultMatch=MatchData::RESULT_HOME_WIN;
+                }elseif($homeGoal<$guestGoal){
+                    $resultMatch=MatchData::RESULT_GUEST_WIN;
+                }else{
+                    if($homePenalty>$guestPenalty){
+                        $resultMatch=MatchData::RESULT_HOME_WIN_PENALTY;
+                    }elseif($homePenalty<$guestPenalty){
+                        $resultMatch=MatchData::RESULT_GUEST_WIN_PENALTY;
+                    }else{
+                        $resultMatch=MatchData::RESULT_TIE;
+                    }
+                }
+            }
+            $result=$matchManageData->UpdateOneMatchResult($matchId,$resultMatch,$homeGoal,$guestGoal,$homePenalty,$guestPenalty,$state);
+            if($result>0){
+                /**更新队伍统计**/
+                $matchList=$matchManageData->GetListFinishedOfTeamInLeague($homeTeamId,$leagueId);
+                foreach($matchList as $oneMatch){
+
+                }
+                parent::DelAllCache();
+                $result.=',"home_goal":'.$homeGoal.',"guest_goal":'.$guestGoal.',"match_result":'.$resultMatch;
+            }
+
+        }
+
+
+        return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
+    }
 
 }

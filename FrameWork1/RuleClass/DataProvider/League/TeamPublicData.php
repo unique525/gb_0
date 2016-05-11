@@ -28,7 +28,7 @@ class TeamPublicData extends BasePublicData
             $cacheFile = 'team_get_list_of_league.cache_' . $leagueId .'';
             $sql = 'SELECT '.' tol.*,t.* FROM ' . self::TableName_TeamOfLeague . ' tol
              LEFT OUTER JOIN '.self::TableName_Team.' t ON t.TeamId=tol.TeamId
-             WHERE tol.LeagueId=:LeagueId AND State='.$state.' ORDER BY tol.GroupName ;';
+             WHERE tol.LeagueId=:LeagueId AND State='.$state.'  ORDER BY GroupName,Score DESC,(Goal-LoseGoal) DESC ;';
             $dataProperty = new DataProperty();
             $dataProperty->AddField("LeagueId", $leagueId);
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

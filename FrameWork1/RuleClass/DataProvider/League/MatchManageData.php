@@ -175,9 +175,11 @@ class MatchManageData extends BaseManageData
             $dataProperty->AddField("LeagueId", $leagueId);
 
             $sql = "
-                SELECT "." * FROM
-                " . self::TableName_Match . "
-                WHERE LeagueId=:LeagueId AND State=2 AND Result>0 ;";
+                SELECT "." m.*,ta.TeamName as HomeTeamName,tb.TeamName as GuestTeamName FROM
+                " . self::TableName_Match . " m
+                LEFT OUTER JOIN ".self::TableName_Team." ta ON ta.TeamId=m.HomeTeamId
+                LEFT OUTER JOIN ".self::TableName_Team." tb ON tb.TeamId=m.GuestTeamId
+                WHERE m.LeagueId=:LeagueId AND m.State=2 AND m.Result>0 ;";
 
 
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
@@ -186,6 +188,29 @@ class MatchManageData extends BaseManageData
     }
 
 
+
+    /**
+     * 获取比赛分页列表
+     * @param int $leagueId id
+     * @param int $teamId id
+     * @return array 数据集
+     */
+    public function GetListFinishedOfTeamInLeague($teamId,$leagueId) {
+        $result=-1;
+        if($leagueId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LeagueId", $leagueId);
+
+            $sql = "
+                SELECT "." * FROM
+                " . self::TableName_Match . "
+                WHERE LeagueId=:LeagueId AND (HomeTeamId=$teamId OR GuestTeamId=$teamId) AND State=2 AND Result>0 ;";
+
+
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+        }
+        return $result;
+    }
 
 
     /**
@@ -251,14 +276,15 @@ class MatchManageData extends BaseManageData
      * @param $guestTeamGoal
      * @param $homePenalty
      * @param $guestPenalty
+     * @param $state
      * @return int
      */
-    public function UpdateOneMatchResult($matchId,$matchResult,$homeTeamGoal,$guestTeamGoal,$homePenalty,$guestPenalty)
+    public function UpdateOneMatchResult($matchId,$matchResult,$homeTeamGoal,$guestTeamGoal,$homePenalty,$guestPenalty,$state)
     {
         $result = -1;
         if ($matchId > 0) {
             $sql = 'UPDATE ' . self::TableName_Match . '
-             SET Result=:Result,HomeTeamGoal=:HomeTeamGoal,GuestTeamGoal=:GuestTeamGoal,HomeTeamPenalty=:HomeTeamPenalty,GuestTeamPenalty=:GuestTeamPenalty
+             SET Result=:Result,HomeTeamGoal=:HomeTeamGoal,GuestTeamGoal=:GuestTeamGoal,HomeTeamPenalty=:HomeTeamPenalty,GuestTeamPenalty=:GuestTeamPenalty,State=:State
              WHERE MatchId=:MatchId;';
             $dataProperty = new DataProperty();
             $dataProperty->AddField("MatchId", $matchId);
@@ -267,6 +293,7 @@ class MatchManageData extends BaseManageData
             $dataProperty->AddField("GuestTeamGoal", $guestTeamGoal);
             $dataProperty->AddField("HomeTeamPenalty", $homePenalty);
             $dataProperty->AddField("GuestTeamPenalty", $guestPenalty);
+            $dataProperty->AddField("State", $state);
             $result=$this->dbOperator->Execute($sql,$dataProperty);
         }
         return $result;

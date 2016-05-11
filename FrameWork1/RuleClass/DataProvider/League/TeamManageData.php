@@ -56,6 +56,38 @@ class TeamManageData extends BaseManageData
     }
 
 
+    /**
+     * 修改match of league
+     * @param array $teamArray $_post数组
+     * @param string $teamId id
+     * @param string $leagueId id
+     * @return int 执行结果
+     */
+    public function ModifyMatchOfLeague($teamArray, $teamId, $leagueId) {
+
+        $result = -1;
+        if($teamId>0&&$leagueId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("Score",$teamArray["f_Score"]);
+            $dataProperty->AddField("Goal",$teamArray["f_Goal"]);
+            $dataProperty->AddField("LoseGoal",$teamArray["f_LoseGoal"]);
+            $dataProperty->AddField("Match",$teamArray["f_Match"]);
+            $dataProperty->AddField("Win",$teamArray["f_Win"]);
+            $dataProperty->AddField("Lose",$teamArray["f_Lose"]);
+            $dataProperty->AddField("Tie",$teamArray["f_Tie"]);
+            $dataProperty->AddField("TeamId",$teamId);
+            $dataProperty->AddField("LeagueId",$leagueId);
+            $sql="UPDATE " . self::TableName_TeamOfLeague .
+                " SET Score=:Score,Goal=:Goal,LoseGoal=:LoseGoal,`Match`=:Match,Win=:Win,Lose=:Lose,Tie=:Tie
+                 WHERE TeamId=:TeamId AND LeagueId=:LeagueId ;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+
+
+        return $result;
+    }
+
+
 
     /**
      *
@@ -85,6 +117,7 @@ class TeamManageData extends BaseManageData
         }
         return $result;
     }
+
 
     /**
      *
@@ -163,7 +196,7 @@ class TeamManageData extends BaseManageData
                 SELECT "." tol.*,t.TeamName,t.TeamShortName
                 FROM ".self::TableName_TeamOfLeague." tol
                 LEFT OUTER JOIN " . self::TableName_Team . " t ON tol.TeamId=t.TeamId
-                WHERE tol.LeagueId=:LeagueId ;";
+                WHERE tol.LeagueId=:LeagueId ORDER BY GroupName,Score DESC,(Goal-LoseGoal) DESC;";
             $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
         }
         return $result;
