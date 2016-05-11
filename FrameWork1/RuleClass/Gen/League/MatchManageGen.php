@@ -442,12 +442,10 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
             $result=$matchManageData->UpdateOneMatchResult($matchId,$resultMatch,$homeGoal,$guestGoal,$homePenalty,$guestPenalty,$state);
             if($result>0){
                 /**更新队伍统计**/
-                $matchList=$matchManageData->GetListFinishedOfTeamInLeague($homeTeamId,$leagueId);
-                foreach($matchList as $oneMatch){
-
-                }
+                $homeStatistic=self::StatisticTeamInLeague($homeTeamId,$leagueId);
+                $guestStatistic=self::StatisticTeamInLeague($guestTeamId,$leagueId);
                 parent::DelAllCache();
-                $result.=',"home_goal":'.$homeGoal.',"guest_goal":'.$guestGoal.',"match_result":'.$resultMatch;
+                $result.=',"home_goal":'.$homeGoal.',"guest_goal":'.$guestGoal.',"match_result":'.$resultMatch.',"home_stat":'.$homeStatistic.',"guest_stat":'.$guestStatistic;
             }
 
         }
@@ -456,4 +454,54 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
         return Control::GetRequest("jsonpcallback", "") . '({"result":' . $result . '})';
     }
 
+    private function StatisticTeamInLeague($teamId,$leagueId){
+        $matchManageData=new MatchManageData();
+        $matchList=$matchManageData->GetListFinishedOfTeamInLeague($teamId,$leagueId);
+        $resultArray=array(
+            "f_Goal"=>0,
+            "f_LoseGoal"=>0,
+            "f_Match"=>0,
+            "f_Win"=>0,
+            "f_Tie"=>0,
+            "f_Lose"=>0,
+            "f_Score"=>0
+        );
+        foreach($matchList as $oneMatch){
+            if($oneMatch["HomeTeamId"]==$teamId){
+                $resultArray["f_Goal"]+=$oneMatch["HomeTeamGoal"];
+                $resultArray["f_LoseGoal"]+=$oneMatch["GuestTeamGoal"];
+                $resultArray["f_Match"]+=1;
+                switch($oneMatch["Result"]){
+                    case 1:
+                        $resultArray["f_Win"]++;
+                        break;
+                    case 2:
+                        $resultArray["f_Lose"]++;
+                        break;
+                    case 3:
+                        $resultArray["f_Tie"]++;
+                        break;
+                }
+            }
+            if($oneMatch["GuestTeamId"]==$teamId){
+                $resultArray["f_Goal"]+=$oneMatch["GuestTeamGoal"];
+                $resultArray["f_LoseGoal"]+=$oneMatch["HomeTeamGoal"];
+                $resultArray["f_Match"]+=1;
+                switch($oneMatch["Result"]){
+                    case 1:
+                        $resultArray["f_Lose"]++;
+                        break;
+                    case 2:
+                        $resultArray["f_Win"]++;
+                        break;
+                    case 3:
+                        $resultArray["f_Tie"]++;
+                        break;
+                }
+            }
+        }
+        $teamManageData=new TeamManageData();
+        $result=$teamManageData->ModifyMatchOfLeague($resultArray,$teamId,$leagueId);
+        return $result;
+    }
 }
