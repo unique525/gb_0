@@ -29,12 +29,43 @@
 
 
             //格式化状态
-            $("#span_state").each(function(){
+            $(".span_state").each(function(){
                 $(this).html(formatState($(this).text()));
+            });
+
+            //格式化状态
+            $(".span_result").each(function(){
+                $(this).html(formatResult($(this).text()));
             });
 
         });
 
+
+        function AjaxSubmitOneMatch(id,state){
+            $.ajax({
+                type: "get",
+                url: "/default.php?secu=manage&mod=match&m=async_submit_one_match&match_id="+id+"&state="+state,
+                dataType: "jsonp",
+                jsonp: "jsonpcallback",
+                success: function(data) {
+                    if(parseInt(data["result"])>0){
+                        $("#span_state_"+id).html(formatState(state));
+                        var result=data["result_match"];
+                        $("#span_result_"+id).html(formatState(result));
+                        var homeGoal=data["home_goal"];
+                        var guestGoal=data["home_goal"];
+                        var homePenalty=data["home_penalty"];
+                        var guestPenalty=data["guest_penalty"];
+                        $("#span_goal_"+id).html(homeGoal+'<span class="penalty_'+result+'">('+homePenalty+')</span>-'+guestGoal+'<span class="penalty_'+result+'">('+guestPenalty+')</span>');
+                    }else{
+                        alert('更新失败！');
+                    }
+                },
+                error:function(){
+                    alert('json错误')
+                }
+            });
+        }
 
         function modifyState(Id,state){
             if(Id>0){
@@ -55,6 +86,38 @@
         }
 
         /**
+         * 格式化结果
+         * @return {string}
+         */
+        function formatResult(result){
+            result = result.toString();
+            switch (result){
+                case "0":
+                    return "<"+"span >未完<"+"/span>";
+                    break;
+                case "1":
+                    return "<"+"span >主胜<"+"/span>";
+                    break;
+                case "2":
+                    return "<"+"span >客胜<"+"/span>";
+                    break;
+                case "3":
+                    return "<"+"span >打平<"+"/span>";
+                    break;
+                case "4":
+                    return "<"+"span >主胜(点)<"+"/span>";
+                    break;
+                case "5":
+                    return "<"+"span >客胜(点)<"+"/span>";
+                    break;
+                default :
+                    return "未知";
+                    break;
+            }
+        }
+
+
+        /**
          * 格式化状态值
          * @return {string}
          */
@@ -62,10 +125,16 @@
             state = state.toString();
             switch (state){
                 case "0":
-                    return "<"+"span style='color:#009900'>启用<"+"/span>";
+                    return "<"+"span >未开始<"+"/span>";
+                    break;
+                case "1":
+                    return "<"+"span >进行中<"+"/span>";
+                    break;
+                case "2":
+                    return "<"+"span >已完场<"+"/span>";
                     break;
                 case "100":
-                    return "<"+"span style='color:#990000'>停用<"+"/span>";
+                    return "<"+"span style='color:#990000'>删除<"+"/span>";
                     break;
                 default :
                     return "未知";
@@ -73,7 +142,13 @@
             }
         }
     </script>
-
+<style>
+    .goal_0{display: none}
+    .penalty_0{display: none}
+    .penalty_1{display: none}
+    .penalty_2{display: none}
+    .penalty_3{display: none}
+</style>
 </head>
 <body>
 
@@ -101,15 +176,15 @@
         <tr class="grid_title">
             <td class="spe_line" style="width:40px;text-align:center">ID</td>
             <td class="spe_line" style="width:40px;text-align:center;">编辑</td>
-            <!--<td class="spe_line" style="width:40px;text-align:center;">状态</td>
-            <td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>-->
+            <!--<td class="spe_line" style="width:80px;text-align:center;">启用&nbsp;&nbsp;停用</td>-->
             <td class="spe_line" style="width:100px;text-align:left;">名称</td>
             <td class="spe_line" style="width:120px;text-align:left;">场地</td>
             <td class="spe_line" style="width:180px;text-align:left;">开球时间</td>
-            <td class="spe_line" style="width:40px;text-align:left;">结果</td>
             <td class="spe_line" style="text-align:left;">主队 - 客队</td>
-            <td class="spe_line" style="width:90px;text-align:left;">比分</td>
-            <td class="spe_line" style="width:80px;text-align:center;"></td>
+            <td class="spe_line" style="width:80px;text-align:center;">状态</td>
+            <td class="spe_line" style="width:70px;text-align:left;">比分</td>
+            <td class="spe_line" style="width:40px;text-align:left;">结果</td>
+            <td class="spe_line" style="width:80px;text-align:center;">确认完场</td>
         </tr>
         <icms id="match_list" type="list">
             <item><![CDATA[
@@ -121,8 +196,7 @@
                                                                           alt="编辑" title="{f_MatchId}"
                                                                           idvalue="{f_MatchId}"
                                                                           onclick="Modify('{f_MatchId}')"/></td>
-                    <!--<td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_MatchId}" class="span_state" idvalue="{f_MatchId}">{f_State}</span></td>
-                    <td class="spe_line2" style="width:60px;text-align:center;">
+                    <!--<td class="spe_line2" style="width:60px;text-align:center;">
                         <img class="img_open" idvalue="{f_MatchId}" src="/system_template/{template_name}/images/manage/start.jpg" style="cursor:pointer" onclick="modifyState({f_MatchId},0)"/>
                         &nbsp;
                         <img class="img_close" idvalue="{f_MatchId}" src="/system_template/{template_name}/images/manage/stop.jpg" style="cursor:pointer" onclick="modifyState({f_MatchId},100)"/>
@@ -131,13 +205,13 @@
                     <td class="spe_line">{f_MatchName}</td>
                     <td class="spe_line">{f_StadiumName}</td>
                     <td class="spe_line date_time">{f_BeginDate} {f_BeginTime}</td>
-                    <td class="spe_line" style="width:40px;text-align:left;">{f_Result}</td>
                     <td class="spe_line">{f_HomeTeamName} - {f_GuestTeamName}</td>
-                    <td class="spe_line">{f_HomeTeamGoal}({f_HomeTeamPenalty}) - {f_GuestTeamGoal}({f_GuestTeamPenalty})</td>
+                    <td class="spe_line2" style="width:40px;text-align:center;"><span id="span_state_{f_MatchId}" class="span_state" idvalue="{f_MatchId}">{f_State}</span></td>
+                    <td class="spe_line" id="span_goal_{f_MatchId}" style="width:50px;"><span class="goal_{f_state}">{f_HomeTeamGoal}<span class="penalty_{f_result}">({f_HomeTeamPenalty})</span> - {f_GuestTeamGoal}<span class="penalty_{f_result}">({f_GuestTeamPenalty})</span><span></span></td>
+                    <td class="spe_line span_result" id="span_result_{f_MatchId}" style="width:40px;text-align:left;">{f_Result}</td>
 
                     <td class="spe_line" style="width:180px;text-align:center;cursor: pointer">
-                        <!--<span class="span_filter" id="span_match" style="width:50px;margin:0 10px 0 10px;cursor:pointer" idvalue="{f_MatchId}">赛程管理</span>
--->
+                        <span class="span_filter span_match btn" style="width:50px;margin:0 10px 0 10px;cursor:pointer" onclick="AjaxSubmitOneMatch({f_MatchId},2)">更新完场数据</span>
                     </td>
 
                 </tr>

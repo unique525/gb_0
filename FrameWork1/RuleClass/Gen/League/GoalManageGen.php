@@ -69,8 +69,6 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
 
         $goalManageData=new GoalManageData();
         if (intval($matchId) > 0) {
-            $tempContent = Template::Load("league/match_event_deal_mobile.html","common");
-            parent::ReplaceFirst($tempContent);
             if (!empty($_POST)) {
                 $goalId = $goalManageData->Create($_POST,$manageUserId);
                 //记入操作log
@@ -97,6 +95,8 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
 
             }
 
+            $tempContent = Template::Load("league/match_event_deal_mobile.html","common");
+            parent::ReplaceFirst($tempContent);
 
             $oneMatch=$matchManageData->GetOne($matchId);
             Template::ReplaceOne($tempContent,$oneMatch);
@@ -105,6 +105,7 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
             );
             $tempContent = strtr($tempContent, $replaceArr);
             $tempContent = str_ireplace("{SiteId}", $siteId, $tempContent);
+            $tempContent = str_ireplace("{Select1}", 'selected=""', $tempContent);
 
 
             $arrField = $goalManageData->GetFields();
@@ -176,8 +177,6 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
 
         $goalManageData=new GoalManageData();
         if (intval($matchId) > 0) {
-            $tempContent = Template::Load("league/match_event_deal_mobile.html","common");
-            parent::ReplaceFirst($tempContent);
             if (!empty($_POST)) {
                 $result = $goalManageData->Modify($_POST,$goalId,$manageUserId);
 
@@ -205,6 +204,8 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
 
             }
 
+            $tempContent = Template::Load("league/match_event_deal_mobile.html","common");
+            parent::ReplaceFirst($tempContent);
 
             $oneMatch=$matchManageData->GetOne($matchId);
             Template::ReplaceOne($tempContent,$oneMatch);
@@ -212,6 +213,14 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
 
             $oneGoal=$goalManageData->GetOne($goalId);
             Template::ReplaceOne($tempContent,$oneGoal);
+
+            $state=$oneGoal["State"];
+            $tempContent = str_ireplace("{select$state}", "selected='selected'", $tempContent);
+            $tempContent = str_ireplace("{select100}", "", $tempContent);
+            $tempContent = str_ireplace("{select1}", "", $tempContent);
+
+
+
             $replaceArr = array(
                 "{display}" => "inline"
             );

@@ -43,7 +43,7 @@ class MatchData {
     /**
      * 平
      */
-    const RESULT_DRAW = 3;
+    const RESULT_TIE = 3;
     /**
      * 主队点球大战胜
      */

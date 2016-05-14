@@ -141,6 +141,9 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
 
 
 
+        //去掉r开头的标记 {f_xxx_xxx}
+        $patterns = '/\{f_(.*?)\}/';
+        $tempContent = preg_replace($patterns, "", $tempContent);
         parent::ReplaceSiteInfo($siteId, $tempContent);
         parent::ReplaceChannelInfo($matchId, $tempContent);
         parent::ReplaceEnd($tempContent);
@@ -191,11 +194,16 @@ class MatchPublicGen extends BasePublicGen implements IBasePublicGen
 
             if($isManage>0){
                 $manageUrl='"/default.php?secu=manage&mod="+mod+"&m="+method';
+                $editMemberUrl='"/default.php?secu=manage&mod=member&m=mobile_list_of_team_in_match&match_id='.$matchId.'&team_id="';
                 $templateContent = str_ireplace("{ManageUrl}", $manageUrl, $templateContent);
+                $templateContent = str_ireplace("{EditMember}", $editMemberUrl, $templateContent);
                 $templateContent = str_ireplace("{display}", "block", $templateContent);
+                $templateContent = str_ireplace("{TagWhere}", "match_manage", $templateContent);
             }else{
                 $templateContent = str_ireplace("{ManageUrl}", "", $templateContent);
+                $templateContent = str_ireplace("{EditMember}", "", $templateContent);
                 $templateContent = str_ireplace("{display}", "none", $templateContent);
+                $templateContent = str_ireplace("{TagWhere}", "match", $templateContent);
             }
 
 

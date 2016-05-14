@@ -474,12 +474,14 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
                 switch($oneMatch["Result"]){
                     case 1:
                         $resultArray["f_Win"]++;
+                        $resultArray["f_Score"]+=3;
                         break;
                     case 2:
                         $resultArray["f_Lose"]++;
                         break;
                     case 3:
                         $resultArray["f_Tie"]++;
+                        $resultArray["f_Score"]+=1;
                         break;
                 }
             }
@@ -493,9 +495,11 @@ class MatchManageGen extends BaseManageGen implements IBaseManageGen
                         break;
                     case 2:
                         $resultArray["f_Win"]++;
+                        $resultArray["f_Score"]+=3;
                         break;
                     case 3:
                         $resultArray["f_Tie"]++;
+                        $resultArray["f_Score"]+=1;
                         break;
                 }
             }

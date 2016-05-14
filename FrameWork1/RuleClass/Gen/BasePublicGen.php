@@ -294,12 +294,15 @@ class BasePublicGen extends BaseGen
 
                     case Template::TAG_TYPE_MEMBER_LIST:
                         $teamId = intval(str_ireplace("team_", "", $tagId));
+                        $matchId = intval(str_ireplace("match_", "", $relationId));
                             $templateContent = self::ReplaceTemplateOfMemberList(
                                 $templateContent,
                                 $teamId,
+                                $matchId,
                                 $tagId,
                                 $tagContent,
                                 $tagTopCount,
+                                $tagWhere,
                                 $state
                             );
                         break;
@@ -2142,18 +2145,22 @@ class BasePublicGen extends BaseGen
      * 替换队员列表的内容
      * @param string $channelTemplateContent 要处理的模板内容
      * @param int $teamId 球队id
+     * @param int $matchId 比赛id
      * @param string $tagId 标签id
      * @param string $tagContent 标签内容
      * @param int $tagTopCount 显示条数
+     * @param int $tagWhere
      * @param int $state 状态
      * @return mixed|string 内容模板
      */
     private function ReplaceTemplateOfMemberList(
         $channelTemplateContent,
         $teamId,
+        $matchId,
         $tagId,
         $tagContent,
         $tagTopCount,
+        $tagWhere,
         $state
     )
     {
@@ -2162,8 +2169,17 @@ class BasePublicGen extends BaseGen
             $arrMemberList = null;
             $memberPublicData = new MemberPublicData();
 
-            $arrMemberList = $memberPublicData->GetListOfTeam($teamId,$state,False);
-
+            switch($tagWhere) {
+                case "match":
+                    $arrMemberList=$memberPublicData->GetListOfTeamInMatch($teamId,$matchId,100,false);
+                    break;
+                case "team":
+                    $arrMemberList = $memberPublicData->GetListOfTeam($teamId, $state, false);
+                    break;
+                default:
+                    $arrMemberList = $memberPublicData->GetListOfTeam($teamId, $state, false);
+                    break;
+            }
             if (!empty($arrMemberList)) {
                 Template::ReplaceList($tagContent, $arrMemberList, $tagId);
                 //把对应ID的CMS标记替换成指定内容
@@ -2189,7 +2205,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagWhere 检索条件
      * @param $tagWhereValue
      * @param $tagOrder
-     * @param $state
+     * @param $stateMax
      * @return string
      */
     private function ReplaceTemplateOfGoalList(
@@ -2200,7 +2216,7 @@ class BasePublicGen extends BaseGen
         $tagWhere,
         $tagWhereValue,
         $tagOrder,
-        $state
+        $stateMax=100
     )
     {
 
@@ -2208,7 +2224,11 @@ class BasePublicGen extends BaseGen
         switch($tagWhere){
             case "match":
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,False);
+                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,100,False);
+                break;
+            case "match_manage":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,101,False);
                 break;
             case "member":
                 break;
@@ -2220,7 +2240,7 @@ class BasePublicGen extends BaseGen
                 break;
             default:
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,False);
+                $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,$stateMax,False);
             break;
         }
 
@@ -2249,7 +2269,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagWhere 检索条件
      * @param $tagWhereValue
      * @param $tagOrder
-     * @param $state
+     * @param $stateMax
      * @return string
      */
     private function ReplaceTemplateOfRedYellowCardList(
@@ -2260,14 +2280,18 @@ class BasePublicGen extends BaseGen
         $tagWhere,
         $tagWhereValue,
         $tagOrder,
-        $state
+        $stateMax=100
     ){
 
         $cardPublicData = new RedYellowCardPublicData();
         switch($tagWhere){
             case "match":
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,False);
+                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,100,False);
+                break;
+            case "match_manage":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,101,False);
                 break;
             case "member":
                 break;
@@ -2279,7 +2303,7 @@ class BasePublicGen extends BaseGen
                 break;
             default:
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,False);
+                $arrCardList = $cardPublicData->GetAllListOfMatch($matchId,$stateMax,False);
                 break;
         }
 
@@ -2306,7 +2330,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagWhere 检索条件
      * @param $tagWhereValue
      * @param $tagOrder
-     * @param $state
+     * @param $stateMax
      * @return string
      */
     private function ReplaceTemplateOfMemberChangeList(
@@ -2317,14 +2341,18 @@ class BasePublicGen extends BaseGen
         $tagWhere,
         $tagWhereValue,
         $tagOrder,
-        $state
+        $stateMax=100
     ){
 
         $memberChangePublicData = new MemberChangePublicData();
         switch($tagWhere){
             case "match":
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,False);
+                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,100,False);
+                break;
+            case "match_manage":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,101,False);
                 break;
             case "member":
                 break;
@@ -2336,7 +2364,7 @@ class BasePublicGen extends BaseGen
                 break;
             default:
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,False);
+                $arrMemberChangeList = $memberChangePublicData->GetAllListOfMatch($matchId,$stateMax,False);
                 break;
         }
 
@@ -2362,7 +2390,7 @@ class BasePublicGen extends BaseGen
      * @param string $tagWhere 检索条件
      * @param $tagWhereValue
      * @param $tagOrder
-     * @param $state
+     * @param $stateMax
      * @return string
      */
     private function ReplaceTemplateOfOtherEventList(
@@ -2373,14 +2401,18 @@ class BasePublicGen extends BaseGen
         $tagWhere,
         $tagWhereValue,
         $tagOrder,
-        $state
+        $stateMax=100
     ){
 
         $otherEventPublicData = new OtherEventPublicData();
         switch($tagWhere){
             case "match":
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,False);
+                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,100,False);
+                break;
+            case "match_manage":
+                $matchId = intval(str_ireplace("match_", "", $tagId));
+                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,101,False);
                 break;
             case "member":
                 break;
@@ -2392,7 +2424,7 @@ class BasePublicGen extends BaseGen
                 break;
             default:
                 $matchId = intval(str_ireplace("match_", "", $tagId));
-                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,False);
+                $arrOtherEventList = $otherEventPublicData->GetAllListOfMatch($matchId,$stateMax,False);
                 break;
         }
 

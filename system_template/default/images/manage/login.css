@@ -1,5 +1,6 @@
 
-body { font-family: Microsoft YaHei,Verdana,serif; background:url("manage_login_bg.jpg"); }
+body { font-family: Microsoft YaHei,Verdana,serif; background:url("manage_login_bg.jpg");background-size: 100% auto;
+    background-repeat: repeat-y; }
 input { font-family: Microsoft YaHei,Verdana,serif;border:none;border:0;}
 
 #div_login_logo_bg{width:100%;height:70px;padding-top:50px;}

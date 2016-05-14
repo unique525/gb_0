@@ -56,6 +56,29 @@ class MemberManageData extends BaseManageData
     }
 
 
+    /**
+     * @param $memberId
+     * @param $matchId
+     * @param $teamId
+     * @param $state
+     * @return int
+     */
+    public function CreateOrModifyOfOneMatch($memberId,$matchId,$teamId,$state) {
+        $result=-1;
+        if($memberId>0&&$matchId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("MemberId",$memberId);
+            $dataProperty->AddField("MatchId",$matchId);
+            $dataProperty->AddField("TeamId",$teamId);
+            $sql='INSERT '.' INTO ' . self::TableName_MemberOfMatch ."
+            (MatchId,MemberId,TeamId,State)
+            VALUE (:MatchId,:MemberId,:TeamId,$state)
+            ON DUPLICATE KEY UPDATE State=$state ;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+
+        }
+        return $result;
+    }
 
 
     /**
@@ -126,6 +149,36 @@ class MemberManageData extends BaseManageData
     }
 
 
+
+    public function GetListOfTeamInMatch($teamId,$matchId,$state=101){
+
+        $result=array();
+        if($teamId>0&&$matchId>0){
+            $sql="SELECT " . " mom.*,m.MemberName,m.Number FROM ".self::TableName_MemberOfMatch." mom
+            LEFT OUTER JOIN ".self::TableName_Member." m ON m.MemberId=mom.MemberId
+            WHERE mom.MatchId=:MatchId AND mom.TeamId=:TeamId AND mom.State<:State ;";
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("TeamId", $teamId);
+            $dataProperty->AddField("MatchId", $matchId);
+            $dataProperty->AddField("State", $state);
+            $result = $this->dbOperator->GetArrayList($sql, $dataProperty);
+
+        }
+        return $result;
+    }
+
+
+    public function ModifyOneTeamOfMatchToCancel($matchId,$teamId){
+        $result=-1;
+        if($matchId>0&&$teamId>0){
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("MatchId",$matchId);
+            $dataProperty->AddField("TeamId",$teamId);
+            $sql="UPDATE ".self::TableName_MemberOfMatch." SET State=100 WHERE MatchId=:MatchId AND TeamId=:TeamId ;";
+            $result = $this->dbOperator->Execute($sql, $dataProperty);
+        }
+        return $result;
+    }
     public function GetRepeat($checkStr,$fieldName){
         $result=array();
         if($checkStr!=""&&$fieldName!=""){

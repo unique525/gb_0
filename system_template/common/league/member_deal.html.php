@@ -148,6 +148,12 @@
                     <input type="button" class="btn" onclick="GetTeamId('TeamName','f_TeamId','{SiteId}')" value="获取id"/>
                 </td>
             </tr>
+            <tr class="grid_item">
+                <td class="spe_line" style="height:30px;text-align:right"><label for="f_Number">号码：</label></td>
+                <td class="spe_line">
+                    <input type="number" class="" id="f_Number" name="f_Number" value="{Number}"/>
+                </td>
+            </tr>
 
         </table>
         <div id="bot_button">

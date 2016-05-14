@@ -96,6 +96,23 @@ class LeagueManageData extends BaseManageData
     }
 
 
+    /**
+     * @param $leagueId
+     * @return array
+     */
+    public function GetOne($leagueId){
+        $result = array();
+        if ($leagueId > 0) {
+            $sql = 'SELECT '.' * FROM '.self::TableName_League.'
+             WHERE LeagueId=:LeagueId;';
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LeagueId", $leagueId);
+            $result=$this->dbOperator->GetArray($sql,$dataProperty);
+        }
+        return $result;
+    }
+
+
 
     /**
      * 取得字段数据集

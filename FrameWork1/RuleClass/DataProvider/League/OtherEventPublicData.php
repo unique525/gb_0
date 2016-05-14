@@ -15,11 +15,13 @@ class OtherEventPublicData extends BasePublicData
     /**
      * 获取match数据集
      * @param $matchId
+     * @param $stateMax
      * @param $withCache
      * @return array
      */
     public function GetAllListOfMatch(
         $matchId,
+        $stateMax=100,
         $withCache = FALSE)
     {
         $result = array();
@@ -30,7 +32,7 @@ class OtherEventPublicData extends BasePublicData
              LEFT OUTER JOIN '.self::TableName_Team.' t ON e.TeamId=t.TeamId
              LEFT OUTER JOIN '.self::TableName_Member.' ma ON e.PrincipalMemberId=ma.MemberId
              LEFT OUTER JOIN '.self::TableName_Member.' mb ON e.SecondaryMemberId=mb.MemberId
-             WHERE e.MatchId=:MatchId AND e.State!='.MatchData::STATE_REMOVED .';';
+             WHERE e.MatchId=:MatchId AND e.State<'.$stateMax.';';
             $dataProperty = new DataProperty();
             $dataProperty->AddField("MatchId", $matchId);
             $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);

@@ -863,6 +863,14 @@ class BaseData
      */
     const TableId_Member = "MemberId";
     /**
+     * 参加比赛的球员 数据表名
+     */
+    const TableName_MemberOfMatch = "gb_member_of_match";
+    /**
+     * 参加赛事的球员 数据表名
+     */
+    const TableName_MemberOfLeague = "gb_member_of_league";
+    /**
      * 进球 数据表名
      */
     const TableName_Goal = "gb_goal";

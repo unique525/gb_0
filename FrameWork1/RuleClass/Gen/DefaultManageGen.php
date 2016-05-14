@@ -16,7 +16,8 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
         $result = "";
         $manageUserId = Control::GetManageUserId();
         if ($manageUserId <= 0) {
-            Control::GoUrl(RELATIVE_PATH . "/default.php?mod=manage&a=login");
+            $self_url=urlencode($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+            Control::GoUrl(RELATIVE_PATH . "/default.php?mod=manage&a=login&url=$self_url");
         } else {
             $module = Control::GetRequest("mod", "");
             switch ($module) {
@@ -347,6 +348,18 @@ class DefaultManageGen extends BaseManageGen implements IBaseManageGen {
                     break;
                 case "goal":
                     $goalManageGen = new GoalManageGen();
+                    $result = $goalManageGen->Gen();
+                    break;
+                case "red_yellow_card":
+                    $goalManageGen = new RedYellowCardManageGen();
+                    $result = $goalManageGen->Gen();
+                    break;
+                case "member_change":
+                    $goalManageGen = new MemberChangeManageGen();
+                    $result = $goalManageGen->Gen();
+                    break;
+                case "other_event":
+                    $goalManageGen = new OtherEventManageGen();
                     $result = $goalManageGen->Gen();
                     break;
 

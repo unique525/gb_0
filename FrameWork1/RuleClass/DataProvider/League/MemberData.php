@@ -18,4 +18,21 @@ class MemberData {
      */
     const STATE_REMOVED = 100;
 
+    /**
+     * 比赛首发
+     */
+    const STATE_OF_MATCH_STARTING =0;
+    /**
+     * 比赛替补登场
+     */
+    const STATE_OF_MATCH_ALTERNATE =1;
+    /**
+     * 比赛管饮水机
+     */
+    const STATE_OF_MATCH_DRINK_MACHINE =2;
+    /**
+     * 未进大名单
+     */
+    const STATE_OF_MATCH_NONE =100;
+
 }

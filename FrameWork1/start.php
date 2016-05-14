@@ -21,7 +21,8 @@ $client = Control::GetRequest("client", "");
 if ($security === "manage") {
     $manageUserId = Control::GetManageUserId();
     if ($manageUserId <= 0) {
-        die("<script>window.location.href='" . RELATIVE_PATH . "/default.php?mod=manage&a=login';</script>");
+        $self_url=urlencode($_SERVER["PHP_SELF"]."?".$_SERVER['QUERY_STRING']);
+        die("<script>window.location.href='" . RELATIVE_PATH . "/default.php?mod=manage&a=login&url=$self_url';</script>");
     } else {
         echo getManageOutput(new DefaultManageGen());
     }

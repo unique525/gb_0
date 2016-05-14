@@ -11,7 +11,7 @@
 </head>
 <body onkeydown="submitKeyClick('btn_sub');" style="">
     <form id="login_form" action="/default.php?mod=manage&a=login" method="post">
-        <div id="div_login_logo_bg"><div id="div_login_logo">iCMS <span>v2.0</span></div></div>
+        <div id="div_login_logo_bg"><div id="div_login_logo"> <span></span></div></div>
         <div id="div_login_box">
             <div id="div_manage_user_name" class="text_box">
                 <label for="manage_user_name">帐号：</label><input id="manage_user_name" name="manage_user_name" class="input_box1" type="text" value="" maxlength="40" />
