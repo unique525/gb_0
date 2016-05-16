@@ -70,6 +70,10 @@ class MemberChangeManageGen extends BaseManageGen implements IBaseManageGen
         $memberChangeManageData=new MemberChangeManageData();
         if (intval($matchId) > 0) {
             if (!empty($_POST)) {
+                //使用取出的league id
+                if(isset($_POST["LeagueId"])){
+                    $_POST["LeagueId"]=$leagueId;
+                }
                 $memberChangeId = $memberChangeManageData->Create($_POST,$manageUserId);
                 //记入操作log
                 $operateContent = "Create member change：match：" . $matchId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $memberChangeId;
@@ -101,6 +105,7 @@ class MemberChangeManageGen extends BaseManageGen implements IBaseManageGen
             $oneMatch=$matchManageData->GetOne($matchId);
             Template::ReplaceOne($tempContent,$oneMatch);
             $replaceArr = array(
+                "{LeagueId}" =>$leagueId,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);
@@ -179,6 +184,10 @@ class MemberChangeManageGen extends BaseManageGen implements IBaseManageGen
 
         if (intval($memberChangeId) > 0) {
             if (!empty($_POST)) {
+                //使用取出的league id
+                if(isset($_POST["LeagueId"])){
+                    $_POST["LeagueId"]=$leagueId;
+                }
                 $result = $memberChangeManageData->Modify($_POST,$memberChangeId,$manageUserId);
 
                 //记入操作log
@@ -223,6 +232,7 @@ class MemberChangeManageGen extends BaseManageGen implements IBaseManageGen
 
 
             $replaceArr = array(
+                "{LeagueId}" =>$leagueId,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);

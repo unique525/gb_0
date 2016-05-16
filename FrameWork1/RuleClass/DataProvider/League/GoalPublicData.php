@@ -68,6 +68,22 @@ class GoalPublicData extends BasePublicData
 
 
 
+    public function GetRankOfMemberInLeague($leagueId,$topCount=1000,$withCache=false){
+        $result=array();
+        if($leagueId>0){
+            $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'goal_data';
+            $cacheFile = 'goal_get_rank_of_member_in_league_id.cache_league_' . $leagueId . '';
+            $sql = 'select '.' g.*,COUNT(g.GoalId) as Count,m.MemberName,m.Number,t.TeamName,t.TeamShortName from '.self::TableName_Goal.' g
+             LEFT OUTER JOIN '.self::TableName_Member.' m ON m.MemberId=g.MemberId
+             LEFT OUTER JOIN '.self::TableName_Team.' t ON t.TeamId=g.TeamId
+             WHERE g.LeagueId=:LeagueId AND g.State<100 AND g.type<9 AND g.MemberId!=0 AND g.MemberId!=525
+            GROUP BY g.MemberId ORDER BY Count DESC LIMIT '.$topCount.' ;';
+            $dataProperty = new DataProperty();
+            $dataProperty->AddField("LeagueId", $leagueId);
+            $result = $this->GetInfoOfArrayList($sql, $dataProperty, $withCache, $cacheDir, $cacheFile);
+        }
+        return $result;
+    }
 
 
 

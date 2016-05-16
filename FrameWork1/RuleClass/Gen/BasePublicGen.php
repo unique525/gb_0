@@ -2230,6 +2230,10 @@ class BasePublicGen extends BaseGen
                 $matchId = intval(str_ireplace("match_", "", $tagId));
                 $arrGoalList = $goalPublicData->GetAllListOfMatch($matchId,101,False);
                 break;
+            case "rank_of_count_of_member":
+                $leagueId = intval(str_ireplace("league_", "", $tagId));
+                $arrGoalList = $goalPublicData->GetRankOfMemberInLeague($leagueId,$tagTopCount, true);
+                    break;
             case "member":
                 break;
             case "member_of_league":

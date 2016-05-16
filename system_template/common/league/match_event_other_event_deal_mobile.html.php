@@ -205,6 +205,7 @@
         <form data-ajax="false" id="main_form" action="/default.php?secu=manage&mod=other_event&m={method}&match_id={MatchId}&other_event_id={OtherEventId}" method="post">
             <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
             <input name="f_MatchId" id="f_MatchId" value="{MatchId}" type="hidden"/>
+            <input name="f_LeagueId" id="f_LeagueId" value="{LeagueId}" type="hidden"/>
             <input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="hidden" class="input_box" style="width:80px;"/>
             <div class="detail_container">
 

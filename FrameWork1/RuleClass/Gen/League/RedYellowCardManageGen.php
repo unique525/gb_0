@@ -70,6 +70,10 @@ class RedYellowCardManageGen extends BaseManageGen implements IBaseManageGen
         $redYellowCardManageData=new RedYellowCardManageData();
         if (intval($matchId) > 0) {
             if (!empty($_POST)) {
+                //使用取出的league id
+                if(isset($_POST["LeagueId"])){
+                    $_POST["LeagueId"]=$leagueId;
+                }
                 $cardId = $redYellowCardManageData->Create($_POST,$manageUserId);
                 //记入操作log
                 $operateContent = "Create red yellow card：match：" . $matchId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $cardId;
@@ -101,6 +105,7 @@ class RedYellowCardManageGen extends BaseManageGen implements IBaseManageGen
             $oneMatch=$matchManageData->GetOne($matchId);
             Template::ReplaceOne($tempContent,$oneMatch);
             $replaceArr = array(
+                "{LeagueId}" =>$leagueId,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);
@@ -171,6 +176,10 @@ class RedYellowCardManageGen extends BaseManageGen implements IBaseManageGen
 
         if (intval($redYellowCardId) > 0) {
             if (!empty($_POST)) {
+                //使用取出的league id
+                if(isset($_POST["LeagueId"])){
+                    $_POST["LeagueId"]=$leagueId;
+                }
                 $result = $redYellowCardManageData->Modify($_POST,$redYellowCardId,$manageUserId);
 
                 //记入操作log
@@ -215,6 +224,7 @@ class RedYellowCardManageGen extends BaseManageGen implements IBaseManageGen
 
 
             $replaceArr = array(
+                "{LeagueId}" =>$leagueId,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);

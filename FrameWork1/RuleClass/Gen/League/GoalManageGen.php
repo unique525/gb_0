@@ -70,12 +70,21 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
         $goalManageData=new GoalManageData();
         if (intval($matchId) > 0) {
             if (!empty($_POST)) {
+                //使用取出的league id
+                if(isset($_POST["LeagueId"])){
+                    $_POST["LeagueId"]=$leagueId;
+                }
                 $goalId = $goalManageData->Create($_POST,$manageUserId);
                 //记入操作log
                 $operateContent = "Create goal：match：" . $matchId .",POST FORM:".implode("|",$_POST).";\r\nResult:". $goalId;
                 self::CreateManageUserLog($operateContent);
 
                 if ($goalId > 0) {
+
+                    //删除相应缓存
+                    $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'goal_data';
+                    $cacheFile = 'goal_get_rank_of_member_in_league_id.cache_league_' . $leagueId . '';
+                    self::DelCache($cacheDir,$cacheFile);
 
                     Control::ShowMessage(Language::Load('lottery', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -101,6 +110,7 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
             $oneMatch=$matchManageData->GetOne($matchId);
             Template::ReplaceOne($tempContent,$oneMatch);
             $replaceArr = array(
+                "{LeagueId}" =>$leagueId,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);
@@ -178,6 +188,9 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
         $goalManageData=new GoalManageData();
         if (intval($matchId) > 0) {
             if (!empty($_POST)) {
+                if(isset($_POST["LeagueId"])){
+                    $_POST["LeagueId"]=$leagueId;
+                }
                 $result = $goalManageData->Modify($_POST,$goalId,$manageUserId);
 
                 //记入操作log
@@ -185,6 +198,11 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
                 self::CreateManageUserLog($operateContent);
 
                 if ($goalId > 0) {
+
+                    //删除相应缓存
+                    $cacheDir = CACHE_PATH . DIRECTORY_SEPARATOR . 'goal_data';
+                    $cacheFile = 'goal_get_rank_of_member_in_league_id.cache_league_' . $leagueId . '';
+                    self::DelCache($cacheDir,$cacheFile);
 
                     Control::ShowMessage(Language::Load('lottery', 1));//提交成功!
                     $closeTab = Control::PostRequest("CloseTab",0);
@@ -222,6 +240,7 @@ class GoalManageGen extends BaseManageGen implements IBaseManageGen
 
 
             $replaceArr = array(
+                "{LeagueId}" =>$leagueId,
                 "{display}" => "inline"
             );
             $tempContent = strtr($tempContent, $replaceArr);

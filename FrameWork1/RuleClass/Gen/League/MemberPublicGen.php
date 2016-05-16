@@ -36,7 +36,6 @@ class MemberPublicGen extends BasePublicGen implements IBasePublicGen
         $teamId = Control::GetRequest("team_id", 0);
         //$publishDate = Control::GetRequest("publish_date", "");
 
-        if($teamId>0){
         $teamPublicData = new TeamPublicData();
 
         $siteId = $teamPublicData->GetSiteId($teamId, true);
@@ -83,7 +82,6 @@ class MemberPublicGen extends BasePublicGen implements IBasePublicGen
         /*******************页面级的缓存 end  ********************** */
 
         parent::ReplaceUserInfoPanel($result, $siteId);
-        }
         return $result;
     }
 

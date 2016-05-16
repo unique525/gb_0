@@ -214,6 +214,7 @@
     <div role="main" class="ui-content jqm-content">
         <form data-ajax="false" id="main_form" action="/default.php?secu=manage&mod=goal&m={method}&match_id={MatchId}&goal_id={GoalId}" method="post">
             <input id="CloseTab" name="CloseTab" type="hidden" value="0"/>
+            <input name="f_LeagueId" id="f_LeagueId" value="{LeagueId}" type="hidden"/>
             <input name="f_MatchId" id="f_MatchId" value="{MatchId}" type="hidden"/>
             <input id="f_CreateDate" name="f_CreateDate" value="{CreateDate}" type="hidden" class="input_box" style="width:80px;"/>
             <div class="detail_container">

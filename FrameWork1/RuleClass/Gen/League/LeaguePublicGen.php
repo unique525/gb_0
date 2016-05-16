@@ -17,8 +17,8 @@ class LeaguePublicGen extends BasePublicGen implements IBasePublicGen
         $result = "";
         $method = Control::GetRequest("a", "");
         switch ($method) {
-            case "match_list":
-                $result = self::MatchList();
+            case "default":
+                $result = self::GetPage();
                 break;
         }
         return $result;
@@ -29,7 +29,7 @@ class LeaguePublicGen extends BasePublicGen implements IBasePublicGen
     /**
      * 生成赛程列表页面
      */
-    private function MatchList()
+    private function GetPage()
     {
         $channelId = Control::GetRequest("channel_id", 0);
 
@@ -39,9 +39,6 @@ class LeaguePublicGen extends BasePublicGen implements IBasePublicGen
         $matchPublicData = new MatchPublicData();
         $leaguePublicData = new LeaguePublicData();
 
-        if ($leagueId > 0 && $channelId <= 0) {
-            $channelId = $leaguePublicData->GetChannelId($leagueId, true);
-        }
 
 
         $channelPublicData = new ChannelPublicData();
